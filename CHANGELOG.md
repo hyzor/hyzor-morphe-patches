@@ -1,3 +1,9 @@
+## [1.1.0](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.0.0...v1.1.0) (2026-10-28)
+
+### ✨ New Features
+
+* **snorelab:** add premium patch for 2.33.5.7814 ([bd6fe60](https://github.com/hyzor/hyzor-morphe-patches/commit/bd6fe60f32c326b7562f89b03f4f8223925f4c47))
+
 ## [1.1.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.0.0...v1.1.0-dev.1) (2026-10-28)
 
 ### ✨ New Features
