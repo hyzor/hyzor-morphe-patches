@@ -18,11 +18,23 @@ so the stock app has to be uninstalled first — back up your data before you do
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-<!-- Do not modify this section by hand. The patch list is generated when release.yml creates a new release. -->
+> **[v1.0.0](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.0.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;2 patches total
+<details open>
+<summary>📦 Sleep as Android&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<br>
 
-#### The patch list is generated after the first release.
+**🎯 Supported versions:**
 
-&nbsp;
+| 20261006 | 20260616 |
+| :---: | :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Enable Cloud Premium](#enable-cloud-premium) | Reports the Sleep Cloud subscription as active. Client side only; the backend may still refuse. |  |
+| [Enable Premium](#enable-premium) | Unlocks Sleep as Android Premium. Tap Wait I already Paid when Prompted |  |
+
+</details>
+
 <!-- PATCHES_END -->
 
 ## 📱 Sleep as Android
