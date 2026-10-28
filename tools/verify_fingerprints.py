@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Re-check the Sleep as Android patch fingerprints against an APK, without running
-Gradle, Morphe or a disassembler.
+Re-check the patch fingerprints against an APK, without running Gradle, Morphe
+or a disassembler.
 
 Morphe's `Fingerprint(name = ...)` matches the *exact DEX method name*, and
 `definingClass` is compared exactly when written as a full class descriptor, so all
@@ -10,28 +10,48 @@ this needs to read is class descriptor + method name + return type + parameters.
 Usage:
     python3 tools/verify_fingerprints.py <app.apk>
 
-Exit code 0 means every required fingerprint resolved.
+The app is detected from the class descriptors that are present, so the command is
+the same for every supported app. Exit code 0 means every required fingerprint for
+the detected app resolved.
 """
 import struct
 import sys
 import zipfile
 
-# (class descriptor, method name) -> (return type, required, patch, description)
+# App -> class descriptor prefix used to pick the target set below.
+MARKERS = {
+    "Sleep as Android": "Lcom/urbandroid/sleep/",
+    "SnoreLab": "Lcom/snorelab/",
+}
+
+# App -> (class descriptor, method name) -> (return type, required, patch, description)
 TARGETS = {
-    ("Lcom/urbandroid/sleep/TrialFilter;", "isTrial"):
-        ("Z", True, "Enable Premium", "the paywall; 58 call sites and isTrialExpired()"),
-    ("Lcom/urbandroid/sleep/TrialFilter;", "hasUnlock"):
-        ("Z", True, "Enable Premium", "drawer / unlock UI"),
-    ("Lcom/urbandroid/common/util/PreferencesUtils;", "isUnlockAcked"):
-        ("Z", True, "Enable Premium", "disables the Play Billing re-query"),
-    ("Lcom/urbandroid/sleep/TrialFilter;", "isOurSignature"):
-        ("Z", False, "Enable Premium", "unknown-signature warning strip"),
-    ("Lcom/urbandroid/sleep/TrialFilter;", "isUnknownSource"):
-        ("Z", False, "Enable Premium", "pirate icon / AI assistant block"),
-    ("Lcom/urbandroid/common/util/PreferencesUtils;", "isCloudPremiumStatus"):
-        ("Z", False, "Enable Cloud Premium", "cloud subscription flag"),
-    ("Lcom/urbandroid/common/util/PreferencesUtils;", "isCloudPremiumStatusUnknown"):
-        ("Z", False, "Enable Cloud Premium", "cloud state unresolved sentinel"),
+    "Sleep as Android": {
+        ("Lcom/urbandroid/sleep/TrialFilter;", "isTrial"):
+            ("Z", True, "Enable Premium", "the paywall; 58 call sites and isTrialExpired()"),
+        ("Lcom/urbandroid/sleep/TrialFilter;", "hasUnlock"):
+            ("Z", True, "Enable Premium", "drawer / unlock UI"),
+        ("Lcom/urbandroid/common/util/PreferencesUtils;", "isUnlockAcked"):
+            ("Z", True, "Enable Premium", "disables the Play Billing re-query"),
+        ("Lcom/urbandroid/sleep/TrialFilter;", "isOurSignature"):
+            ("Z", False, "Enable Premium", "unknown-signature warning strip"),
+        ("Lcom/urbandroid/sleep/TrialFilter;", "isUnknownSource"):
+            ("Z", False, "Enable Premium", "pirate icon / AI assistant block"),
+        ("Lcom/urbandroid/common/util/PreferencesUtils;", "isCloudPremiumStatus"):
+            ("Z", False, "Enable Cloud Premium", "cloud subscription flag"),
+        ("Lcom/urbandroid/common/util/PreferencesUtils;", "isCloudPremiumStatusUnknown"):
+            ("Z", False, "Enable Cloud Premium", "cloud state unresolved sentinel"),
+    },
+    # SnoreLab 2.33.5.7814:
+    #   vp.h.q()          remotePremiumActive getter (the class has three ()Z getters,
+    #                     so the patch pins the obfuscated method name too)
+    #   mp.d.p(Lh80/g;)   premium expiration-date check in the local premium source
+    "SnoreLab": {
+        ("Lvp/h;", "q"):
+            ("Z", True, "Enable Premium", "remotePremiumActive getter"),
+        ("Lmp/d;", "p"):
+            ("Z", True, "Enable Premium", "premium expiry check"),
+    },
 }
 
 
@@ -78,7 +98,9 @@ class Dex:
             yield self.type(c), self.string(n), self.proto(p)
 
 
-def main(path):
+def scan(path):
+    """Return the set of class descriptors and the first method signature seen per (class, name)."""
+    classes = set()
     found = {}
     with zipfile.ZipFile(path) as z:
         for name in sorted(z.namelist()):
@@ -86,23 +108,34 @@ def main(path):
                 continue
             dex = Dex(z.read(name))
             for cls, meth, (ret, params) in dex.methods():
-                key = (cls, meth)
-                if key in TARGETS and key not in found:
-                    found[key] = (name, ret, params)
+                classes.add(cls)
+                found.setdefault((cls, meth), (name, ret, params))
+    return classes, found
+
+
+def main(path):
+    classes, found = scan(path)
+
+    apps = [app for app, marker in MARKERS.items() if any(c.startswith(marker) for c in classes)]
+    if not apps:
+        print("no supported app class found in", path)
+        return 2
 
     ok = True
-    for key, (ret, required, patch, why) in TARGETS.items():
-        hit = found.get(key)
-        status = "OK  " if hit else ("MISS" if required else "skip")
-        if hit:
-            dexname, fret, params = hit
-            sig = f"({''.join(params)}){fret}"
-            print(f"  {status} {key[0]:<46} {key[1]:<28} {sig:<34} {dexname:<12} {patch}: {why}")
-        else:
-            print(f"  {status} {key[0]:<46} {key[1]:<28} {'-':<34} {'-':<12} {patch}: {why}")
-        ok = ok and (bool(hit) or not required)
+    for app in apps:
+        print(f"[{app}]")
+        for key, (ret, required, patch, why) in TARGETS[app].items():
+            hit = found.get(key)
+            status = "OK  " if hit else ("MISS" if required else "skip")
+            if hit:
+                dexname, fret, params = hit
+                sig = f"({''.join(params)}){fret}"
+                print(f"  {status} {key[0]:<46} {key[1]:<28} {sig:<34} {dexname:<12} {patch}: {why}")
+            else:
+                print(f"  {status} {key[0]:<46} {key[1]:<28} {'-':<34} {'-':<12} {patch}: {why}")
+            ok = ok and (bool(hit) or not required)
+        print()
 
-    print()
     print("all required fingerprints resolved" if ok else "MISSING REQUIRED FINGERPRINTS")
     return 0 if ok else 1
 
