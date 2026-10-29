@@ -3,7 +3,14 @@
 Patches for apps I use, for use with [Morphe](https://morphe.software).
 
 Currently supports **Sleep as Android** (`com.urbandroid.sleep`),
-**SnoreLab** (`com.snorelab.app`) and **NYT Games** (`com.nytimes.crossword`).
+**SnoreLab** (`com.snorelab.app`), **NYT Games** (`com.nytimes.crossword`) and
+**Chess.com** (`com.chess`, 4.10.18 and 4.10.23).
+
+### Credits
+
+The chess.com patches are a port of [Noam's Morphe Patches](https://github.com/ImNoammm/Noams-Morphe-Patches)
+(GPLv3), extended with chess.com 4.10.23 support. Original patch code © ImNoammm and
+contributors; the 4.10.23 port lives here.
 
 ### How to use these patches
 

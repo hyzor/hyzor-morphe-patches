@@ -19,3 +19,11 @@ provided that such references:
 - Are accurate, factual, and non-misleading;
 - Do not suggest authorship by the Morphe project; and
 - Appear only in a secondary or descriptive context, not as part of the product or project name.
+
+Third-party attribution
+-----------------------
+
+The chess.com patches (patches/src/main/kotlin/dev/hyzor/patches/chesscom and
+extensions/chesscom) are derived from Noam's Morphe Patches
+(https://github.com/ImNoammm/Noams-Morphe-Patches), GPLv3, with additional
+chess.com 4.10.23 support.
