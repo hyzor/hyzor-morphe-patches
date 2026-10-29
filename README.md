@@ -199,6 +199,7 @@ Supported target: `6.48.0` (APKM).
 | Patch | Default | What it does |
 |---|---|---|
 | Unlock Subscription | on | Reports the account as an active Games subscriber (client-side only). |
+| AMOLED Black | on | Native UI only: paints the app's own dark theme pure black (`#000000`). The games are WebViews and stay dark grey. |
 
 This is a port of [rushiranpise/morphe-patches](https://github.com/rushiranpise/morphe-patches)'
 6.33.0 patch. The newer build flattened the delegate chain that patch's fingerprint was
@@ -251,6 +252,40 @@ Only the client-side decision is changed. Anything the NYT backend decides for i
 state, and an anonymous user stays anonymous — the patch reports *subscribed*, not
 *signed in*. Game **Packs** are one-time purchases rather than a subscription and are not
 covered by this patch.
+
+### AMOLED Black (native UI only)
+
+The games inside this app — Wordle, Connections, Strands, Spelling Bee, Sudoku, ... — are
+**WebViews** (`GamesHybridHostActivity`). Their screens are a website rendered by the app, and
+they keep the website's own dark theme (`#121213`), which this patch does not touch. Everything
+the patch does cover is the app's **native** UI: home, Me, settings, archive sheets, tab bar,
+dialogs, puzzle toolbars and the system bars.
+
+The app's dark theme is dark grey, not black: pages are `#121212`, sheets and modals
+`#2A2A2A`. On an OLED panel those pixels still light up. The patch paints them `#000000`,
+in both places the app gets its theme from:
+
+- the Compose design system keeps its palette as plain ARGB constants in
+  `ExtendedColorsKt.<clinit>` — one `const-wide` per colour, rewritten in place;
+- the XML views (bottom tab bar, archive sheet, dialogs, puzzle toolbars) resolve
+  `res/values-night/colors.xml`, plus the `*AlwaysDark` variants in the default file and
+  the theme's window/navigation-bar colour.
+
+Light mode is untouched: only the night configuration and the always-dark values change.
+The calendar cells of the archive (`#363636`) and `backgroundTertiary` (`#424242`) are kept
+slightly grey on purpose — pure black would make those small surfaces disappear.
+
+**Not covered:** the games that run in a WebView (`GamesHybridHostActivity` — Wordle,
+Connections, Strands, ...) draw their own dark theme from the web bundle (`#121213`), which
+no resource or bytecode patch can reach. Those screens stay dark grey.
+
+Injecting a stylesheet into the WebView is mechanically possible — the hybrid host funnels
+every page through `WebViewClientProxy.onPageFinished`, and a wildcard test stylesheet does
+repaint the page. It is not worth it here: the bundles are served from nytimes.com with
+content-hashed filenames and hashed CSS-module class names, the puzzle framework applies its
+dark colours from nested containers instead of a theme class on `html`/`body`, and the web
+app ships independently of the APK. Any targeted rule would be guesswork that silently stops
+working on the next web deploy.
 
 ## ✅ Verification
 

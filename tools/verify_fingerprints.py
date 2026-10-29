@@ -65,6 +65,8 @@ TARGETS = {
     "NYT Games": {
         ("Lcom/nytimes/games/integrations/subauth/library/SubauthEntitlementClientImpl;", "P"):
             ("Z", True, "Unlock Subscription", "isSubscribedForGames; only boolean read of NYTUserState.f"),
+        ("Lcom/nytimes/games/designsystem/theme/ExtendedColorsKt;", "<clinit>"):
+            ("V", True, "AMOLED Black", "static light/dark palette; dark greys rewritten to #000000"),
     },
 }
 
