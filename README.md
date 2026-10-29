@@ -118,6 +118,23 @@ The patch forces the two inputs of the local source (`vp.h.q()` → true and
 client-side decision; anything that authenticates against SnoreLab's backend still
 needs a real account.
 
+### Recording immediately returns to the landing page
+
+SnoreLab will not start a session without microphone access, and it does not show
+an error when the permission is missing. `NightViewActivity` checks `RECORD_AUDIO`
+in `onCreate`, then calls `finish()` and relaunches `MainActivity`, so tapping
+**Start** looks like it bounces straight back to the home screen.
+
+Grant the permission and try again:
+
+- **Settings → Apps → SnoreLab → Permissions → Microphone → Allow while using app**, or
+- `adb shell pm grant com.snorelab.app android.permission.RECORD_AUDIO`
+
+Reinstalling or updating the app can reset runtime permissions, so re-check this
+after every install. A test session can also be stopped from the ongoing
+notification's **STOP** action; the in-app slide-to-stop control shows the
+30-minute minimum-recording warning first.
+
 ## ✅ Verification
 
 `tools/verify_fingerprints.py` re-checks every fingerprint against an APK's DEX
