@@ -27,7 +27,23 @@ before you do.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.3.0-dev.2](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.3.0-dev.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;24 patches total
+> **[v1.3.0-dev.3](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.3.0-dev.3)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;25 patches total
+<details open>
+<summary>📦 NYT Games&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 6.48.0 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [AMOLED Black](#amoled-black) | Paints the app's own dark theme pure black (#000000) instead of dark grey, for OLED screens. Native UI only: the games themselves are WebViews with their own web CSS and stay dark grey. |  |
+| [Unlock Subscription](#unlock-subscription) | Reports the account as an active Games subscriber, unlocking subscriber-only archives and bonus puzzles. Client side only; the backend may still refuse some content. |  |
+
+</details>
+
 <details open>
 <summary>📦 Chess.com&nbsp;&nbsp;•&nbsp;&nbsp;20 patches</summary>
 <br>
@@ -90,21 +106,6 @@ before you do.
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | [Enable Premium](#enable-premium) | Enables app features locked behind the subscription paywall. |  |
-
-</details>
-
-<details open>
-<summary>📦 NYT Games&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
-<br>
-
-**🎯 Supported versions:**
-
-| 6.48.0 |
-| :---: |
-
-| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
-|----------|----------------|-----------|
-| [Unlock Subscription](#unlock-subscription) | Reports the account as an active Games subscriber, unlocking subscriber-only archives and bonus puzzles. Client side only; the backend may still refuse some content. |  |
 
 </details>
 
