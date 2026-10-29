@@ -1,3 +1,9 @@
+## [1.2.0](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.1.0...v1.2.0) (2026-10-29)
+
+### ✨ New Features
+
+* **nytgames:** add Unlock Subscription patch for 6.48.0 ([32cdf42](https://github.com/hyzor/hyzor-morphe-patches/commit/32cdf42d720c4aef755c453a3a1241e1443bac56))
+
 ## [1.2.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.1.0...v1.2.0-dev.1) (2026-10-29)
 
 ### ✨ New Features
