@@ -3,7 +3,14 @@
 Patches for apps I use, for use with [Morphe](https://morphe.software).
 
 Currently supports **Sleep as Android** (`com.urbandroid.sleep`),
-**SnoreLab** (`com.snorelab.app`) and **NYT Games** (`com.nytimes.crossword`).
+**SnoreLab** (`com.snorelab.app`), **NYT Games** (`com.nytimes.crossword`) and
+**Chess.com** (`com.chess`, 4.10.18 and 4.10.23).
+
+### Credits
+
+The chess.com patches are a port of [Noam's Morphe Patches](https://github.com/ImNoammm/Noams-Morphe-Patches)
+(GPLv3), extended with chess.com 4.10.23 support. Original patch code © ImNoammm and
+contributors; the 4.10.23 port lives here.
 
 ### How to use these patches
 
@@ -20,7 +27,57 @@ before you do.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.2.0](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.2.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;4 patches total
+> **[v1.3.0-dev.3](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.3.0-dev.3)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;25 patches total
+<details open>
+<summary>📦 NYT Games&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 6.48.0 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [AMOLED Black](#amoled-black) | Paints the app's own dark theme pure black (#000000) instead of dark grey, for OLED screens. Native UI only: the games themselves are WebViews with their own web CSS and stay dark grey. |  |
+| [Unlock Subscription](#unlock-subscription) | Reports the account as an active Games subscriber, unlocking subscriber-only archives and bonus puzzles. Client side only; the backend may still refuse some content. |  |
+
+</details>
+
+<details open>
+<summary>📦 Chess.com&nbsp;&nbsp;•&nbsp;&nbsp;20 patches</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 4.10.18-googleplay | 4.10.23-googleplay |
+| :---: | :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [AMOLED black](#amoled-black) | Pure black backgrounds instead of chess.com's dark grey, in the newer and the older screens. Switch it in Noam's Patches (then restart the app). |  |
+| [Accent color](#accent-color) | Your own colour in place of chess.com's green, chosen in Noam's Patches → Accent color: buttons, highlights, icons and text of the app. |  |
+| [Arcade animations](#arcade-animations) | Adds the chess.com website's Arcade piece animations to every board: light trails, bursts when a piece is picked up, dropped or captured, a flash on check, outlined last-move squares and animated move hints. Switch it in Noam's Patches. |  |
+| [Arrows in games](#arrows-in-games) | Adds Arrows and Clear buttons to the game bars (live, daily, archived, pass and play, bots, coach). While Arrows is on, dragging on the board draws an arrow and tapping marks a square, as on the website, and pieces don't move. |  |
+| [Board colors](#board-colors) | Choose the board's square colours: your own, or one of chess.com's colour themes, on every board of the app. In Noam's Patches → Board colors. |  |
+| [Clone Chess.com](#clone-chess-com) | Renames the app to com.chess.noam so it installs next to the real Chess.com app instead of over it. Leave it off to keep updating your current install. |  |
+| [Customize Home screen](#customize-home-screen) | Choose which tiles and sections the Home screen shows, and the order of the tiles. Works on both of chess.com's Home screens (the older list and the redesign). |  |
+| [Customize bottom bar](#customize-bottom-bar) | Choose the tabs between Home and More (Puzzles, Learn, Watch, Bots, Train) and their order, in Noam's Patches → Bottom bar. |  |
+| [Hide Premium-only content](#hide-premium-only-content) | Free accounts no longer see what only Premium members can use: Premium-only bots are not listed, and the Premium toolbar button, the Home and More banners and the Settings Upgrade row, the Home diamond, the sale banner and More's Membership row are gone. Nothing is unlocked. |  |
+| [Lichess Puzzles](#lichess-puzzles) | Puzzles from Lichess becomes the Puzzles tab's big button, with chess.com's Solve Puzzles above it. Lichess's puzzles play in chess.com's own puzzle screen (board, coach, sounds), rated on the phone the way Lichess rates them; nothing is sent to chess.com. |  |
+| [Limits as toasts](#limits-as-toasts) | When a free limit is reached (Game Review, puzzles, lessons, drills, videos…) a short toast says so instead of a full-screen Premium offer, and promotional pop-ups are not shown. Nothing is unlocked: the limits stay exactly as they are. |  |
+| [No ads](#no-ads) | Banner, full-screen and game-over ads are not loaded or shown, and neither are their Remove Ads links: the app's own "ads enabled" state and the account's show-ads flag, which are off for members, stay off. |  |
+| [No rating prompts](#no-rating-prompts) | The app doesn't ask you to rate it on Google Play. Switch it in Noam's Patches. |  |
+| [Noam's Patches settings](#noam-s-patches-settings) | Adds a Noam's Patches row at the top of the More tab, where the other patches of this bundle are switched on and off. Patches you did not select do not show up there. |  |
+| [Stockfish analysis](#stockfish-analysis) | Stockfish 19 on your phone, offline (arm64): best-move arrows on finished games, the analysis boards, the game explorer and Game Review (in a Lichess review, on the moves Lichess didn't mark), and an eval bar where chess.com has none of its own. It never shows while a game is being played or in puzzles. Patching downloads the official Stockfish 19 (80 MB) from Stockfish's GitHub, so it needs internet. |  |
+| [Time controls under a minute](#time-controls-under-a-minute) | The custom time slider goes below one minute: 10, 15, 20, 30 and 45 seconds, with or without increment, the way the website allows. Labels read "30 sec" and "0:30+1". |  |
+| [Unlimited Game Review](#unlimited-game-review) | Game Review asks who reviews the game: chess.com, Lichess's servers (online, with your Lichess account) or, with the Stockfish analysis patch, Stockfish on your phone (offline, no daily limit). The phone and Lichess judge moves the Lichess way (?! inaccuracies, ? mistakes, ?? blunders, accuracy and centipawn loss) in chess.com's own review screen, and the phone marks the moves Lichess leaves unmarked Best, Excellent or Good, as chess.com does. Finished games only; a live game on screen is never analysed. |  |
+| [Unlimited Play Coach](#unlimited-play-coach) | Removes the one-free-game-per-day limit on Play Coach, a bot-only practice mode. |  |
+| [Unlock Premium content](#unlock-premium-content) | The app's own premium-tier check always answers with the top tier, so content gated on it (lessons, drills, insights, themes, puzzle-rush extras and anything else that reads the account's tier) treats the account as a member. The server still decides what you may actually play online. |  |
+| [Unlock all bots](#unlock-all-bots) | Every bot in Versus Bots can be played, including ones only Premium members may play. |  |
+
+</details>
+
 <details open>
 <summary>📦 Sleep as Android&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -49,21 +106,6 @@ before you do.
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | [Enable Premium](#enable-premium) | Enables app features locked behind the subscription paywall. |  |
-
-</details>
-
-<details open>
-<summary>📦 NYT Games&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
-<br>
-
-**🎯 Supported versions:**
-
-| 6.48.0 |
-| :---: |
-
-| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
-|----------|----------------|-----------|
-| [Unlock Subscription](#unlock-subscription) | Reports the account as an active Games subscriber, unlocking subscriber-only archives and bonus puzzles. Client side only; the backend may still refuse some content. |  |
 
 </details>
 
@@ -158,6 +200,7 @@ Supported target: `6.48.0` (APKM).
 | Patch | Default | What it does |
 |---|---|---|
 | Unlock Subscription | on | Reports the account as an active Games subscriber (client-side only). |
+| AMOLED Black | on | Native UI only: paints the app's own dark theme pure black (`#000000`). The games are WebViews and stay dark grey. |
 
 This is a port of [rushiranpise/morphe-patches](https://github.com/rushiranpise/morphe-patches)'
 6.33.0 patch. The newer build flattened the delegate chain that patch's fingerprint was
@@ -210,6 +253,40 @@ Only the client-side decision is changed. Anything the NYT backend decides for i
 state, and an anonymous user stays anonymous — the patch reports *subscribed*, not
 *signed in*. Game **Packs** are one-time purchases rather than a subscription and are not
 covered by this patch.
+
+### AMOLED Black (native UI only)
+
+The games inside this app — Wordle, Connections, Strands, Spelling Bee, Sudoku, ... — are
+**WebViews** (`GamesHybridHostActivity`). Their screens are a website rendered by the app, and
+they keep the website's own dark theme (`#121213`), which this patch does not touch. Everything
+the patch does cover is the app's **native** UI: home, Me, settings, archive sheets, tab bar,
+dialogs, puzzle toolbars and the system bars.
+
+The app's dark theme is dark grey, not black: pages are `#121212`, sheets and modals
+`#2A2A2A`. On an OLED panel those pixels still light up. The patch paints them `#000000`,
+in both places the app gets its theme from:
+
+- the Compose design system keeps its palette as plain ARGB constants in
+  `ExtendedColorsKt.<clinit>` — one `const-wide` per colour, rewritten in place;
+- the XML views (bottom tab bar, archive sheet, dialogs, puzzle toolbars) resolve
+  `res/values-night/colors.xml`, plus the `*AlwaysDark` variants in the default file and
+  the theme's window/navigation-bar colour.
+
+Light mode is untouched: only the night configuration and the always-dark values change.
+The calendar cells of the archive (`#363636`) and `backgroundTertiary` (`#424242`) are kept
+slightly grey on purpose — pure black would make those small surfaces disappear.
+
+**Not covered:** the games that run in a WebView (`GamesHybridHostActivity` — Wordle,
+Connections, Strands, ...) draw their own dark theme from the web bundle (`#121213`), which
+no resource or bytecode patch can reach. Those screens stay dark grey.
+
+Injecting a stylesheet into the WebView is mechanically possible — the hybrid host funnels
+every page through `WebViewClientProxy.onPageFinished`, and a wildcard test stylesheet does
+repaint the page. It is not worth it here: the bundles are served from nytimes.com with
+content-hashed filenames and hashed CSS-module class names, the puzzle framework applies its
+dark colours from nested containers instead of a theme class on `html`/`body`, and the web
+app ships independently of the APK. Any targeted rule would be guesswork that silently stops
+working on the next web deploy.
 
 ## ✅ Verification
 

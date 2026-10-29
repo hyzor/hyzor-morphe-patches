@@ -1,3 +1,21 @@
+## [1.3.0-dev.3](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.3.0-dev.2...v1.3.0-dev.3) (2026-10-29)
+
+### ✨ New Features
+
+* **nytgames:** add AMOLED Black patch for 6.48.0 ([0ead9e6](https://github.com/hyzor/hyzor-morphe-patches/commit/0ead9e6edb69a5c72d197dc71ba0f7c8a1158534)), closes [#121212](https://github.com/hyzor/hyzor-morphe-patches/issues/121212) [#2A2A2A](https://github.com/hyzor/hyzor-morphe-patches/issues/2A2A2A) [#000000](https://github.com/hyzor/hyzor-morphe-patches/issues/000000) [#121213](https://github.com/hyzor/hyzor-morphe-patches/issues/121213) [#000000](https://github.com/hyzor/hyzor-morphe-patches/issues/000000)
+
+## [1.3.0-dev.2](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.3.0-dev.1...v1.3.0-dev.2) (2026-10-29)
+
+### 🐛 Bug Fixes
+
+* **chesscom:** ship the Lichess badge drawables in the bundle ([8b2750d](https://github.com/hyzor/hyzor-morphe-patches/commit/8b2750db792779454c7ff38b7ac98c7781b1b97d))
+
+## [1.3.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.2.0...v1.3.0-dev.1) (2026-10-29)
+
+### ✨ New Features
+
+* **chesscom:** add the chess.com patch set with 4.10.23 support ([6ed90c7](https://github.com/hyzor/hyzor-morphe-patches/commit/6ed90c7be4faca94e82daad838d723e80d2494b4))
+
 ## [1.2.0](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.1.0...v1.2.0) (2026-10-29)
 
 ### ✨ New Features
