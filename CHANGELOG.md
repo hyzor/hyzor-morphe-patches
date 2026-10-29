@@ -1,3 +1,9 @@
+## [1.3.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.2.0...v1.3.0-dev.1) (2026-10-29)
+
+### ✨ New Features
+
+* **chesscom:** add the chess.com patch set with 4.10.23 support ([6ed90c7](https://github.com/hyzor/hyzor-morphe-patches/commit/6ed90c7be4faca94e82daad838d723e80d2494b4))
+
 ## [1.2.0](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.1.0...v1.2.0) (2026-10-29)
 
 ### ✨ New Features
