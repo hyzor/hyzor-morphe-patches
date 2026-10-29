@@ -1,3 +1,9 @@
+## [1.3.0-dev.2](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.3.0-dev.1...v1.3.0-dev.2) (2026-10-29)
+
+### 🐛 Bug Fixes
+
+* **chesscom:** ship the Lichess badge drawables in the bundle ([8b2750d](https://github.com/hyzor/hyzor-morphe-patches/commit/8b2750db792779454c7ff38b7ac98c7781b1b97d))
+
 ## [1.3.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.2.0...v1.3.0-dev.1) (2026-10-29)
 
 ### ✨ New Features

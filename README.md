@@ -27,7 +27,7 @@ before you do.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.3.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.3.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;24 patches total
+> **[v1.3.0-dev.2](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.3.0-dev.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;24 patches total
 <details open>
 <summary>📦 Chess.com&nbsp;&nbsp;•&nbsp;&nbsp;20 patches</summary>
 <br>
