@@ -2,8 +2,8 @@
 
 Patches for apps I use, for use with [Morphe](https://morphe.software).
 
-Currently supports **Sleep as Android** (`com.urbandroid.sleep`) and
-**SnoreLab** (`com.snorelab.app`).
+Currently supports **Sleep as Android** (`com.urbandroid.sleep`),
+**SnoreLab** (`com.snorelab.app`) and **NYT Games** (`com.nytimes.crossword`).
 
 ### How to use these patches
 
@@ -13,8 +13,9 @@ Add this source to Morphe:
 https://morphe.software/add-source?github=hyzor/hyzor-morphe-patches
 ```
 
-Then patch a stock APK (or XAPK) of a supported version. The output is re-signed by
-Morphe, so the stock app has to be uninstalled first — back up your data before you do.
+Then patch a stock APK (or APKM/XAPK bundle) of a supported version. The output is
+re-signed by Morphe, so the stock app has to be uninstalled first — back up your data
+before you do.
 
 ## 🩹 Patches list
 
@@ -135,6 +136,66 @@ after every install. A test session can also be stopped from the ongoing
 notification's **STOP** action; the in-app slide-to-stop control shows the
 30-minute minimum-recording warning first.
 
+## 📱 NYT Games
+
+Supported target: `6.48.0` (APKM).
+
+| Patch | Default | What it does |
+|---|---|---|
+| Unlock Subscription | on | Reports the account as an active Games subscriber (client-side only). |
+
+This is a port of [rushiranpise/morphe-patches](https://github.com/rushiranpise/morphe-patches)'
+6.33.0 patch. The newer build flattened the delegate chain that patch's fingerprint was
+written against, so the hook had to be re-resolved; `Fingerprints.kt` documents how the
+method was identified.
+
+### How the app decides you are a subscriber
+
+The games code does not verify a receipt. The subauth library keeps a local user state
+(`NYTUserState`) with three booleans — signed in, has an active entitlement, has a linked
+entitlement — and `SubauthEntitlementClientImpl` exposes them:
+
+| Method | Name (from the in-app developer settings) | Reads |
+|---|---|---|
+| `P()` | `isSubscribedForGames` | the active-entitlement bit |
+| `E()` | `isSubscribedAndLinked` | `SubscriptionLevel` is *registered + subscribed + linked* |
+| `K()` | `isSubscribedViaGooglePlay` | Play entitlements contain `Games` |
+| `R()` | `hasUnlinkedSubscription` | `SubscriptionLevel` is an unlinked subscriber |
+
+`P()` is the one the rest of the app treats as "subscribed":
+
+- `AppEntitlementsImpl.e()` → `UserEntitlements.statusFlow` → `EntitlementStatus`, which
+  `GameAvailabilityCalculator`, the archive screens and the bonus-puzzle paywall read;
+- `GamesHybridUserConfig.isSubscribed`, handed to the WebView games;
+- `GamesSubauth2PurchaseClientImpl.d()` plus ads/analytics targeting.
+
+The patch forces only `P()` to `true`. The signed-in and linked bits are left alone on
+purpose: forcing them changes `NYTUserImpl.d()` to *registered + subscribed + linked*, and
+the app then tries to load a profile for a session that does not exist — that is the
+"Oops, something went wrong" Me-page bug noted in the reference patch.
+
+The port was verified end-to-end on a Pixel 9 (Android 17) with a signed-in **free** NYT
+account. Installing only the patched DEX over the stock build (same app data, same
+throwaway signing key) flips every subscription surface in the app:
+
+| Surface | Stock | Patched |
+|---|---|---|
+| Me → Settings | `NOT SUBSCRIBED`, **Subscribe** row | `NYT GAMES SUBSCRIBER`, no Subscribe row |
+| Home hero | “Subscribe to Games” banner | normal greeting |
+| Crossword / Wordle / Connections / Strands archive | “Access our archives with a subscription” | full calendar; archived puzzles open and play |
+| Bonus puzzles | free *Starter set* + “Unlock new Weekly drops” tile | the current weekly drop, playable |
+
+The same comparison holds with no account signed in (anonymous users get the same
+unlocks), and the Me page keeps working throughout — no “Oops, something went wrong”.
+
+### Limitations
+
+Only the client-side decision is changed. Anything the NYT backend decides for itself
+(account/subscription pages, purchase and restore, pushes) still sees the real account
+state, and an anonymous user stays anonymous — the patch reports *subscribed*, not
+*signed in*. Game **Packs** are one-time purchases rather than a subscription and are not
+covered by this patch.
+
 ## ✅ Verification
 
 `tools/verify_fingerprints.py` re-checks every fingerprint against an APK's DEX
@@ -145,8 +206,7 @@ classes that are present:
 python3 tools/verify_fingerprints.py /path/to/app.apk
 ```
 
-For an XAPK, point it at the extracted base APK (`com.snorelab.app.apk`), not the
-`.xapk` archive.
+APK, APKM and XAPK all work: bundles are opened through their nested `base.apk`.
 
 Run it after every app update before bumping the matching `Constants.kt`.
 
@@ -181,7 +241,10 @@ GPLv3 — see [LICENSE](LICENSE) and [NOTICE](NOTICE).
   cloud patch are new here.
 - The SnoreLab patch is a port of
   [hoo-dles/morphe-patches](https://github.com/hoo-dles/morphe-patches) (GPLv3).
-- Not affiliated with Urbandroid, the Morphe project, or the above authors.
+- The NYT Games patch is a port of
+  [rushiranpise/morphe-patches](https://github.com/rushiranpise/morphe-patches) (GPLv3).
+- Not affiliated with Urbandroid, The New York Times, the Morphe project, or the above
+  authors.
 
 Patches are provided for interoperability and private study of software I already
 have the right to run. They bypass a licence check; using them to avoid paying for

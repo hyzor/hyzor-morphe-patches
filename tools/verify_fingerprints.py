@@ -8,12 +8,14 @@ Morphe's `Fingerprint(name = ...)` matches the *exact DEX method name*, and
 this needs to read is class descriptor + method name + return type + parameters.
 
 Usage:
-    python3 tools/verify_fingerprints.py <app.apk>
+    python3 tools/verify_fingerprints.py <app.apk|app.apkm|app.xapk>
 
 The app is detected from the class descriptors that are present, so the command is
-the same for every supported app. Exit code 0 means every required fingerprint for
-the detected app resolved.
+the same for every supported app. Bundles (APKM/XAPK/APKS) are opened through their
+nested `base.apk`. Exit code 0 means every required fingerprint for the detected app
+resolved.
 """
+import io
 import struct
 import sys
 import zipfile
@@ -22,6 +24,7 @@ import zipfile
 MARKERS = {
     "Sleep as Android": "Lcom/urbandroid/sleep/",
     "SnoreLab": "Lcom/snorelab/",
+    "NYT Games": "Lcom/nytimes/games/",
 }
 
 # App -> (class descriptor, method name) -> (return type, required, patch, description)
@@ -51,6 +54,17 @@ TARGETS = {
             ("Z", True, "Enable Premium", "remotePremiumActive getter"),
         ("Lmp/d;", "p"):
             ("Z", True, "Enable Premium", "premium expiry check"),
+    },
+    # NYT Games 6.48.0:
+    #   SubauthEntitlementClientImpl  the subauth bridge; class is not obfuscated but all of
+    #                                 its members are one letter. P() = isSubscribedForGames,
+    #                                 E() = isSubscribedAndLinked, K() = isSubscribedViaGooglePlay,
+    #                                 R() = hasUnlinkedSubscription (see the in-app dev settings).
+    #                                 Only P() reads NYTUserState.f, which the patch's
+    #                                 IGET_BOOLEAN filter relies on.
+    "NYT Games": {
+        ("Lcom/nytimes/games/integrations/subauth/library/SubauthEntitlementClientImpl;", "P"):
+            ("Z", True, "Unlock Subscription", "isSubscribedForGames; only boolean read of NYTUserState.f"),
     },
 }
 
@@ -98,15 +112,40 @@ class Dex:
             yield self.type(c), self.string(n), self.proto(p)
 
 
+def _dex_blobs(z):
+    """Yield (label, bytes) for every DEX this archive carries.
+
+    A plain APK has the DEX files at the top level. APKM/XAPK/APKS bundles (e.g. the
+    NYT Games or SnoreLab downloads) keep the code in a nested `base.apk`, so that is
+    opened too instead of silently finding no classes.
+    """
+    dex_names = sorted(
+        n for n in z.namelist() if n.startswith("classes") and n.endswith(".dex")
+    )
+    if dex_names:
+        for name in dex_names:
+            yield name, z.read(name)
+        return
+
+    apks = sorted(
+        (n for n in z.namelist() if n.endswith(".apk") and "/" not in n),
+        key=lambda n: (n != "base.apk", n),
+    )
+    for apk in apks:
+        with zipfile.ZipFile(io.BytesIO(z.read(apk))) as inner:
+            for name in sorted(
+                n for n in inner.namelist() if n.startswith("classes") and n.endswith(".dex")
+            ):
+                yield f"{apk}!{name}", inner.read(name)
+
+
 def scan(path):
     """Return the set of class descriptors and the first method signature seen per (class, name)."""
     classes = set()
     found = {}
     with zipfile.ZipFile(path) as z:
-        for name in sorted(z.namelist()):
-            if not (name.startswith("classes") and name.endswith(".dex")):
-                continue
-            dex = Dex(z.read(name))
+        for name, blob in _dex_blobs(z):
+            dex = Dex(blob)
             for cls, meth, (ret, params) in dex.methods():
                 classes.add(cls)
                 found.setdefault((cls, meth), (name, ret, params))
