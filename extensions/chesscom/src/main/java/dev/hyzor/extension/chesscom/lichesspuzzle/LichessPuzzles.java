@@ -449,11 +449,25 @@ public final class LichessPuzzles {
                     pathResult = constructor.newInstance(0, null, null, empty);
                 }
             }
-            Object score = Class.forName(scoreClass()).getConstructor(pathResultClass, ratingClass, Throwable.class)
-                .newInstance(pathResult, rating, null);
+            // 4.10.18 takes a Throwable here, 4.10.23 an ApiException; a null fits either, and
+            // the parameter type is matched by assignability so a rename does not break scoring.
+            Object score = null;
+            for (Constructor<?> constructor : Class.forName(scoreClass()).getConstructors()) {
+                Class<?>[] types = constructor.getParameterTypes();
+                if (types.length == 3 && types[0].isAssignableFrom(pathResultClass)
+                        && types[1].isAssignableFrom(ratingClass)) {
+                    score = constructor.newInstance(pathResult, rating, null);
+                    break;
+                }
+            }
+            if (score == null) throw new IllegalStateException("The puzzle score constructor was not found");
             Class<?> result = Class.forName(resultClass());
             for (Constructor<?> constructor : result.getConstructors()) {
-                if (constructor.getParameterTypes().length == 2) return constructor.newInstance(solution, score);
+                Class<?>[] types = constructor.getParameterTypes();
+                if (types.length == 2 && types[0].isAssignableFrom(solution.getClass())
+                        && types[1].isAssignableFrom(score.getClass())) {
+                    return constructor.newInstance(solution, score);
+                }
             }
         } catch (Throwable throwable) {
             Utils.logError("Lichess puzzle not scored", throwable);
