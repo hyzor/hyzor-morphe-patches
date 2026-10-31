@@ -1,3 +1,9 @@
+## [1.3.1-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.3.0...v1.3.1-dev.1) (2026-10-31)
+
+### 🐛 Bug Fixes
+
+* **chesscom:** score Lichess puzzles on 4.10.23 ([88d9fbe](https://github.com/hyzor/hyzor-morphe-patches/commit/88d9fbea4177b0a6eceea5d34d205439db127cf1))
+
 ## [1.3.0](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.2.0...v1.3.0) (2026-10-29)
 
 ### 🐛 Bug Fixes
