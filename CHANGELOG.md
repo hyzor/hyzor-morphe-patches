@@ -1,3 +1,9 @@
+## [1.3.1-dev.4](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.3.1-dev.3...v1.3.1-dev.4) (2026-10-31)
+
+### 🐛 Bug Fixes
+
+* **chesscom:** keep the Next hook out of chess.com puzzles ([fe6650d](https://github.com/hyzor/hyzor-morphe-patches/commit/fe6650d4cbdafba632703ec1d28fc5d3a5a32083))
+
 ## [1.3.1-dev.3](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.3.1-dev.2...v1.3.1-dev.3) (2026-10-31)
 
 ### 🐛 Bug Fixes
