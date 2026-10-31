@@ -1,3 +1,9 @@
+## [1.3.1-dev.3](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.3.1-dev.2...v1.3.1-dev.3) (2026-10-31)
+
+### 🐛 Bug Fixes
+
+* **chesscom:** open the next Lichess puzzle from Next ([75af36e](https://github.com/hyzor/hyzor-morphe-patches/commit/75af36ea4f82e945fd86fa4f398a66927b172d0f))
+
 ## [1.3.1-dev.2](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.3.1-dev.1...v1.3.1-dev.2) (2026-10-31)
 
 ### 🐛 Bug Fixes
