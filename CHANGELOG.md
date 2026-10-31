@@ -1,3 +1,9 @@
+## [1.3.1-dev.2](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.3.1-dev.1...v1.3.1-dev.2) (2026-10-31)
+
+### 🐛 Bug Fixes
+
+* **chesscom:** give the puzzle result empty stats and bonuses ([f4b465e](https://github.com/hyzor/hyzor-morphe-patches/commit/f4b465e96b4548b6af9185a59f77cc3865376a65))
+
 ## [1.3.1-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.3.0...v1.3.1-dev.1) (2026-10-31)
 
 ### 🐛 Bug Fixes
