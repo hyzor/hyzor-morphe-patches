@@ -442,11 +442,15 @@ public final class LichessPuzzles {
                     enumValue(algorithm, "RATING_ALGORITHM_STANDARD_RATING"), true, "", oldRating,
                     (float) before.deviation, empty);
             Class<?> pathResultClass = Class.forName("chesscom.puzzles.v1.PuzzlePathResult");
+            // The solved screen reads XP, stats and bonuses; empty messages beat nulls there.
+            Object stats = emptyMessage("chesscom.puzzles.v1.PuzzlePathUserStats");
+            Object bonuses = emptyMessage("chesscom.puzzles.v1.PuzzlePathEarnedBonuses");
             Object pathResult = null;
             for (Constructor<?> constructor : pathResultClass.getConstructors()) {
                 Class<?>[] types = constructor.getParameterTypes();
                 if (types.length == 4 && types[0] == int.class) {
-                    pathResult = constructor.newInstance(0, null, null, empty);
+                    pathResult = constructor.newInstance(0, stats, bonuses, empty);
+                    break;
                 }
             }
             // 4.10.18 takes a Throwable here, 4.10.23 an ApiException; a null fits either, and
@@ -473,6 +477,15 @@ public final class LichessPuzzles {
             Utils.logError("Lichess puzzle not scored", throwable);
         }
         return null;
+    }
+
+    /** A default instance of one of the app's empty Wire messages, or null if it is gone. */
+    private static Object emptyMessage(String name) {
+        try {
+            return Class.forName(name).getConstructor().newInstance();
+        } catch (Throwable ignored) {
+            return null;
+        }
     }
 
     /** Hands Lichess puzzles near the rating to chess.com's puzzle database as guest puzzles. */
