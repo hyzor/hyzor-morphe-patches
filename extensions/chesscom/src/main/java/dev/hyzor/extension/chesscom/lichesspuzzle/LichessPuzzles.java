@@ -50,6 +50,11 @@ public final class LichessPuzzles {
     /** Between Puzzles from Lichess and Solve Puzzles, guest puzzles are Lichess's. */
     private static volatile boolean active;
     private static volatile boolean freshQueue = true;
+    private static volatile long keepAliveUntil;
+    private static volatile Object sessionRouter;
+    private static volatile java.lang.reflect.Method sessionMethod;
+    private static volatile Object sessionActivity;
+    private static volatile Object sessionTarget;
     private static final java.util.List<Runnable> countWaiters = new java.util.ArrayList<>();
     /** The Lichess puzzle screen is the activity in front. */
     private static volatile boolean puzzleVisible;
@@ -154,6 +159,25 @@ public final class LichessPuzzles {
         return true;
     }
 
+    /**
+     * The puzzle screen's Next: chess.com would fetch a rated puzzle from its server and hit the
+     * free daily limit, so reopen the Lichess flow, which takes the next seeded guest puzzle.
+     */
+    public static boolean onNext() {
+        if (!active || sessionRouter == null || sessionMethod == null) return false;
+        try {
+            keepAliveUntil = SystemClock.uptimeMillis() + 3000;
+            Activity top = Utils.topActivity();
+            if (top != null && isPuzzle(top)) top.finish();
+            sessionMethod.invoke(sessionRouter, sessionActivity, sessionTarget);
+            Utils.log("Lichess session: opened the next puzzle");
+            return true;
+        } catch (Throwable throwable) {
+            Utils.logError("Lichess next puzzle", throwable);
+            return false;
+        }
+    }
+
     /** Finds the listener's router and activity, builds the puzzle directions and navigates. */
     private static void navigateGuest(Object listener, String directionsType, String guestField) throws Exception {
         Class<?> directions = Class.forName("com.chess.navigationinterface.NavigationDirections");
@@ -194,6 +218,11 @@ public final class LichessPuzzles {
             Class<?>[] parameters = method.getParameterTypes();
             if (parameters.length == 2 && parameters[1] == directions &&
                 parameters[0].isAssignableFrom(activity.getClass()) && method.getReturnType() == void.class) {
+                // Remembered so Next can reopen the screen without going through chess.com.
+                sessionRouter = router;
+                sessionMethod = method;
+                sessionActivity = activity;
+                sessionTarget = target;
                 method.invoke(router, activity, target);
                 return;
             }
@@ -228,7 +257,7 @@ public final class LichessPuzzles {
 
     /** Ends the session before the hub resumes, not after the Lichess screen is destroyed. */
     private static void endSessionIfFinishing(Activity activity) {
-        if (isPuzzle(activity) && activity.isFinishing()) active = false;
+        if (isPuzzle(activity) && activity.isFinishing() && SystemClock.uptimeMillis() > keepAliveUntil) active = false;
     }
 
     private static boolean isPuzzle(Activity activity) {
@@ -263,7 +292,7 @@ public final class LichessPuzzles {
             public void onActivityDestroyed(Activity activity) {
                 if (isPuzzle(activity) && !activity.isChangingConfigurations()) {
                     puzzleVisible = false;
-                    active = false;
+                    if (SystemClock.uptimeMillis() > keepAliveUntil) active = false;
                 }
             }
 
