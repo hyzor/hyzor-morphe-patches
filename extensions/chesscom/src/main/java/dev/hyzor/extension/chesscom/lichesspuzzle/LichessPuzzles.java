@@ -164,7 +164,10 @@ public final class LichessPuzzles {
      * free daily limit, so reopen the Lichess flow, which takes the next seeded guest puzzle.
      */
     public static boolean onNext() {
-        if (!active || sessionRouter == null || sessionMethod == null) return false;
+        if (!active || sessionRouter == null || sessionMethod == null) {
+            Utils.log("Lichess next: not in a session, chess.com handles it");
+            return false;
+        }
         try {
             keepAliveUntil = SystemClock.uptimeMillis() + 3000;
             Activity top = Utils.topActivity();
@@ -309,9 +312,17 @@ public final class LichessPuzzles {
             @Override
             public void onActivityResumed(Activity activity) {
                 puzzleVisible = isPuzzle(activity);
-                // The hub is back: hold the frozen state for its first refresh.
-                if (isHub(activity) && freezeActive && unfreezeAt == Long.MAX_VALUE) {
-                    unfreezeAt = SystemClock.uptimeMillis() + 1000;
+                if (isHub(activity)) {
+                    // Back at the hub means the session is over, so a chess.com puzzle started from
+                    // here never sees it. The window keeps the Next hand-off from ending it.
+                    if (active && SystemClock.uptimeMillis() > keepAliveUntil) {
+                        active = false;
+                        Utils.log("Lichess session: ended at the hub");
+                    }
+                    // The hub is back: hold the frozen state for its first refresh.
+                    if (freezeActive && unfreezeAt == Long.MAX_VALUE) {
+                        unfreezeAt = SystemClock.uptimeMillis() + 1000;
+                    }
                 }
             }
 
