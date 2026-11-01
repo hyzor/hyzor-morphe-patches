@@ -3,14 +3,18 @@
 Patches for apps I use, for use with [Morphe](https://morphe.software).
 
 Currently supports **Sleep as Android** (`com.urbandroid.sleep`),
-**SnoreLab** (`com.snorelab.app`), **NYT Games** (`com.nytimes.crossword`) and
-**Chess.com** (`com.chess`, 4.10.18 and 4.10.23).
+**SnoreLab** (`com.snorelab.app`), **NYT Games** (`com.nytimes.crossword`),
+**Chess.com** (`com.chess`, 4.10.18 and 4.10.23) and
+**Duolingo** (`com.duolingo`, 6.104.3).
 
 ### Credits
 
 The chess.com patches are a port of [Noam's Morphe Patches](https://github.com/ImNoammm/Noams-Morphe-Patches)
 (GPLv3), extended with chess.com 4.10.23 support. Original patch code © ImNoammm and
 contributors; the 4.10.23 port lives here.
+
+The Duolingo patches are a port of [hoo-dles/morphe-patches](https://github.com/hoo-dles/morphe-patches)
+(GPLv3), re-resolved for 6.104.3. Original patch code © hoo-dles and contributors.
 
 ### How to use these patches
 
@@ -27,7 +31,7 @@ before you do.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.3.1](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.3.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;25 patches total
+> **[v1.4.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.4.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;29 patches total
 <details open>
 <summary>📦 NYT Games&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -75,6 +79,24 @@ before you do.
 | [Unlimited Play Coach](#unlimited-play-coach) | Removes the one-free-game-per-day limit on Play Coach, a bot-only practice mode. |  |
 | [Unlock Premium content](#unlock-premium-content) | The app's own premium-tier check always answers with the top tier, so content gated on it (lessons, drills, insights, themes, puzzle-rush extras and anything else that reads the account's tier) treats the account as a member. The server still decides what you may actually play online. |  |
 | [Unlock all bots](#unlock-all-bots) | Every bot in Versus Bots can be played, including ones only Premium members may play. |  |
+
+</details>
+
+<details open>
+<summary>📦 Duolingo&nbsp;&nbsp;•&nbsp;&nbsp;4 patches</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 6.104.3 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Disable dynamic app icon](#disable-dynamic-app-icon) | Prevents Duolingo from changing the app icon. Only the default icon will be available. |  |
+| [Enable Premium](#enable-premium) | Enables app features locked behind the subscription paywall. Some features like AI video calls may not work. | • Type |
+| [Enable debug mode](#enable-debug-mode) | Enables hidden debug menu in settings. |  |
+| [Unlimited RampUp time](#unlimited-rampup-time) | The timer for RampUp challenges will never decrease. |  |
 
 </details>
 
@@ -288,11 +310,101 @@ dark colours from nested containers instead of a theme class on `html`/`body`, a
 app ships independently of the APK. Any targeted rule would be guesswork that silently stops
 working on the next web deploy.
 
+## 📱 Duolingo
+
+Supported target: `6.104.3` (APKM, versionCode 2492).
+
+| Patch | Default | What it does |
+|---|---|---|
+| Enable Premium | on | Reports the signed-in account as Super (or MAX) so the client unlocks subscriber features. |
+| Disable dynamic app icon | off | Removes the disabled launcher aliases so only the default icon remains. |
+| Enable debug mode | off | Adds the hidden **Debug options** menu to Settings. |
+| Unlimited RampUp time | off | Pins the RampUp challenge timer at one hour. |
+
+This is a port of [hoo-dles/morphe-patches](https://github.com/hoo-dles/morphe-patches)'
+Duolingo 6.98.4 patch set. The hooks that moved between 6.98.4 and 6.104.3:
+
+| Hook | 6.98.4 | 6.104.3 |
+|---|---|---|
+| Email login builder | `LoginFragmentViewModel` class | class renamed; matched by return type `LoginRequest$EmailLoginRequest` and `(String, String)` parameters |
+| `EnergyConfig` primary constructor | `(IIJJJIJ)V` | `(IIJJJIJLjava/lang/Integer;)V`; a Kotlin default-args constructor was added |
+| `SubscriptionFeatures` | `com.duolingo.core.subscription.models` | `com.duolingo.data.subscription.models` |
+| `VideoCallTabCtaButtonState` upsell fields | label directly followed by `iget-boolean` | label, `append`, then `iget-boolean`, so the filter uses `MatchAfterAnywhere` |
+| `User.toString()` field labels | label, `append`, field | two labels and the field batched into a helper call; the field is still two instructions after the label |
+
+### How the app decides you are premium
+
+Duolingo keeps the decision on the device, on the `User` model
+(`com.duolingo.data.user.User`) that comes back with the session:
+
+| Field | Serialized name | Meaning |
+|---|---|---|
+| `y` | `hasPlus` | the classic Super flag |
+| `B0` | `subscriberLevel` | `FREE` / `LITE` / `PREMIUM` / `GOLD` |
+| `R0` | — | computed "paid" bit read by every paid helper (`hasPlus || …`) |
+| `Q0` | — | computed "MAX" bit read by `MaxHooksUserData` |
+
+The last two are calculated rather than serialized, so the patch finds them through
+the helpers that read them (`z22.k(User, …)` for `R0`, the `MaxHooksUserData`
+constructor for `Q0`) instead of through `toString()`.
+
+The values are written into the `User` instance that the `LoggedIn` state wraps
+(`ss90.<init>(User)` in 6.104.3), so only the signed-in account is affected —
+opening a friend's profile still shows their real state — and the fields are set
+again every time the state is rebuilt from a fresh server user. `EnergyConfig`'s primary
+constructor gets `move p1, p2` and its Kotlinx default-args constructor gets `move p2, p3`
+(the leading argument is the default-args mask), so the current energy is the maximum
+whichever constructor the app uses.
+
+MAX additionally sets the computed MAX bit, forces the
+`VIDEO_CALL_IN_PATH` / `VIDEO_CALL_IN_PRACTICE_HUB` feature checks and clears the
+two `VideoCallTabCtaButtonState` upsell flags that would otherwise open the purchase
+screen from the bottom bar.
+
+### Disable login integrity
+
+`LoginRequest$EmailLoginRequest` carries a fourth constructor parameter, the login
+integrity signal. On a re-signed sideload that signal fails attestation and login is
+rejected. The app already ships an empty signal singleton (the one the normal email
+login path passes), so the patch loads that instance instead of the supplied
+parameter inside the constructor. That covers the builder, the shared-login lambda
+and the Kotlinx serializer. Every other Duolingo patch depends on it.
+
+### On-device verification
+
+Verified end-to-end on a Pixel 9 (Android 17) with a real account, patching the
+supplied APKM with the built bundle and installing the merged APK:
+
+| Surface | Result |
+|---|---|
+| Install / cold start | installs and starts; no crash, still signed in after a force-stop |
+| Home header | the top-right button reads **Super Dashboard** instead of the Super upsell |
+| Super dashboard | member view: “SUPER duolingo”, **Manage Features** with **Unlimited energy** checked, **No ads** |
+| Profile | **SUPER** badge next to the name |
+| Settings | **DEBUG OPTIONS** section is present; opening it shows `DebugActivity` — `6.104.3 (2492) built Oct 30 4:25 PM ET` |
+| Launcher | one `MAIN`/`LAUNCHER` entry (`com.duolingo/.app.LoginActivity`); the manifest goes from 216 to 4 `activity-alias` entries |
+| RampUp timer | both `RampupTimerState$Paused` and `$Tick` constructors start with `const v1, 3600` in the patched DEX; not exercised in the UI — the test account has no RampUp challenge, and the debug `Show Ramp Up Challenge FAB` override did not surface one |
+
+The MAX variant patches and applies cleanly (27 modified classes instead of 10,
+`Q0`/`GOLD` set, both upsell flags zeroed) but was not installed; Super is the
+default and was the one tested at runtime.
+
+### Limitations
+
+Only the client-side decision is changed. Subscription state that the Duolingo
+backend owns (purchase, restore, live AI/video-call entitlement, account pages) still
+sees the real account, and this build is still a re-signed sideload — the login
+integrity patch keeps email login working, but it does not make the app pass Play
+Integrity anywhere else.
+
 ## ✅ Verification
 
-`tools/verify_fingerprints.py` re-checks every fingerprint against an APK's DEX
-files without running Gradle, Morphe or a disassembler. It detects the app from the
-classes that are present:
+`tools/verify_fingerprints.py` re-checks the class/method fingerprints against an
+APK's DEX files without running Gradle, Morphe or a disassembler. It detects the app
+from the classes that are present. Duolingo's structural fingerprints (string anchors
+and field-usage shapes) cannot be expressed as class/method names, so for Duolingo the
+script checks only its pinned class/method signatures — build and apply the bundle for
+the rest.
 
 ```
 python3 tools/verify_fingerprints.py /path/to/app.apk
@@ -333,10 +445,12 @@ GPLv3 — see [LICENSE](LICENSE) and [NOTICE](NOTICE).
   cloud patch are new here.
 - The SnoreLab patch is a port of
   [hoo-dles/morphe-patches](https://github.com/hoo-dles/morphe-patches) (GPLv3).
+- The Duolingo patches are a port of
+  [hoo-dles/morphe-patches](https://github.com/hoo-dles/morphe-patches) (GPLv3).
 - The NYT Games patch is a port of
   [rushiranpise/morphe-patches](https://github.com/rushiranpise/morphe-patches) (GPLv3).
-- Not affiliated with Urbandroid, The New York Times, the Morphe project, or the above
-  authors.
+- Not affiliated with Urbandroid, The New York Times, Duolingo, the Morphe project, or
+  the above authors.
 
 Patches are provided for interoperability and private study of software I already
 have the right to run. They bypass a licence check; using them to avoid paying for
