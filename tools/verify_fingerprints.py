@@ -25,6 +25,7 @@ MARKERS = {
     "Sleep as Android": "Lcom/urbandroid/sleep/",
     "SnoreLab": "Lcom/snorelab/",
     "NYT Games": "Lcom/nytimes/games/",
+    "Duolingo": "Lcom/duolingo/",
 }
 
 # App -> (class descriptor, method name) -> (return type, required, patch, description)
@@ -62,6 +63,23 @@ TARGETS = {
     #                                 R() = hasUnlinkedSubscription (see the in-app dev settings).
     #                                 Only P() reads NYTUserState.f, which the patch's
     #                                 IGET_BOOLEAN filter relies on.
+    # Duolingo 6.104.3:
+    #   Most Duolingo fingerprints are structural (toString literals, field-usage shapes,
+    #   opcode windows) and are validated by building and applying the bundle, not by method
+    #   names here. The rows below are the pinned class/method anchors: the login request
+    #   constructor, the energy config primary constructor and the two RampUp timer states.
+    #   `Lss90`, `Lgo3`, `Lz22` and the other short names change with every obfuscation pass,
+    #   so they are deliberately not pinned here.
+    "Duolingo": {
+        ("Lcom/duolingo/data/signuplogin/LoginRequest$EmailLoginRequest;", "<init>"):
+            ("V", True, "Disable login integrity", "constructor whose signal parameter is replaced"),
+        ("Lcom/duolingo/core/energy/models/EnergyConfig;", "<init>"):
+            ("V", True, "Enable Premium", "constructors; `move p1, p2` in the primary fills the energy bar"),
+        ("Lcom/duolingo/data/session/state/RampupTimerState$Paused;", "<init>"):
+            ("V", True, "Unlimited RampUp time", "timer state keeps the remaining seconds"),
+        ("Lcom/duolingo/data/session/state/RampupTimerState$Tick;", "<init>"):
+            ("V", True, "Unlimited RampUp time", "per-second tick state"),
+    },
     "NYT Games": {
         ("Lcom/nytimes/games/integrations/subauth/library/SubauthEntitlementClientImpl;", "P"):
             ("Z", True, "Unlock Subscription", "isSubscribedForGames; only boolean read of NYTUserState.f"),

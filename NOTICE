@@ -27,3 +27,7 @@ The chess.com patches (patches/src/main/kotlin/dev/hyzor/patches/chesscom and
 extensions/chesscom) are derived from Noam's Morphe Patches
 (https://github.com/ImNoammm/Noams-Morphe-Patches), GPLv3, with additional
 chess.com 4.10.23 support.
+
+The Duolingo patches (patches/src/main/kotlin/dev/hyzor/patches/duolingo) are derived
+from hoo-dles/morphe-patches (https://github.com/hoo-dles/morphe-patches), GPLv3, with
+additional Duolingo 6.104.3 support.
