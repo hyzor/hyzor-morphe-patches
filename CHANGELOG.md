@@ -1,3 +1,9 @@
+## [1.4.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.4.0...v1.4.1) (2026-11-01)
+
+### 🐛 Bug Fixes
+
+* **chesscom:** stop making every class mutable while patching ([10ce39b](https://github.com/hyzor/hyzor-morphe-patches/commit/10ce39b4891f16e13729ca1ffc1b2a0949b16115)), closes [#7](https://github.com/hyzor/hyzor-morphe-patches/issues/7)
+
 ## [1.4.1-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.4.0...v1.4.1-dev.1) (2026-11-01)
 
 ### 🐛 Bug Fixes
