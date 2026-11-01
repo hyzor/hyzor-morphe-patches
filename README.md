@@ -31,7 +31,7 @@ before you do.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.3.1](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.3.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;25 patches total
+> **[v1.4.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.4.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;29 patches total
 <details open>
 <summary>📦 NYT Games&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -79,6 +79,24 @@ before you do.
 | [Unlimited Play Coach](#unlimited-play-coach) | Removes the one-free-game-per-day limit on Play Coach, a bot-only practice mode. |  |
 | [Unlock Premium content](#unlock-premium-content) | The app's own premium-tier check always answers with the top tier, so content gated on it (lessons, drills, insights, themes, puzzle-rush extras and anything else that reads the account's tier) treats the account as a member. The server still decides what you may actually play online. |  |
 | [Unlock all bots](#unlock-all-bots) | Every bot in Versus Bots can be played, including ones only Premium members may play. |  |
+
+</details>
+
+<details open>
+<summary>📦 Duolingo&nbsp;&nbsp;•&nbsp;&nbsp;4 patches</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 6.104.3 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Disable dynamic app icon](#disable-dynamic-app-icon) | Prevents Duolingo from changing the app icon. Only the default icon will be available. |  |
+| [Enable Premium](#enable-premium) | Enables app features locked behind the subscription paywall. Some features like AI video calls may not work. | • Type |
+| [Enable debug mode](#enable-debug-mode) | Enables hidden debug menu in settings. |  |
+| [Unlimited RampUp time](#unlimited-rampup-time) | The timer for RampUp challenges will never decrease. |  |
 
 </details>
 
