@@ -39,6 +39,15 @@ extension learns about the app lifecycle through a hook that
   archive and engine SHA-256, and places it at `lib/arm64-v8a/libstockfish.so`. It is
   arm64-only, and only runs on a device that supports it. The download is cached in the
   system temp directory between runs.
+- **Patching Chess.com needs a lot of memory.** The APKM is 236 MB and its 36 modules are
+  merged before patching, and every class a patch makes mutable is compiled into a new DEX
+  file. Scanning the app through `mutableClassDefBy` once made all 87,519 classes mutable:
+  patching every default patch at once peaked at 4.7 GB and failed with a 1.5 GB heap (see
+  [issue #7](https://github.com/hyzor/hyzor-morphe-patches/issues/7)). The scans now read the
+  immutable classes and make only the ~70 hooked classes mutable, so the same set completes
+  with a 1 GB heap (about 2.4 GB peak without a heap limit, 1.4 GB peak at 1.5 GB), most of
+  which is the merge and loading the app's eight DEX files. Patching the arm64-only APK
+  instead of the full APKM avoids most of the merge cost.
 - **Clone Chess.com changes the package name** to `com.chess.noam` and renames the app's
   own permissions and provider authorities so both installs can coexist. It is off by
   default; leaving it off keeps the normal `com.chess` package that updates in place.

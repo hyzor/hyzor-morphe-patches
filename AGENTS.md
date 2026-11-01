@@ -396,6 +396,12 @@ force-stop the app so the next test starts cold.
   though the package is public.
 - **Ambiguous fingerprints:** a duplicate match is only an error under `--validate`;
   without it the first match wins silently.
+- **Don't make a class mutable just to read it:** `mutableClassDefBy` inside
+  `classDefForEach` converts every class in the app, and each converted class is recompiled
+  into a new DEX file before the APK is written. On Chess.com (87,519 classes) that made the
+  default patch set need 4.7 GB and fail at a 1.5 GB heap. Scan `classDef.methods` first,
+  collect the matches, then make only the classes that get a hook mutable
+  (`CustomTabsPatch` and `LichessPuzzlesPatch` do this).
 - **Version string mismatch:** Morphe matches the target's `versionName`. Sleep as Android
   has no build suffix; Chess.com includes `-googleplay`. A typo makes Morphe show the target
   while every fingerprint fails.
