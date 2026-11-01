@@ -46,8 +46,11 @@ extension learns about the app lifecycle through a hook that
   [issue #7](https://github.com/hyzor/hyzor-morphe-patches/issues/7)). The scans now read the
   immutable classes and make only the ~70 hooked classes mutable, so the same set completes
   with a 1 GB heap (about 2.4 GB peak without a heap limit, 1.4 GB peak at 1.5 GB), most of
-  which is the merge and loading the app's eight DEX files. Patching the arm64-only APK
-  instead of the full APKM avoids most of the merge cost.
+  which is the merge and loading the app's eight DEX files (78 MB of dex, 87k classes). An
+  arm64-only bundle is about half that input (the other three ABI splits are ~120 MB), so it
+  is worth using on a small device. Morphe's *Strip libs* option (`--striplibs`) does not help
+  here: it runs after the bundle is merged, so patching peaks at the same 2.4 GB, and only the
+  output gets smaller (347 MB → 227 MB keeping `arm64-v8a`).
 - **Clone Chess.com changes the package name** to `com.chess.noam` and renames the app's
   own permissions and provider authorities so both installs can coexist. It is off by
   default; leaving it off keeps the normal `com.chess` package that updates in place.
