@@ -1,5 +1,6 @@
 package dev.hyzor.patches.duolingo.misc.icon
 
+import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.resourcePatch
 import dev.hyzor.patches.duolingo.shared.Constants.DUOLINGO
 import dev.hyzor.patches.duolingo.shared.integrity.disableLoginIntegrityPatch
@@ -25,15 +26,19 @@ val disableDynamicIconPatch = resourcePatch(
         document("AndroidManifest.xml").use { document ->
             val aliases = document.getElementsByTagName("activity-alias")
 
-            val toRemove = buildList {
-                for (index in 0 until aliases.length) {
-                    val element = aliases.item(index) as? Element ?: continue
-                    if (element.getAttribute("android:enabled") == "false" &&
-                        element.getAttribute("android:targetActivity") == "com.duolingo.splash.LaunchActivity"
-                    ) {
-                        add(element)
-                    }
+            val toRemove = (0 until aliases.length).mapNotNull { index ->
+                val element = aliases.item(index) as? Element ?: return@mapNotNull null
+                element.takeIf {
+                    it.getAttribute("android:enabled") == "false" &&
+                        it.getAttribute("android:targetActivity") ==
+                        "com.duolingo.splash.LaunchActivity"
                 }
+            }
+
+            if (toRemove.isEmpty()) {
+                throw PatchException(
+                    "No disabled LaunchActivity activity-alias entries found in AndroidManifest.xml",
+                )
             }
 
             toRemove.forEach { it.parentNode.removeChild(it) }

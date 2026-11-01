@@ -20,18 +20,29 @@ object UserFingerprint : Fingerprint(
 )
 
 /**
- * The helper that reads the user's "paid" bit. It is a public static `(User, L…)Z` that calls
- * `getClass()` and immediately reads a boolean field of `User`, i.e. `z22.k(User, f9d)Z` in
- * 6.104.3 (the field is `R0`). The field is computed rather than serialized, which is why it is
+ * The helper that reads the user's "paid" bit. It is a public static `(User, L…)Z` that starts
+ * with `getClass()` and immediately reads the boolean `User` field (`z22.k(User, f9d)Z` in
+ * 6.104.3, the field is `R0`). The field is computed rather than serialized, which is why it is
  * located through its usage instead of the serializer's field names.
+ *
+ * `MatchFirst` + `MatchAfterImmediately` pin that exact two-instruction shape: the other public
+ * static `(User, …)Z` helper (`Ljev.f`) also calls `getClass()`, but only after a second
+ * `getClass()` call, so it does not match.
+ *
+ * The second parameter is `"L"` in the fingerprint: Morphe matches parameter types with
+ * `startsWith`, so that pins "some reference type" without pinning the obfuscated holder class.
  */
 object UserIsPaidFieldUsageFingerprint : Fingerprint(
     accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC),
     returnType = "Z",
     parameters = listOf("Lcom/duolingo/data/user/User;", "L"),
     filters = listOf(
-        methodCall(name = "getClass"),
-        fieldAccess(definingClass = "Lcom/duolingo/data/user/User;"),
+        methodCall(name = "getClass", location = InstructionLocation.MatchFirst()),
+        fieldAccess(
+            definingClass = "Lcom/duolingo/data/user/User;",
+            type = "Z",
+            location = InstructionLocation.MatchAfterImmediately(),
+        ),
     ),
 )
 
@@ -84,11 +95,22 @@ fun getVideoCallTabCtaButtonStateFieldFingerprint(field: String): Fingerprint {
 }
 
 /**
- * `EnergyConfig.<init>(current, max, …)` in 6.104.3. The primary constructor gained the trailing
- * `Ljava/lang/Integer;` parameter (`EnergyConfig(IIJJJIJLjava/lang/Integer;)V`).
+ * `EnergyConfig.<init>(current, max, …)` in 6.104.3: the primary constructor, which the app uses
+ * when it updates the energy config. Its first two parameters are the current and maximum energy.
  */
 object EnergyConfigCtorFingerprint : Fingerprint(
     definingClass = "Lcom/duolingo/core/energy/models/EnergyConfig;",
     name = "<init>",
     parameters = listOf("I", "I", "J", "J", "J", "I", "J", "Ljava/lang/Integer;"),
+)
+
+/**
+ * The synthetic Kotlin default-arguments constructor that the Kotlinx serializer calls when it
+ * deserializes an `EnergyConfig`. The leading `I` is the default-arguments mask, so the current
+ * and maximum energy are p2 and p3 (not p1 and p2 as in the primary constructor).
+ */
+object EnergyConfigSerializationCtorFingerprint : Fingerprint(
+    definingClass = "Lcom/duolingo/core/energy/models/EnergyConfig;",
+    name = "<init>",
+    parameters = listOf("I", "I", "I", "J", "J", "J", "I", "J", "Ljava/lang/Integer;", "Z"),
 )

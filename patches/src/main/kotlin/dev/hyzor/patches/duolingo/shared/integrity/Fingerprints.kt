@@ -12,22 +12,25 @@ import com.android.tools.smali.dexlib2.Opcode
  * patch swaps that parameter for the app's own "empty" signal instance inside the constructor,
  * which covers every construction site (the email login builder, the shared-login lambda and the
  * Kotlinx serializer).
+ *
+ * The signal type is obfuscated, so the fourth parameter only pins that it is a reference type
+ * (`"L"` is a prefix match in Morphe's parameter matching).
  */
-object LoginStateFingerprint : Fingerprint(
+object EmailLoginRequestCtorFingerprint : Fingerprint(
     definingClass = "Lcom/duolingo/data/signuplogin/LoginRequest\$EmailLoginRequest;",
     accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.CONSTRUCTOR),
-    returnType = "V",
+    parameters = listOf("Ljava/lang/String;", "Ljava/lang/String;", "Ljava/lang/String;", "L"),
 )
 
 /**
  * The email login request builder (`k3o.G0(String, String)` in 6.104.3, previously
  * `LoginFragmentViewModel`). It is the only method returning `EmailLoginRequest`, and it loads
- * the empty integrity signal with a single `sget-object` before constructing the request.
+ * the empty integrity signal with a `sget-object` before constructing the request.
  *
  * The class name is obfuscated and changed between versions, so this matches on the return type
  * and parameters instead.
  */
-object BasicLoginFingerprint : Fingerprint(
+object EmailLoginBuilderFingerprint : Fingerprint(
     returnType = "Lcom/duolingo/data/signuplogin/LoginRequest\$EmailLoginRequest;",
     parameters = listOf("Ljava/lang/String;", "Ljava/lang/String;"),
     isStatic = false,

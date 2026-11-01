@@ -2,25 +2,23 @@ package dev.hyzor.patches.duolingo.premium
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
-import app.morphe.patcher.extensions.InstructionExtensions.instructions
-import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.patch.stringOption
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
-import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 import dev.hyzor.patches.duolingo.shared.Constants.DUOLINGO
-import dev.hyzor.patches.duolingo.shared.Utils.fieldFromToString
+import dev.hyzor.patches.duolingo.shared.fieldFromToString
 import dev.hyzor.patches.duolingo.shared.integrity.disableLoginIntegrityPatch
+import dev.hyzor.patches.util.addInstructionsBeforeReturn
 import dev.hyzor.patches.util.constructor
 import dev.hyzor.patches.util.fieldByName
 import dev.hyzor.patches.util.getReference
 import dev.hyzor.patches.util.indexOfFirstInstructionOrThrow
 import dev.hyzor.patches.util.removeFlag
 
-enum class PremiumVariant {
+private enum class PremiumVariant {
     SUPER,
     MAX,
 }
@@ -64,9 +62,10 @@ val enablePremiumPatch = bytecodePatch(
     )
 
     execute {
-        val optionIsMax = enumValueOf<PremiumVariant>(premiumVariant!!) == PremiumVariant.MAX
+        val optionIsMax = premiumVariant == PremiumVariant.MAX.name
 
         val userClass = UserFingerprint.classDef
+        val userType = userClass.type
         val hasPlusField = userClass.fieldFromToString("hasPlus")
         val subscriberLevelField = userClass.fieldFromToString("subscriberLevel")
         val subscriberLevel = if (optionIsMax) "GOLD" else "PREMIUM"
@@ -74,62 +73,41 @@ val enablePremiumPatch = bytecodePatch(
         // These fields are calculated in the User constructor, but not serialized, so find their
         // names through the methods that read them. The MAX bit is only needed for the MAX
         // variant, so do not fail a Super patch when that helper moves.
-        val isPaidField = UserIsPaidFieldUsageFingerprint.let { fingerprint ->
-            val index = fingerprint.instructionMatches.last().index
-            fingerprint.method.getInstruction<ReferenceInstruction>(index)
-                .getReference<FieldReference>()
-                ?: throw PatchException("Could not resolve the user's isPaid field")
-        }
+        val isPaidField = UserIsPaidFieldUsageFingerprint.instructionMatches.last().getFieldAccessed()
         val hasGoldField = if (optionIsMax) {
-            UserHasGoldFieldUsageFingerprint.let { fingerprint ->
-                val index = fingerprint.instructionMatches.first().index
-                fingerprint.method.getInstruction<ReferenceInstruction>(index)
-                    .getReference<FieldReference>()
-                    ?: throw PatchException("Could not resolve the user's hasGold field")
-            }
+            UserHasGoldFieldUsageFingerprint.instructionMatches.last().getFieldAccessed()
         } else {
             null
         }
 
         // Remove final from the fields we patch.
-        listOfNotNull(hasPlusField, subscriberLevelField, isPaidField, hasGoldField).forEach {
-            userClass.fieldByName(it.name).removeFlag(AccessFlags.FINAL)
-        }
+        listOf(hasPlusField.name, subscriberLevelField.name, isPaidField.name, hasGoldField?.name)
+            .filterNotNull()
+            .forEach { userClass.fieldByName(it).removeFlag(AccessFlags.FINAL) }
 
         // Patching the User passed to LoggedIn(user) only affects the signed-in account, instead
         // of every User object (e.g. a friend's profile).
         val loggedInConstructor = LoggedInStateFingerprint.classDef.constructor
-        val userType = userClass.type
-        val patchIndex = loggedInConstructor.instructions.count() - 1
 
-        val instructions = buildString {
-            appendLine(
-                """
-                const/4 v0, 0x1
-                iput-boolean v0, p1, $userType->${isPaidField.name}:Z
-                iput-boolean v0, p1, $userType->${hasPlusField.name}:Z
-                """.trimIndent(),
-            )
-
-            if (optionIsMax) {
-                appendLine("iput-boolean v0, p1, $userType->${hasGoldField!!.name}:Z")
-            }
-
-            appendLine(
-                """
-                sget-object v0, ${subscriberLevelField.type}->$subscriberLevel:${subscriberLevelField.type}
-                iput-object v0, p1, $userType->${subscriberLevelField.name}:${subscriberLevelField.type}
-                """.trimIndent(),
-            )
+        val smali = buildList {
+            add("const/4 v0, 0x1")
+            add("iput-boolean v0, p1, $userType->${isPaidField.name}:Z")
+            add("iput-boolean v0, p1, $userType->${hasPlusField.name}:Z")
+            hasGoldField?.let { add("iput-boolean v0, p1, $userType->${it.name}:Z") }
+            add("sget-object v0, ${subscriberLevelField.type}->$subscriberLevel:${subscriberLevelField.type}")
+            add("iput-object v0, p1, $userType->${subscriberLevelField.name}:${subscriberLevelField.type}")
         }
 
         // Single-parameter constructor, so the User is always in p1, and the insertion goes right
         // before its return so the existing registers can be clobbered.
-        loggedInConstructor.addInstructions(patchIndex, instructions)
+        loggedInConstructor.addInstructionsBeforeReturn(smali.joinToString("\n"))
 
-        // Start with a full energy bar: the first constructor parameter is the current energy and
-        // the second is the maximum, so copy the maximum over the current value.
-        EnergyConfigCtorFingerprint.match().method.addInstructions(0, "move p1, p2")
+        // The primary constructor is used when the app updates the energy config; the Kotlinx
+        // serializer calls the synthetic default-args constructor instead, so patch both.
+        EnergyConfigCtorFingerprint.method.addInstructions(0, "move p1, p2")
+        // In the synthetic constructor p1 is the default-args mask, p2 is the current energy and
+        // p3 is the maximum.
+        EnergyConfigSerializationCtorFingerprint.method.addInstructions(0, "move p2, p3")
 
         if (optionIsMax) {
             // `SubscriptionFeatureGroup` lives on the server-side user data, so patch the places
@@ -138,11 +116,10 @@ val enablePremiumPatch = bytecodePatch(
             features.forEach { feature ->
                 getFeatureFingerprint(feature).matchAll().forEach { match ->
                     val resultIndex = match.instructionMatches.last().index
-                    val resultReg = match.method.getInstruction<OneRegisterInstruction>(resultIndex).registerA
-                    match.method.addInstructions(
-                        resultIndex + 1,
-                        "const/4 v$resultReg, 0x1",
-                    )
+                    val resultReg = match.method
+                        .getInstruction<OneRegisterInstruction>(resultIndex)
+                        .registerA
+                    match.method.addInstructions(resultIndex + 1, "const/16 v$resultReg, 0x1")
                 }
             }
 
@@ -163,7 +140,7 @@ val enablePremiumPatch = bytecodePatch(
                 }
                 val paramReg = constructor.getInstruction<TwoRegisterInstruction>(setFieldIndex).registerA
 
-                constructor.addInstructions(setFieldIndex, "const/4 v$paramReg, 0x0")
+                constructor.addInstructions(setFieldIndex, "const/16 v$paramReg, 0x0")
             }
         }
     }

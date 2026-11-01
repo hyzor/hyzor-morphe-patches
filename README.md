@@ -333,9 +333,10 @@ constructor for `Q0`) instead of through `toString()`.
 The values are written into the `User` instance that the `LoggedIn` state wraps
 (`ss90.<init>(User)` in 6.104.3), so only the signed-in account is affected —
 opening a friend's profile still shows their real state — and the fields are set
-again every time the state is rebuilt from a fresh server user. `EnergyConfig`'s
-primary constructor also gets `move p1, p2` so the current energy starts at the
-maximum.
+again every time the state is rebuilt from a fresh server user. `EnergyConfig`'s primary
+constructor gets `move p1, p2` and its Kotlinx default-args constructor gets `move p2, p3`
+(the leading argument is the default-args mask), so the current energy is the maximum
+whichever constructor the app uses.
 
 MAX additionally sets the computed MAX bit, forces the
 `VIDEO_CALL_IN_PATH` / `VIDEO_CALL_IN_PRACTICE_HUB` feature checks and clears the
@@ -351,7 +352,7 @@ login path passes), so the patch loads that instance instead of the supplied
 parameter inside the constructor. That covers the builder, the shared-login lambda
 and the Kotlinx serializer. Every other Duolingo patch depends on it.
 
-### Verification
+### On-device verification
 
 Verified end-to-end on a Pixel 9 (Android 17) with a real account, patching the
 supplied APKM with the built bundle and installing the merged APK:
@@ -384,7 +385,8 @@ Integrity anywhere else.
 APK's DEX files without running Gradle, Morphe or a disassembler. It detects the app
 from the classes that are present. Duolingo's structural fingerprints (string anchors
 and field-usage shapes) cannot be expressed as class/method names, so for Duolingo the
-script checks only its pinned classes — build and apply the bundle for the rest.
+script checks only its pinned class/method signatures — build and apply the bundle for
+the rest.
 
 ```
 python3 tools/verify_fingerprints.py /path/to/app.apk

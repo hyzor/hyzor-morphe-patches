@@ -31,7 +31,7 @@ val enableDebugModePatch = bytecodePatch(
             .getReference<FieldReference>()
             ?: throw PatchException("Could not find the isDebug field reference")
 
-        val buildConfigProviderClass = mutableClassDefBy { it.type == isDebugFieldRef.definingClass }
+        val buildConfigProviderClass = mutableClassDefBy(isDebugFieldRef.definingClass)
 
         buildConfigProviderClass.constructor.addInstructionsBeforeReturn(
             """
