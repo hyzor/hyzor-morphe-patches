@@ -91,7 +91,8 @@ public final class HomeTabs {
                 Object tab = byName(all, name);
                 if (tab != null) result.add(tab);
             }
-            return result.isEmpty() ? tabs : result;
+            // An empty list is the user turning every middle tab off; Home and More stay.
+            return result;
         } catch (Throwable throwable) {
             return tabs;
         }
