@@ -1,3 +1,13 @@
+## [1.5.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.4.2-dev.1...v1.5.0-dev.1) (2026-11-02)
+
+### 🐛 Bug Fixes
+
+* **nova:** harden the Enable Prime hook and correct its docs ([efc33fa](https://github.com/hyzor/hyzor-morphe-patches/commit/efc33fa073bc3c6a80dd22b47398c17e36200184))
+
+### ✨ New Features
+
+* **nova:** add Nova Launcher 8.9.5 Enable Prime patch ([0ab9787](https://github.com/hyzor/hyzor-morphe-patches/commit/0ab9787c1219957f4e82a3f7b1d2222210237667))
+
 ## [1.4.2-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.4.1...v1.4.2-dev.1) (2026-11-02)
 
 ### 🐛 Bug Fixes
