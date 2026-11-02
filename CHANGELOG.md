@@ -1,3 +1,10 @@
+## [1.4.2-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.4.1...v1.4.2-dev.1) (2026-11-02)
+
+### 🐛 Bug Fixes
+
+* **chesscom:** apply the Home and bottom bar settings ([e39c561](https://github.com/hyzor/hyzor-morphe-patches/commit/e39c56193b7b632d780e58651ebda354873d829d))
+* **chesscom:** hide the Settings Upgrade row without crashing ([6db6ea0](https://github.com/hyzor/hyzor-morphe-patches/commit/6db6ea03dac657cdb7672bc01316e0eb5ff5ad73))
+
 ## [1.4.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.4.0...v1.4.1) (2026-11-01)
 
 ### 🐛 Bug Fixes
