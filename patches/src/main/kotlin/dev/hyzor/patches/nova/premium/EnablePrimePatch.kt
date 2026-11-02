@@ -1,6 +1,7 @@
 /*
- * Copyright 2026 rushiranpise
+ * Copyright 2026 rushiranpise and hoo-dles
  * https://github.com/rushiranpise/morphe-patches
+ * https://github.com/hoo-dles/morphe-patches
  *
  * Ported from the 8.8.8 Nova Launcher patch in rushiranpise/morphe-patches and the 8.8.6
  * patch in hoo-dles/morphe-patches (both GPLv3), re-resolved for 8.9.5.
@@ -9,10 +10,15 @@
 package dev.hyzor.patches.nova.premium
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
+import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.bytecodePatch
+import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import dev.hyzor.patches.nova.shared.Constants.NOVA_LAUNCHER
 import dev.hyzor.patches.util.returnEarly
+
+/** The persisted `"1"` value Nova writes when it accepts a direct Prime licence. */
+private const val PRIME_DIRECT_LICENSE = "0x200"
 
 /**
  * Nova Launcher 8.9.5 keeps the Prime decision on the device, in two places that both have to
@@ -20,7 +26,7 @@ import dev.hyzor.patches.util.returnEarly
  *
  * ### The Prime state
  *
- * `i10.g2.h` is the Prime boolean. More than sixty classes read it directly, and the static
+ * `i10.g2.h` is the Prime boolean. More than forty classes read it directly, and the static
  * `px.b1.b()` gate reads it too and ORs in two fallbacks: the separate Nova Prime unlocker
  * APK (the `px.b1.b` field) and the time-limited grant in `fy.g0.a()`.
  *
@@ -36,8 +42,9 @@ import dev.hyzor.patches.util.returnEarly
  * 8.9.5 anti-tamper flow consult it:
  *
  *   - `px.b1.c(Context)` returns immediately when it is true, so the Play licence (LVL)
- *     checker is never installed. A re-signed APK always fails LVL, and the failure handler
- *     (`ci.j4.d()`) clears `"1"` and posts a runnable that sets `i10.g2.h` back to false.
+ *     checker is never installed. A re-signed APK always fails LVL; the failure handler
+ *     (`ci.j4.d()`) clears `"1"` and posts `px.b1.g`, which re-enters `px.b1.c()` and can
+ *     drop `i10.g2.h` back to false.
  *   - the billing sync takes it as "trust the cache" when Play returns no purchases.
  *   - `fy.d0.o()` reports the subscription as active.
  *
@@ -63,12 +70,16 @@ val enablePrimePatch = bytecodePatch(
         // 0x200 makes both the field and the "direct licence" marker come out as the app's own
         // Prime state; it is re-applied on every startup.
         val primeStateInit = PrimeStateInitFingerprint.method
-        val persistedPrimeRead = PrimeStateInitFingerprint.instructionMatches.last()
+        val persistedPrimeRead = PrimeStateInitFingerprint.instructionMatches.lastOrNull {
+            it.instruction.opcode == Opcode.MOVE_RESULT
+        } ?: throw PatchException(
+            "Nova Launcher: PrimeStateInitFingerprint matched no getInt() move-result",
+        )
         val valueRegister = persistedPrimeRead.getInstruction<OneRegisterInstruction>().registerA
 
         primeStateInit.addInstructions(
             persistedPrimeRead.index + 1,
-            "const/16 v$valueRegister, 0x200",
+            "const/16 v$valueRegister, $PRIME_DIRECT_LICENSE",
         )
 
         // Report an active subscription. Besides unlocking the subscription-gated surfaces this

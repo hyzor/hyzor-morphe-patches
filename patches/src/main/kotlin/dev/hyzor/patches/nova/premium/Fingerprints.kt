@@ -1,6 +1,7 @@
 /*
- * Copyright 2026 rushiranpise
+ * Copyright 2026 rushiranpise and hoo-dles
  * https://github.com/rushiranpise/morphe-patches
+ * https://github.com/hoo-dles/morphe-patches
  *
  * Ported from the 8.8.8 Nova Launcher patch in rushiranpise/morphe-patches and the 8.8.6
  * patch in hoo-dles/morphe-patches (both GPLv3), re-resolved for 8.9.5.
@@ -22,7 +23,7 @@ import com.android.tools.smali.dexlib2.Opcode
  *
  * Its whole body is an OR of three sources:
  *
- *   `i10.g2.h`                  the runtime Prime boolean (read directly by 60+ classes)
+ *   `i10.g2.h`                  the runtime Prime boolean (read directly by 40+ classes)
  *   `px.b1.b`                   set when the separate Nova Prime unlocker APK is installed
  *   `fy.g0.a(Context)`          the time-limited "prime grant" from `nova_prime_grant`
  *
@@ -30,9 +31,10 @@ import com.android.tools.smali.dexlib2.Opcode
  * `NovaLauncher`, `NovaFeedContentView` and the settings screens.
  *
  * Both filter anchors are unique to this method across all five DEX shards: the boolean read
- * of the Prime field plus the call to the grant check. Pinning the instruction shape rather
- * than the obfuscated `px/b1.b` name keeps the fingerprint working if the next obfuscation
- * pass moves the class.
+ * of the Prime field plus the call to the grant check. The fingerprint deliberately does not
+ * pin its own class or method name (`px/b1.b`): the two instruction anchors find it. They
+ * still name the obfuscated `i10/g2` field and `fy/g0` grant check, so re-resolve those two
+ * anchors if a future obfuscation pass moves them; the rest of the shape is structural.
  */
 object IsPrimeFingerprint : Fingerprint(
     returnType = "Z",
