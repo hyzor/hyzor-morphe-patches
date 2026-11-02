@@ -341,7 +341,7 @@ claim in the PR.
 | NYT Games | Me → Settings reports a Games subscriber; archive opens; bonus puzzle is playable; AMOLED screens are black while WebView games stay dark grey. |
 | Chess.com | Noam's Patches row appears; only selected patches are listed; ads gone; Arrows draws on the board; Stockfish analyses offline (after the patch-time download); optionally clone installs as `com.chess.noam` alongside the stock app. |
 | Duolingo | Fresh install + email login works; Super Dashboard and profile badge; debug options open; one launcher icon; RampUp timer only if the account has a challenge. |
-| Nova Launcher | Settings header reads `Nova Prime <version>` instead of `Nova Launcher <version>`; `Prime` badges next to App drawer → Hide apps and friends are gone and the rows open instead of the subscription screen. |
+| Nova Launcher | Settings → version row reads `Nova Prime <version>` instead of `Nova Launcher <version>`; `Prime` badges next to App drawer → Hide apps (and similar rows) are gone and the rows open instead of the subscription screen. |
 
 Record what was **not** exercised (e.g. “MAX variant applied but not installed”, “RampUp
 verified in the patched DEX, account has no challenge”). Be explicit about static-only

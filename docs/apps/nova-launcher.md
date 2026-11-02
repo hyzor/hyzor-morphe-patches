@@ -75,12 +75,18 @@ account, and the Manage Subscription screen keeps offering the Nova AI / Plus up
 
   | | Stock | Patched |
   |---|---|---|
-  | Settings header | `Nova Launcher 89500 (8.9.5)` | `Nova Prime 89500 (8.9.5)` |
+  | Settings → version row | `Nova Launcher 89500 (8.9.5)` | `Nova Prime 89500 (8.9.5)` |
   | Manage Subscription summary | `Unlock more with Nova Prime or Plus` | `Nova Prime · Upgrade for Nova AI` |
   | App drawer → Hide apps | `Prime` badge, opens Manage Subscription | no badge, opens the hide-apps list |
   | First launch | GDPR ad-consent dialog | no consent dialog |
 
   The Prime state survived a force-stop and relaunch, and logcat showed no fatal exceptions.
+  The top-level Settings title stays `Nova Launcher` in both builds; the Prime state is the
+  version row below Manage Subscription.
+
+- Re-installed the patched APK on the Pixel 9 AVD after clearing app data: the version row
+  read `Nova Prime 89500 (8.9.5)`, Hide apps had no Prime badge and opened the hide list, and
+  the state survived force-stop + relaunch.
 
 Not exercised: any real purchase, Play account flow, physical hardware, or the behaviour after
 the 48-hour subscription cache expiry (the patched `fy.d0.w()` skips that check entirely).
