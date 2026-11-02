@@ -21,16 +21,16 @@ import dev.hyzor.patches.util.returnEarly
 private const val PRIME_DIRECT_LICENSE = "0x200"
 
 /**
- * Nova Launcher 8.9.5 keeps the Prime decision on the device, in two places that both have to
+ * Nova Launcher 8.9.6 keeps the Prime decision on the device, in two places that both have to
  * agree before the paid surfaces appear.
  *
  * ### The Prime state
  *
- * `i10.g2.h` is the Prime boolean. More than forty classes read it directly, and the static
- * `px.b1.b()` gate reads it too and ORs in two fallbacks: the separate Nova Prime unlocker
- * APK (the `px.b1.b` field) and the time-limited grant in `fy.g0.a()`.
+ * `j10.h2.h` is the Prime boolean. More than forty classes read it directly, and the static
+ * `qx.b1.b()` gate reads it too and ORs in two fallbacks: the separate Nova Prime unlocker
+ * APK (the `qx.b1.b` field) and the time-limited grant in `gy.g0.a()`.
  *
- * `i10.g2.a(SharedPreferences)` derives the field on every startup from the persisted `"1"`
+ * `j10.h2.a(SharedPreferences)` derives the field on every startup from the persisted `"1"`
  * integer: `h = value != 0` and `c = value == 0x200`, where `0x200` is the value the app
  * itself writes when it accepts the unlocker APK. Forcing that one read to `0x200` therefore
  * reproduces the app's own "Prime" state, including the marker that says Prime came from a
@@ -38,18 +38,25 @@ private const val PRIME_DIRECT_LICENSE = "0x200"
  *
  * ### The revocation path
  *
- * `fy.d0.w(Context)` reports whether a fresh subscription is on record. Three pieces of the
- * 8.9.5 anti-tamper flow consult it:
+ * `gy.d0.w(Context)` reports whether a fresh subscription is on record. Three pieces of the
+ * 8.9.6 anti-tamper flow consult it:
  *
- *   - `px.b1.c(Context)` returns immediately when it is true, so the Play licence (LVL)
+ *   - `qx.b1.c(Context)` returns immediately when it is true, so the Play licence (LVL)
  *     checker is never installed. A re-signed APK always fails LVL; the failure handler
- *     (`ci.j4.d()`) clears `"1"` and posts `px.b1.g`, which re-enters `px.b1.c()` and can
- *     drop `i10.g2.h` back to false.
+ *     (`ci.j4.d()`) clears `"1"` and posts `qx.b1.g`, which re-enters `qx.b1.c()` and can
+ *     drop `j10.h2.h` back to false.
  *   - the billing sync takes it as "trust the cache" when Play returns no purchases.
- *   - `fy.d0.o()` reports the subscription as active.
+ *   - `gy.d0.o()` reports the subscription as active.
  *
  * The patch only changes these client-side decisions. Anything the app asks Nova's backend
  * for still needs a real account.
+ *
+ * ### Why 8.9.6 and not 8.9.5
+ *
+ * 8.9.5 has a settings regression of its own: its custom switches write the preference but
+ * never repaint, so every toggle looks dead until the screen is recreated. 8.9.6 fixes that
+ * in the app. Targeting 8.9.6 avoids shipping a patch on top of a build whose settings are
+ * already broken.
  */
 @Suppress("unused")
 val enablePrimePatch = bytecodePatch(
@@ -62,7 +69,7 @@ val enablePrimePatch = bytecodePatch(
     compatibleWith(NOVA_LAUNCHER)
 
     execute {
-        // The static gate, so callers that use px.b1.b() instead of reading the field agree
+        // The static gate, so callers that use qx.b1.b() instead of reading the field agree
         // with the field value forced below.
         IsPrimeFingerprint.method.returnEarly(true)
 
