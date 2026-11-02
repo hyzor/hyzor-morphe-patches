@@ -1,3 +1,17 @@
+## [1.5.0](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.4.1...v1.5.0) (2026-11-02)
+
+### 🐛 Bug Fixes
+
+* **chesscom:** apply the Home and bottom bar settings ([e39c561](https://github.com/hyzor/hyzor-morphe-patches/commit/e39c56193b7b632d780e58651ebda354873d829d))
+* **chesscom:** hide the redesign's recommended match with Suggested opponents ([2347960](https://github.com/hyzor/hyzor-morphe-patches/commit/234796047c3a5e8e58b9ab155aa730d37c7a0509))
+* **chesscom:** hide the Settings Upgrade row without crashing ([6db6ea0](https://github.com/hyzor/hyzor-morphe-patches/commit/6db6ea03dac657cdb7672bc01316e0eb5ff5ad73))
+* **chesscom:** let Puzzles move in the bottom bar ([de3e22a](https://github.com/hyzor/hyzor-morphe-patches/commit/de3e22a42571655a61b20f7cde9d7e8fdf046b43))
+* **nova:** harden the Enable Prime hook and correct its docs ([efc33fa](https://github.com/hyzor/hyzor-morphe-patches/commit/efc33fa073bc3c6a80dd22b47398c17e36200184))
+
+### ✨ New Features
+
+* **nova:** add Nova Launcher 8.9.5 Enable Prime patch ([0ab9787](https://github.com/hyzor/hyzor-morphe-patches/commit/0ab9787c1219957f4e82a3f7b1d2222210237667))
+
 ## [1.5.0-dev.2](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.5.0-dev.1...v1.5.0-dev.2) (2026-11-02)
 
 ### 🐛 Bug Fixes
