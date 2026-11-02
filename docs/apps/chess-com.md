@@ -94,3 +94,13 @@ The settings screen groups the features as follows (names as shown in *Noam's Pa
 
 Two further patches are not feature toggles: **Noam's Patches settings** adds the screen
 itself, and **Clone Chess.com** changes the package name.
+
+### Bottom bar
+
+Home and More stay first and last; the five tabs between them are chosen and ordered in
+*Noam's Patches → Bottom bar*. 4.10.23's bar composable builds `[Play, Puzzles, middle
+tabs..., More]` itself, so the `NavigationBarState` hook only reorders the middle tabs: it
+left Puzzles pinned right after Play no matter what the settings said. `HomeTabs.finalTabs`
+therefore rewrites the finished list (the app appends More after the hook), keeping Play
+first, More last, and laying the saved order — Puzzles included — out between them. Without
+a saved order the bar is left exactly as the app built it.
