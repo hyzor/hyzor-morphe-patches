@@ -4,7 +4,7 @@
  * https://github.com/hoo-dles/morphe-patches
  *
  * Ported from the 8.8.8 Nova Launcher patch in rushiranpise/morphe-patches and the 8.8.6
- * patch in hoo-dles/morphe-patches (both GPLv3), re-resolved for 8.9.5.
+ * patch in hoo-dles/morphe-patches (both GPLv3), re-resolved for 8.9.6.
  */
 
 package dev.hyzor.patches.nova.premium
@@ -19,21 +19,21 @@ import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 
 /**
- * `px.b1.b()Z` — the static "am I Prime?" gate in 8.9.5.
+ * `qx.b1.b()Z` — the static "am I Prime?" gate in 8.9.6.
  *
  * Its whole body is an OR of three sources:
  *
- *   `i10.g2.h`                  the runtime Prime boolean (read directly by 40+ classes)
- *   `px.b1.b`                   set when the separate Nova Prime unlocker APK is installed
- *   `fy.g0.a(Context)`          the time-limited "prime grant" from `nova_prime_grant`
+ *   `j10.h2.h`                  the runtime Prime boolean (read directly by 40+ classes)
+ *   `qx.b1.b`                   set when the separate Nova Prime unlocker APK is installed
+ *   `gy.g0.a(Context)`          the time-limited "prime grant" from `nova_prime_grant`
  *
- * 17 call sites use it instead of reading `i10.g2.h`, among them `NovaApplication`,
+ * 17 call sites use it instead of reading `j10.h2.h`, among them `NovaApplication`,
  * `NovaLauncher`, `NovaFeedContentView` and the settings screens.
  *
  * Both filter anchors are unique to this method across all five DEX shards: the boolean read
  * of the Prime field plus the call to the grant check. The fingerprint deliberately does not
- * pin its own class or method name (`px/b1.b`): the two instruction anchors find it. They
- * still name the obfuscated `i10/g2` field and `fy/g0` grant check, so re-resolve those two
+ * pin its own class or method name (`qx/b1.b`): the two instruction anchors find it. They
+ * still name the obfuscated `j10/h2` field and `gy/g0` grant check, so re-resolve those two
  * anchors if a future obfuscation pass moves them; the rest of the shape is structural.
  */
 object IsPrimeFingerprint : Fingerprint(
@@ -41,26 +41,26 @@ object IsPrimeFingerprint : Fingerprint(
     accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.FINAL, AccessFlags.STATIC),
     parameters = emptyList(),
     filters = listOf(
-        // iget-boolean v0, v0, Li10/g2;->h:Z
+        // iget-boolean v0, v0, Lj10/h2;->h:Z
         fieldAccess(
             opcode = Opcode.IGET_BOOLEAN,
-            definingClass = "Li10/g2;",
+            definingClass = "Lj10/h2;",
             name = "h",
         ),
-        // invoke-static {v2}, Lfy/g0;->a(Landroid/content/Context;)Z
+        // invoke-static {v2}, Lgy/g0;->a(Landroid/content/Context;)Z
         methodCall(
-            definingClass = "Lfy/g0;",
+            definingClass = "Lgy/g0;",
             name = "a",
         ),
     ),
 )
 
 /**
- * `i10.g2.a(SharedPreferences)V` — the Prime state initialiser, called once from the
+ * `j10.h2.a(SharedPreferences)V` — the Prime state initialiser, called once from the
  * preference setup ("initPrefs") that runs during application startup.
  *
  * The method reads the persisted `"1"` integer (0 = not Prime, 0x200 = Prime) and derives
- * both `i10.g2.h` (Prime) and `i10.g2.c` (Prime came from a direct licence / the unlocker
+ * both `j10.h2.h` (Prime) and `j10.h2.c` (Prime came from a direct licence / the unlocker
  * APK) from it. The app writes 0x200 into `"1"` itself when it accepts the Prime unlocker.
  *
  * The `android.os.SystemProperties` lookup (the Razer device branch) is a globally unique
@@ -87,7 +87,7 @@ object PrimeStateInitFingerprint : Fingerprint(
 )
 
 /**
- * `fy.d0.w(Context)Z` — "is an active subscription on record?" in 8.9.5.
+ * `gy.d0.w(Context)Z` — "is an active subscription on record?" in 8.9.6.
  *
  * It reads `subActive` from the `nova_billing` preferences and returns false when
  * `last_verified` is older than 48 hours (`y(prefs)`). That is the same check upstream
