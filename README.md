@@ -9,7 +9,7 @@ Patches for apps I use, for use with [Morphe](https://morphe.software).
 | [NYT Games](docs/apps/nyt-games.md) | `com.nytimes.crossword` | `6.48.0` |
 | [Chess.com](docs/apps/chess-com.md) | `com.chess` | `4.10.18`, `4.10.23` |
 | [Duolingo](docs/apps/duolingo.md) | `com.duolingo` | `6.104.3` |
-| [Nova Launcher](docs/apps/nova-launcher.md) | `com.teslacoilsw.launcher` | `8.9.5` |
+| [Nova Launcher](docs/apps/nova-launcher.md) | `com.teslacoilsw.launcher` | `8.9.6` |
 
 ### How to use these patches
 
