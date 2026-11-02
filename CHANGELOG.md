@@ -1,3 +1,10 @@
+## [1.5.0-dev.2](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.5.0-dev.1...v1.5.0-dev.2) (2026-11-02)
+
+### 🐛 Bug Fixes
+
+* **chesscom:** hide the redesign's recommended match with Suggested opponents ([2347960](https://github.com/hyzor/hyzor-morphe-patches/commit/234796047c3a5e8e58b9ab155aa730d37c7a0509))
+* **chesscom:** let Puzzles move in the bottom bar ([de3e22a](https://github.com/hyzor/hyzor-morphe-patches/commit/de3e22a42571655a61b20f7cde9d7e8fdf046b43))
+
 ## [1.5.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.4.2-dev.1...v1.5.0-dev.1) (2026-11-02)
 
 ### 🐛 Bug Fixes
