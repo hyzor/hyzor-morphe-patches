@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,25 +90,77 @@ public final class HomeLayout {
     public static Object recommendedActivities(Object section) {
         if (section == null || !enabled()) return section;
         try {
-            Field listField = null, typeField = null;
+            Field listField = null;
             for (Field field : section.getClass().getDeclaredFields()) {
-                if (Modifier.isStatic(field.getModifiers())) continue;
-                if (List.class.isAssignableFrom(field.getType())) listField = field;
-                else if (field.getType().isEnum()) typeField = field;
+                if (!Modifier.isStatic(field.getModifiers()) && List.class.isAssignableFrom(field.getType())) {
+                    listField = field;
+                    break;
+                }
             }
-            if (listField == null || typeField == null) return section;
+            if (listField == null) return section;
             listField.setAccessible(true);
-            typeField.setAccessible(true);
             List activities = (List) listField.get(section);
             if (activities == null) return section;
             List arranged = arrange(activities);
             if (arranged.equals(activities)) return section;
-            Constructor<?> constructor = section.getClass().getConstructor(List.class, typeField.getType());
-            return constructor.newInstance(arranged, typeField.get(section));
+            return withActivities(section, arranged);
         } catch (Throwable throwable) {
             Utils.logError("Home activities failed", throwable);
             return section;
         }
+    }
+
+    /**
+     * The activities section with a new list. 4.10.23's RecommendedActivitiesSection has a copy
+     * helper that keeps the carousel type and its other fields, so prefer it; its constructors
+     * alone are not enough: the three-argument one resets those fields and takes a bitmask, and
+     * the four-argument one needs them passed in again. Falling back to a constructor reads them
+     * from the matching fields, and looks for the enum by constructor position: the class has two
+     * enum-typed fields (the carousel type and LessonSection), so field order cannot pick one.
+     */
+    @SuppressWarnings("rawtypes")
+    private static Object withActivities(Object section, List activities) throws Exception {
+        Class<?> type = section.getClass();
+        for (Method method : type.getDeclaredMethods()) {
+            Class<?>[] parameters = method.getParameterTypes();
+            if (Modifier.isStatic(method.getModifiers()) && parameters.length == 2 &&
+                parameters[0] == type && parameters[1] == List.class && method.getReturnType() == type
+            ) {
+                method.setAccessible(true);
+                return method.invoke(null, section, activities);
+            }
+        }
+        Constructor<?> best = null;
+        Object[] bestArguments = null;
+        for (Constructor<?> constructor : type.getConstructors()) {
+            Class<?>[] parameters = constructor.getParameterTypes();
+            if (parameters.length < 2 || parameters[0] != List.class || !parameters[1].isEnum()) continue;
+            Object[] arguments = new Object[parameters.length];
+            arguments[0] = activities;
+            boolean complete = true;
+            for (int i = 1; i < parameters.length && complete; i++) {
+                Field field = fieldOfType(type, parameters[i]);
+                if (field == null) {
+                    complete = false;
+                } else {
+                    field.setAccessible(true);
+                    arguments[i] = field.get(section);
+                }
+            }
+            if (complete && (best == null || parameters.length > best.getParameterCount())) {
+                best = constructor;
+                bestArguments = arguments;
+            }
+        }
+        if (best == null) throw new NoSuchMethodException("No activities constructor on " + type.getName());
+        return best.newInstance(bestArguments);
+    }
+
+    private static Field fieldOfType(Class<?> type, Class<?> fieldType) {
+        for (Field field : type.getDeclaredFields()) {
+            if (!Modifier.isStatic(field.getModifiers()) && field.getType() == fieldType) return field;
+        }
+        return null;
     }
 
     /** A section of the redesigned Home, or an empty one when it is hidden. */
