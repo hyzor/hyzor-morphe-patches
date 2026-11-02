@@ -384,6 +384,10 @@ force-stop the app so the next test starts cold.
 ## Git and releases
 
 - Work on `dev` (or a feature branch that merges into it). `main` is stable.
+- **Fetch before you branch and again before you open a PR.** `git status` compares against
+  the cached `origin/dev` ref, not the server, so a clean tree can still be hours behind.
+  Run `git fetch origin` and check `git log --oneline HEAD..origin/dev` first; a stale base is
+  how parallel fixes turn into duplicate commits.
 - Conventional commits drive semantic-release:
   `fix` → patch, `feat` → minor, `perf` → patch, `bump` → “Updated App Support”,
   `build` with scope `Needs bump` → patch, `chore`/`docs`/`ci` → no release.
