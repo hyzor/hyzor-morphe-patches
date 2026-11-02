@@ -166,13 +166,40 @@ public final class HomeLayout {
     /** A section of the redesigned Home, or an empty one when it is hidden. */
     public static Object section(Object section) {
         if (section == null || !enabled()) return section;
-        if (!hiddenSections().contains(redesignSection(prefix(section)))) return section;
+        if (!hiddenSections().contains(redesignId(section))) return section;
         try {
             return section.getClass().getConstructor().newInstance();
         } catch (Throwable throwable) {
             Utils.logError("Home section failed", throwable);
             return section;
         }
+    }
+
+    /**
+     * The redesigned Home's section id for this object. The ChallengesSection doubles as the
+     * "Suggested opponents" row when its title is the recommended-match string, so the
+     * challenges and recommendations switches stay independent.
+     */
+    private static String redesignId(Object section) {
+        String id = redesignSection(prefix(section));
+        if ("challenges".equals(id) && isRecommendedMatch(section)) return "recommendations";
+        return id;
+    }
+
+    /** Whether this ChallengesSection is the recommended-match variant. */
+    private static boolean isRecommendedMatch(Object section) {
+        int recommendedMatch = Utils.resourceId("recommended_match", "string");
+        if (recommendedMatch == 0) return false;
+        for (Field field : section.getClass().getDeclaredFields()) {
+            if (Modifier.isStatic(field.getModifiers()) || field.getType() != int.class) continue;
+            try {
+                field.setAccessible(true);
+                if (field.getInt(section) == recommendedMatch) return true;
+            } catch (Throwable ignored) {
+                // Not this field; the rest are still worth checking.
+            }
+        }
+        return false;
     }
 
     /** Players online now, or nothing when that row is hidden. */

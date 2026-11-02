@@ -35,17 +35,23 @@ Both *Look* features rewrite lists instead of editing a layout:
 
 - **Bottom bar.** `NavigationBarState` keeps the middle tabs. On 4.10.23 the state has no
   `tabs()` getter, so the patch rewrites the four-argument constructor's list
-  (`HomeTabs.middleTabs`) and drops the Puzzles tab the bar adds itself
-  (`HomeTabs.finalTabs`, hooked after the bar's list is built). The saved list may be empty:
-  Home and More stay, and the bar renders with just those two tabs.
+  (`HomeTabs.middleTabs`) and rebuilds the finished list (`HomeTabs.finalTabs`, hooked after
+  the bar's list is built): Home stays first, More last (the app appends it after the hook),
+  and Puzzles follows the saved order like the other tabs instead of staying pinned after
+  Home. The saved list may be empty: Home and More stay, and the bar renders with just those
+  two tabs. Without a saved order the bar is left as the app built it.
 - **Home screen.** The older Home reads a sections map and a tile list; the redesign passes
-  each section to `Content` separately. Hidden sections become empty instances. Tiles are
-  filtered and reordered in `HomeLayout.tiles` (older Home) and `recommendedActivities`
+  each section to `Content` separately. Tiles are filtered and reordered in `HomeLayout.tiles` (older Home) and `recommendedActivities`
   (redesign). 4.10.23's `RecommendedActivitiesSection` has two enum-typed fields (the
   carousel type and `LessonSection`), so the extension only picks the enum the constructor
   uses; it rebuilds the section through the app's own copy helper
   `a(RecommendedActivitiesSection, List)` when present, and otherwise through the full
-  constructor, reading its other arguments from the matching fields.
+  constructor, reading its other arguments from the matching fields. Hidden sections become
+  empty instances (Friends, Game history, Challenges, Suggested opponents); Stats keeps its
+  empty-state frame, because the app draws the Ratings block even with an empty stats list.
+  The redesign has no separate recommendations section: its `ChallengesSection` doubles as
+  the Recommended Match row, so `HomeLayout.section` tells the Challenges and Suggested
+  opponents switches apart by the section title (the `recommended_match` string resource).
 
 Changes from the settings screen need a restart: the Home content is cached in its view
 model, and the bar reads the state once at startup. Both pages show the restart bar.
@@ -94,13 +100,3 @@ The settings screen groups the features as follows (names as shown in *Noam's Pa
 
 Two further patches are not feature toggles: **Noam's Patches settings** adds the screen
 itself, and **Clone Chess.com** changes the package name.
-
-### Bottom bar
-
-Home and More stay first and last; the five tabs between them are chosen and ordered in
-*Noam's Patches → Bottom bar*. 4.10.23's bar composable builds `[Play, Puzzles, middle
-tabs..., More]` itself, so the `NavigationBarState` hook only reorders the middle tabs: it
-left Puzzles pinned right after Play no matter what the settings said. `HomeTabs.finalTabs`
-therefore rewrites the finished list (the app appends More after the hook), keeping Play
-first, More last, and laying the saved order — Puzzles included — out between them. Without
-a saved order the bar is left exactly as the app built it.
