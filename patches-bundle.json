@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-11-01T17:27:49",
-  "description": "## [1.4.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.4.0...v1.4.1) (2026-11-01)\n\n### 🐛 Bug Fixes\n\n* **chesscom:** stop making every class mutable while patching ([10ce39b](https://github.com/hyzor/hyzor-morphe-patches/commit/10ce39b4891f16e13729ca1ffc1b2a0949b16115)), closes [#7](https://github.com/hyzor/hyzor-morphe-patches/issues/7)",
-  "download_url": "https://github.com/hyzor/hyzor-morphe-patches/releases/download/v1.4.1/patches-1.4.1.mpp",
+  "created_at": "2026-11-02T17:16:15",
+  "description": "## [1.5.0-dev.2](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.5.0-dev.1...v1.5.0-dev.2) (2026-11-02)\n\n### 🐛 Bug Fixes\n\n* **chesscom:** hide the redesign's recommended match with Suggested opponents ([2347960](https://github.com/hyzor/hyzor-morphe-patches/commit/234796047c3a5e8e58b9ab155aa730d37c7a0509))\n* **chesscom:** let Puzzles move in the bottom bar ([de3e22a](https://github.com/hyzor/hyzor-morphe-patches/commit/de3e22a42571655a61b20f7cde9d7e8fdf046b43))",
+  "download_url": "https://github.com/hyzor/hyzor-morphe-patches/releases/download/v1.5.0-dev.2/patches-1.5.0-dev.2.mpp",
   "signature_download_url": "",
-  "version": "1.4.1"
+  "version": "1.5.0-dev.2"
 }
