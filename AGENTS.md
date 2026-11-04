@@ -26,7 +26,7 @@ conventions the repository follows.
 | Sleep as Android | `com.urbandroid.sleep` | `20261006`, `20260616` | `patches/.../sleep/` |
 | SnoreLab | `com.snorelab.app` | `2.33.5.7814` | `patches/.../snorelab/` |
 | NYT Games | `com.nytimes.crossword` | `6.48.0` | `patches/.../nytgames/` |
-| Chess.com | `com.chess` | `4.10.18`, `4.10.23` | `patches/.../chesscom/` + `extensions/chesscom/` |
+| Chess.com | `com.chess` | `4.10.23` | `patches/.../chesscom/` + `extensions/chesscom/` |
 | Duolingo | `com.duolingo` | `6.104.3` | `patches/.../duolingo/` |
 | Nova Launcher | `com.teslacoilsw.launcher` | `8.9.5` | `patches/.../nova/` |
 
