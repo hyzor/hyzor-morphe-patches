@@ -42,6 +42,8 @@ public final class LichessPuzzles {
     private static final String TARGET = "lichess_puzzle_target";
     private static final String SOLVED = "lichess_puzzle_solved";
     private static final String FAILED = "lichess_puzzle_failed";
+    private static final String HISTORY = "lichess_puzzle_history";
+    private static final int HISTORY_LIMIT = 20;
     /** Lichess shows a rating as provisional (with a ?) while its deviation is above this. */
     private static final double PROVISIONAL = 110;
 
@@ -405,11 +407,14 @@ public final class LichessPuzzles {
 
     /**
      * Empties the guest queue once a session starts, so chess.com's own signed-out guest puzzles
-     * (older and served first) cannot be played in a Lichess session. 4.10.23's delete lives in a
-     * coroutine the patch cannot name, so this is a no-op there.
+     * (older and served first) cannot be played in a Lichess session. 4.10.23's delete is a
+     * suspend DAO method the patch cannot name, so that version clears the table through Room's
+     * open database instead.
      */
     private static boolean clearGuestQueue(Object repository, PuzzleStore store) {
-        if (puzzleDbField().isEmpty() || puzzleDbClear().isEmpty()) return true;
+        if (puzzleDbField().isEmpty() || puzzleDbClear().isEmpty()) {
+            return clearGuestQueueBySql(repository, store);
+        }
         try {
             Class<?> sourceClass = Class.forName("com.chess.features.puzzles.db.model.ProblemSource");
             Field field = repository.getClass().getDeclaredField(puzzleDbField());
@@ -421,6 +426,47 @@ public final class LichessPuzzles {
             return true;
         } catch (Throwable throwable) {
             Utils.logError("Guest puzzles not cleared", throwable);
+            return false;
+        }
+    }
+
+    /**
+     * 4.10.23's delete lives behind a suspend DAO call; clearing the same table through Room's
+     * writable database is what the DAO would do. Runs on the seeding thread, before the Lichess
+     * rows are inserted, and only once per session (the caller tracks that).
+     */
+    private static boolean clearGuestQueueBySql(Object repository, PuzzleStore store) {
+        try {
+            Field daoField = repository.getClass().getDeclaredField(daoField());
+            daoField.setAccessible(true);
+            Object dao = daoField.get(repository);
+            Object database = dao.getClass().getField("a").get(dao);
+            Method openHelper = null;
+            for (Method method : database.getClass().getMethods()) {
+                if (method.getParameterTypes().length == 0
+                    && method.getReturnType().getName().equals("com.google.android.vz6")) {
+                    openHelper = method;
+                    break;
+                }
+            }
+            if (openHelper == null) throw new IllegalStateException("Room open helper not found");
+            Object helper = openHelper.invoke(database);
+            Object writable = helper.getClass().getMethod("getWritableDatabase").invoke(helper);
+            Class<?> sourceClass = Class.forName("com.chess.features.puzzles.db.model.ProblemSource");
+            Object guest = enumValue(sourceClass, "RATED_GUEST");
+            int source = ((Number) Class.forName("com.chess.db.converters.a")
+                .getMethod("x", sourceClass).invoke(null, guest)).intValue();
+            String sql = "DELETE FROM tactics_problem WHERE source = " + source;
+            try {
+                writable.getClass().getMethod("Z0", String.class).invoke(writable, sql);
+            } catch (NoSuchMethodException noZ0) {
+                writable.getClass().getMethod("execSQL", String.class).invoke(writable, sql);
+            }
+            store.ungive();
+            Utils.log("Lichess puzzles: cleared chess.com guest puzzles (" + source + ")");
+            return true;
+        } catch (Throwable throwable) {
+            Utils.logError("Lichess guest queue not cleared", throwable);
             return false;
         }
     }
@@ -466,6 +512,8 @@ public final class LichessPuzzles {
 
             Glicko before = glicko();
             Glicko after = before.after(puzzleRating > 0 ? puzzleRating : before.rating, correct ? 1 : 0);
+            record(before.rating);
+            record(after.rating);
             save(after);
             count(correct ? SOLVED : FAILED);
             store.solved(number);
@@ -569,9 +617,96 @@ public final class LichessPuzzles {
         }
     }
 
-    /** The Lichess rating as a long while a session runs; the app's value otherwise. */
-    public static long currentRating(long original) {
+    /** The Lichess rating as the app's current rating while a session runs. */
+    public static int currentRating(int original) {
         return session() ? rating() : original;
+    }
+
+    /**
+     * The puzzle screen's rating summary. Guest mode's stats flow emits null, which leaves the
+     * Classic layout without a rating box even when the path stats were filled; a session
+     * supplies an empty summary, and the constructor patch gives it the Lichess rating.
+     */
+    public static Object ratingStats(Object original) {
+        if (original != null || !session()) return original;
+        try {
+            return Class.forName("com.chess.features.puzzles.db.model.o").getConstructor().newInstance();
+        } catch (Throwable throwable) {
+            Utils.logError("Lichess rating summary", throwable);
+            return original;
+        }
+    }
+
+    /** The live Lichess rating for the Classic rating box. */
+    public static int displayRating(int original) {
+        return session() ? rating() : original;
+    }
+
+    /**
+     * The graph's first point. The model draws its primary point first and the list after it,
+     * so the primary must be the oldest rating to keep the line chronological.
+     */
+    public static Object liveRatingPoint(Object point) {
+        if (!session() || point == null) return point;
+        try {
+            int[] values = ratingHistoryValues();
+            int rating = values.length > 0 ? values[0]
+                : displayRating(point.getClass().getField("a").getInt(point));
+            Object selected = point.getClass().getField("b").get(point);
+            return point.getClass().getConstructor(int.class, Boolean.class).newInstance(rating, selected);
+        } catch (Throwable throwable) {
+            Utils.logError("Lichess rating point", throwable);
+            return point;
+        }
+    }
+
+    /** The graph's points after the oldest one, ending with the current Lichess rating. */
+    public static java.util.List<?> ratingHistory(java.util.List<?> original) {
+        if (!session()) return original;
+        int[] values = ratingHistoryValues();
+        java.util.List<Object> points = new java.util.ArrayList<>();
+        try {
+            Constructor<?> constructor = Class.forName("com.chess.features.puzzles.rated.ui.m")
+                .getConstructor(int.class, Boolean.class);
+            for (int i = 1; i < values.length; i++) {
+                points.add(constructor.newInstance(values[i], null));
+            }
+        } catch (Throwable throwable) {
+            Utils.logError("Lichess rating history", throwable);
+            return original;
+        }
+        return points;
+    }
+
+    /**
+     * The puzzle screen's settings list without what does nothing in a Lichess session:
+     * rating visibility, points, goals and chat hints belong to chess.com's Path/coach data,
+     * and difficulty is bypassed by the extension's own puzzle-rating target. Mistake feedback,
+     * voice and the timer are local and keep working.
+     */
+    public static java.util.List<?> withoutUnusedSettings(java.util.List<?> items) {
+        if (items == null || !onPuzzleScreen()) return items;
+        java.util.List<Object> kept = new java.util.ArrayList<>(items.size());
+        for (Object item : items) {
+            if (!isUnusedSetting(item)) kept.add(item);
+        }
+        return kept;
+    }
+
+    private static boolean isUnusedSetting(Object item) {
+        if (item == null) return false;
+        String type = item.getClass().getName();
+        if (type.equals("com.chess.settings.ui.puzzles.a$a")) return true; // Difficulty dropdown
+        if (!type.equals("com.chess.settings.ui.puzzles.a$b")) return false;
+        try {
+            Object setting = item.getClass().getField("a").get(item);
+            if (!(setting instanceof Enum)) return false;
+            String name = ((Enum<?>) setting).name();
+            return "ALWAYS_SHOW_RATING".equals(name) || "PUZZLE_GOALS".equals(name)
+                || "COLLECT_POINTS".equals(name) || "CHAT_HINTS".equals(name);
+        } catch (Throwable ignored) {
+            return false;
+        }
     }
 
     public static int rating() {
@@ -596,7 +731,8 @@ public final class LichessPuzzles {
     public static void resetRating() {
         SharedPreferences preferences = Features.preferences();
         if (preferences == null) return;
-        preferences.edit().remove(RATING).remove(DEVIATION).remove(VOLATILITY).remove(SOLVED).remove(FAILED).apply();
+        preferences.edit().remove(RATING).remove(DEVIATION).remove(VOLATILITY).remove(SOLVED).remove(FAILED)
+            .remove(HISTORY).apply();
     }
 
     /** The rating puzzles are chosen near: a chosen one, or 0 for the player's own. */
@@ -744,6 +880,41 @@ public final class LichessPuzzles {
         if (preferences == null) return;
         preferences.edit().putFloat(RATING, (float) glicko.rating).putFloat(DEVIATION, (float) glicko.deviation)
             .putFloat(VOLATILITY, (float) glicko.volatility).apply();
+    }
+
+    /** Appends a rating to the small history the in-game graph draws. */
+    private static void record(double rating) {
+        SharedPreferences preferences = Features.preferences();
+        if (preferences == null) return;
+        int value = (int) Math.round(rating);
+        int[] existing = ratingHistoryValues();
+        if (existing.length > 0 && existing[existing.length - 1] == value) return;
+        StringBuilder joined = new StringBuilder();
+        int start = Math.max(0, existing.length - (HISTORY_LIMIT - 1));
+        for (int i = start; i < existing.length; i++) {
+            if (joined.length() > 0) joined.append(',');
+            joined.append(existing[i]);
+        }
+        if (joined.length() > 0) joined.append(',');
+        joined.append(value);
+        preferences.edit().putString(HISTORY, joined.toString()).apply();
+    }
+
+    private static int[] ratingHistoryValues() {
+        SharedPreferences preferences = Features.preferences();
+        if (preferences == null) return new int[0];
+        String raw = preferences.getString(HISTORY, "");
+        if (raw == null || raw.isEmpty()) return new int[0];
+        String[] parts = raw.split(",");
+        int[] values = new int[parts.length];
+        int count = 0;
+        for (String part : parts) {
+            try {
+                values[count++] = Integer.parseInt(part.trim());
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        return java.util.Arrays.copyOf(values, count);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

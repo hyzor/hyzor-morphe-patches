@@ -18,6 +18,7 @@ import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.Method
 import com.android.tools.smali.dexlib2.iface.value.ArrayEncodedValue
 import com.android.tools.smali.dexlib2.iface.value.StringEncodedValue
+import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.Instruction
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
@@ -28,6 +29,8 @@ import com.android.tools.smali.dexlib2.iface.reference.StringReference
 import com.android.tools.smali.dexlib2.iface.reference.TypeReference
 
 private const val PUZZLES = "${Constants.EXTENSION_PACKAGE}/lichesspuzzle/LichessPuzzles;"
+private const val SETTINGS_COMBINE =
+    "Lcom/chess/features/settings/puzzles/PuzzlesSettingsViewModel\$special\$\$inlined\$combine\$1\$1\$1;"
 private const val PUZZLES_TAB = "Lcom/chess/features/puzzles/home/ui/HomePuzzlePathRootContentKt;"
 private const val BUTTON_SIZE = "Lcom/chess/palette/core/style/ButtonSize;"
 private const val MENU_LISTENER = "Lcom/chess/palette/components/menu/a;"
@@ -619,20 +622,33 @@ val lichessPuzzlesPatch = bytecodePatch(
         if (currentRating != null) {
             currentRating.whileSession(ratingValue)
         } else {
-            // 4.10.23 stores the current rating as a long and inlines the getter.
+            // 4.10.23 inlines the current getter. The constructor is (JIIIIIJII): the first
+            // long is user_id, the first int is current, so hook the int, not the long.
             ratingStatsClass.methods.first { method ->
                 method.name == "<init>" && method.parameterTypes.size == 9 &&
-                    method.parameterTypes[0].toString() == "J"
+                    method.parameterTypes[0].toString() == "J" &&
+                    method.parameterTypes[1].toString() == "I"
             }.apply {
                 addInstructions(
                     0,
-                    """
-                        invoke-static { p1, p2 }, $PUZZLES->currentRating(J)J
-                        move-result-wide p1
-                    """,
+                    "invoke-static { p3 }, $PUZZLES->currentRating(I)I\nmove-result p3",
                 )
             }
         }
+        // The stats event carries the rating summary. Guest stats have none (the flow emits
+        // null), so the Classic rating box is never built even though path stats were filled
+        // above. Supply an empty summary during a session; its constructor above sets current.
+        statsLoaded.methods.singleOrNull { method ->
+            method.name == "<init>" && method.parameterTypes.size == 3 &&
+                method.parameterTypes[1].toString() == RATING_STATS
+        }?.addInstructions(
+            0,
+            """
+                invoke-static { p2 }, $PUZZLES->ratingStats(Ljava/lang/Object;)Ljava/lang/Object;
+                move-result-object p2
+                check-cast p2, $RATING_STATS
+            """,
+        ) ?: throw PatchException("The puzzle stats event was not found")
         // The rating chip also needs stats, which guest mode gives as flowOf(null).
         val ratingStats = mutableClassDefBy(VIEW_MODEL).methods.singleOrNull { method ->
             method.parameterTypes.isEmpty() && method.annotations.any { annotation ->
@@ -663,6 +679,49 @@ val lichessPuzzlesPatch = bytecodePatch(
             """,
             ExternalLabel("morphe_rating_stats", ratingStats.getInstruction(0)),
         )
+        }
+        // The Classic box's rating comes from the path stats captured when the session started,
+        // and its graph from chess.com's rating history. Show the live Lichess rating instead
+        // (the queue fix makes the screen serve Lichess puzzles), and drop the foreign graph.
+        mutableClassDefBy("Lcom/chess/features/puzzles/rated/ui/h0\$a;").methods
+            .single { it.name == "<init>" && it.parameterTypes.size == 4 }
+            .addInstructions(0, "invoke-static { p2 }, $PUZZLES->displayRating(I)I\nmove-result p2")
+        mutableClassDefBy("Lcom/chess/features/puzzles/rated/ui/l;").methods
+            .single { method ->
+                method.name == "<init>" && method.parameterTypes.size == 3 &&
+                    method.parameterTypes[1].toString() == "Ljava/util/List;"
+            }
+            .addInstructions(
+                0,
+                """
+                    invoke-static { p1 }, $PUZZLES->liveRatingPoint(Ljava/lang/Object;)Ljava/lang/Object;
+                    move-result-object p1
+                    check-cast p1, Lcom/chess/features/puzzles/rated/ui/m;
+                    invoke-static { p2 }, $PUZZLES->ratingHistory(Ljava/util/List;)Ljava/util/List;
+                    move-result-object p2
+                """,
+            )
+        // "Always Show Rating" only drives the Path layout and the submitted rated mode, and a
+        // Lichess session forces the Classic layout with points off, so the row would do nothing
+        // in the puzzle screen's dialog. Drop it from the list while the session is on screen.
+        mutableClassDefByOrNull(SETTINGS_COMBINE)?.let { settings ->
+            fun Instruction.handsOffSettingsList(): Boolean {
+                val reference = (this as? ReferenceInstruction)?.reference as? MethodReference ?: return false
+                return opcode == Opcode.INVOKE_INTERFACE &&
+                    reference.definingClass == "Lcom/google/android/vb6;" && reference.name == "j"
+            }
+            val emit = settings.methods.firstOrNull { method ->
+                method.returnType == "Ljava/lang/Object;" &&
+                    method.implementation?.instructions?.any { it.handsOffSettingsList() } == true
+            } ?: return@let
+            val handoff = emit.implementation!!.instructions.indexOfFirst { it.handsOffSettingsList() }
+            if (handoff < 0) return@let
+            val listRegister = (emit.getInstruction(handoff) as? FiveRegisterInstruction)?.registerE ?: return@let
+            emit.addInstructions(
+                handoff,
+                "invoke-static { v$listRegister }, $PUZZLES->withoutUnusedSettings(Ljava/util/List;)Ljava/util/List;\n" +
+                    "move-result-object v$listRegister",
+            )
         }
         // The Puzzles tab's menu is PathRootMenuState(expanded, big button text, button above it,
         // buttons, ...). The button above is empty unless there is a next lesson. Ours takes the big
