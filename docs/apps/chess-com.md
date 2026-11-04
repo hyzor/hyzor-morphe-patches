@@ -88,6 +88,27 @@ model, and the bar reads the state once at startup. Both pages show the restart 
   tier check to the top tier, so every client-side gate opens; the chess.com backend still
   decides what the account may play or download.
 
+## Lichess puzzles in the puzzle screen
+
+*Puzzles from Lichess* opens chess.com's `RatedPuzzlesGameActivity` in guest mode, and the
+session runs it as `PathPuzzlesMode.REGULAR` so the Classic layout and the rating stats load.
+
+- Before the first batch is seeded, the patch empties chess.com's `RATED_GUEST` queue. On
+  4.10.18 it calls the repository's delete; on 4.10.23 that delete is a suspend DAO method,
+  so the extension runs `DELETE FROM tactics_problem WHERE source = 4` through Room's
+  writable database. Without it, chess.com's older guest puzzles are served first and the
+  screen shows chess.com's rating and history instead of Lichess's.
+- The rating box reads the live Glicko rating, and the graph is drawn from a local history of
+  the last 20 ratings (`lichess_puzzle_history`), not chess.com's rating history. **Reset
+  rating** clears that history too.
+- The in-game settings dialog hides the rows that do nothing in a Lichess session: Collect
+  Puzzle Points, Always Show Rating, Show Puzzle Goals, Difficulty and Show Chat Hints.
+  Mistake Feedback, Voice and Show Timer are local and stay. The full Settings → Puzzles page
+  is unchanged.
+
+Runtime-tested on 4.10.23. 4.10.18 keeps its own queue-delete path and shares the rating and
+dialog hooks.
+
 ## Feature groups
 
 The settings screen groups the features as follows (names as shown in *Noam's Patches*):
