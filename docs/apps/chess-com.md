@@ -1,7 +1,8 @@
 # Chess.com
 
-Package `com.chess`, supported targets `4.10.18-googleplay` (versionCode 280075) and
-`4.10.23-googleplay` (versionCode 280100).
+Package `com.chess`, supported target `4.10.23-googleplay` (versionCode 280100). The
+fingerprints were first written against 4.10.18 (versionCode 280075), which is no longer
+supported; some patches still recognise its shapes as fallbacks.
 Sources: [`patches/.../chesscom/`](../../patches/src/main/kotlin/dev/hyzor/patches/chesscom/) and
 [`extensions/chesscom/`](../../extensions/chesscom/).
 
@@ -58,9 +59,11 @@ model, and the bar reads the state once at startup. Both pages show the restart 
 
 ## Caveats
 
-- **Two targets, one fingerprint set.** 4.10.18 is the build the fingerprints were written
-  against; 4.10.23 is being tested against the same fingerprints. Check both when changing a
-  fingerprint.
+- **Only 4.10.23 is supported; 4.10.18's shapes are dead lookups.** Several patches still
+  try a 4.10.18 class/method first and fall back to the 4.10.23 one
+  (`mutableClassDefByOrNull(old) ?: mutableClassDefBy(new)`, `getterForLabel`), so a patch
+  can sit on a stale name and only work through the fallback. When re-resolving for a new
+  build, update the 4.10.23 name and drop the dead first attempt.
 - **Stockfish analysis needs internet while patching.** The patch downloads the official
   Stockfish 19 Android arm64 build (about 80 MB) from Stockfish's GitHub, verifies the
   archive and engine SHA-256, and places it at `lib/arm64-v8a/libstockfish.so`. It is
@@ -87,6 +90,29 @@ model, and the bar reads the state once at startup. Both pages show the restart 
 - **Nothing premium is unlocked on the server.** *Unlock Premium content* forces the app's
   tier check to the top tier, so every client-side gate opens; the chess.com backend still
   decides what the account may play or download.
+
+## Lichess puzzles in the puzzle screen
+
+*Puzzles from Lichess* opens chess.com's `RatedPuzzlesGameActivity` in guest mode, and the
+session runs it as `PathPuzzlesMode.REGULAR` so the Classic layout and the rating stats load.
+
+- Before the first batch is seeded, the patch empties chess.com's `RATED_GUEST` queue.
+  4.10.23's delete is a suspend DAO method, so the extension runs
+  `DELETE FROM tactics_problem WHERE source = 4` through Room's writable database (a build
+  that exposes a plain delete-by-source method is called directly instead). Without it,
+  chess.com's older guest puzzles are served first and the screen shows chess.com's rating
+  and history instead of Lichess's.
+- The rating box reads the live Glicko rating, and the graph is drawn from a local history of
+  the last 20 ratings (`lichess_puzzle_history`), not chess.com's rating history. **Reset
+  rating** clears that history too.
+- The in-game settings dialog hides the rows that do nothing in a Lichess session: Collect
+  Puzzle Points, Always Show Rating, Show Puzzle Goals, Difficulty and Show Chat Hints.
+  Mistake Feedback, Voice and Show Timer are local and stay. The full Settings → Puzzles page
+  is unchanged.
+
+Runtime-tested on 4.10.23: the seed cleared chess.com's guest queue, puzzles scored locally,
+the rating box and graph showed the Lichess values, and the settings dialog showed only the
+three local rows.
 
 ## Feature groups
 

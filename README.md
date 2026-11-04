@@ -7,7 +7,7 @@ Patches for apps I use, for use with [Morphe](https://morphe.software).
 | [Sleep as Android](docs/apps/sleep-as-android.md) | `com.urbandroid.sleep` | `20261006`, `20260616` |
 | [SnoreLab](docs/apps/snorelab.md) | `com.snorelab.app` | `2.33.5.7814` |
 | [NYT Games](docs/apps/nyt-games.md) | `com.nytimes.crossword` | `6.48.0` |
-| [Chess.com](docs/apps/chess-com.md) | `com.chess` | `4.10.18`, `4.10.23` |
+| [Chess.com](docs/apps/chess-com.md) | `com.chess` | `4.10.23` |
 | [Duolingo](docs/apps/duolingo.md) | `com.duolingo` | `6.104.3` |
 | [Nova Launcher](docs/apps/nova-launcher.md) | `com.teslacoilsw.launcher` | `8.9.6` |
 
@@ -202,7 +202,8 @@ WebViews with the website's own dark theme and stay dark grey.
 
 ## 📱 Chess.com
 
-Supported targets: `4.10.18` and `4.10.23` (both `-googleplay`).
+Supported target: `4.10.23-googleplay`. Older builds, including 4.10.18, are no longer
+supported.
 
 20 patches, most backed by the bundle's Java extension. The **Noam's Patches** row in the
 More tab turns the feature patches on and off, and only the patches you selected appear
