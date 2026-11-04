@@ -231,6 +231,22 @@ patch depends on.
 
 [6.104.3 hook changes and on-device verification →](docs/apps/duolingo.md)
 
+## 📱 Nova Launcher
+
+Supported target: `89600 (8.9.6)` (APK, versionCode `89600`).
+
+| Patch | Default | What it does |
+|---|---|---|
+| Enable Prime | on | Unlocks the features gated on Nova Prime. |
+
+Nova keeps the Prime decision on the device. The patch returns `true` from the static Prime
+gate (`qx.b1.b()`), forces the persisted `"1"` value read at startup to `0x200` (the app's own
+"direct licence" state), and returns `true` from the active-subscription check (`gy.d0.w()`),
+which also keeps the Play licence revocation path from starting. Client-side only: anything
+Nova asks its backend for still needs a real account.
+
+[Port notes, hook map and on-device verification →](docs/apps/nova-launcher.md)
+
 ## ✅ Verification
 
 `tools/verify_fingerprints.py` re-checks the pinned class/method fingerprints against an
@@ -298,7 +314,7 @@ attribution:
 - **Nova Launcher:** port of
   [rushiranpise/morphe-patches](https://github.com/rushiranpise/morphe-patches) and
   [hoo-dles/morphe-patches](https://github.com/hoo-dles/morphe-patches) (both GPLv3),
-  re-resolved for 8.9.5.
+  re-resolved for 8.9.6.
 
 Original patch code is © the upstream authors and contributors — ImNoammm, hoo-dles,
 rushiranpise, Entree3k, PrathxmOp and their contributors. New code in this repository is
