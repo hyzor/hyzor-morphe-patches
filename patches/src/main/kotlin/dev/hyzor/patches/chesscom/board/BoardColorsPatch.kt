@@ -2,16 +2,13 @@ package dev.hyzor.patches.chesscom.board
 
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.extensions.InstructionExtensions.instructions
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import dev.hyzor.patches.chesscom.misc.settings.settingsPatch
 import dev.hyzor.patches.chesscom.shared.Constants
 import dev.hyzor.patches.chesscom.shared.markFeaturePatched
 import dev.hyzor.patches.chesscom.shared.returnString
 import dev.hyzor.patches.chesscom.shared.toBinaryName
-import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 
 private const val BOARD_COLORS = "${Constants.EXTENSION_PACKAGE}/board/BoardColors;"
 

@@ -19,14 +19,11 @@ import dev.hyzor.patches.chesscom.shared.Constants
 import dev.hyzor.patches.chesscom.shared.markFeaturePatched
 import dev.hyzor.patches.chesscom.upsell.NavigateFingerprint
 import dev.hyzor.patches.chesscom.upsell.ShowDialogDirectionFingerprint
-import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import org.w3c.dom.Element
 
 private const val EXTENSION_CLASS = "${Constants.EXTENSION_PACKAGE}/gamereview/GameReviewExtension;"
 private const val GAME_REVIEW = "${Constants.EXTENSION_PACKAGE}/gamereview/GameReview;"
 private const val CHOOSER = "${Constants.EXTENSION_PACKAGE}/gamereview/ReviewChooser;"
-
-private const val LICHESS_MARKS = "chesscom/lichessreview"
 
 private const val ANDROID_NAMESPACE = "http://schemas.android.com/apk/res/android"
 private val LICHESS_SCREENS = listOf(
@@ -34,9 +31,9 @@ private val LICHESS_SCREENS = listOf(
     "dev.hyzor.extension.chesscom.gamereview.LichessActivity",
 )
 
-/** Lichess's move marks (?! ? ?? badges in its colors, and its words) and its pages. */
-private val lichessMarksResourcePatch = resourcePatch(
-    description = "Adds Lichess's move badges, colors and words, and the Lichess login and analysis pages, for Lichess reviews.",
+/** The Lichess login and analysis pages. */
+private val lichessScreensResourcePatch = resourcePatch(
+    description = "Adds the Lichess login and analysis pages, for Lichess reviews.",
 ) {
     execute {
         document("AndroidManifest.xml").use { document ->
@@ -57,36 +54,6 @@ private val lichessMarksResourcePatch = resourcePatch(
                 )
             }
         }
-        listOf("inaccuracy", "mistake", "blunder", "quiet").forEach { name ->
-            val badge = object {}.javaClass.classLoader?.getResourceAsStream("$LICHESS_MARKS/morphe_lichess_$name.xml")
-                ?: throw PatchException("The $name badge is missing from the patches")
-            badge.use { input -> get("res/drawable/morphe_lichess_$name.xml").outputStream().use { input.copyTo(it) } }
-        }
-        document("res/values/colors.xml").use { document ->
-            mapOf("inaccuracy" to "#FF56B4E9", "mistake" to "#FFE69F00", "blunder" to "#FFDF5353").forEach { (name, color) ->
-                document.documentElement.appendChild(
-                    document.createElement("color").apply {
-                        setAttribute("name", "morphe_lichess_$name")
-                        textContent = color
-                    },
-                )
-            }
-        }
-        document("res/values/strings.xml").use { document ->
-            mapOf(
-                "morphe_lichess_inaccuracy_phrase" to "?! Inaccuracy.",
-                "morphe_lichess_mistake_phrase" to "? Mistake.",
-                "morphe_lichess_blunder_phrase" to "?? Blunder.",
-                "morphe_lichess_quiet" to "",
-            ).forEach { (name, text) ->
-                document.documentElement.appendChild(
-                    document.createElement("string").apply {
-                        setAttribute("name", name)
-                        textContent = text
-                    },
-                )
-            }
-        }
     }
 }
 
@@ -95,14 +62,13 @@ val gameReviewPatch = bytecodePatch(
     name = "Unlimited Game Review",
     description = "Game Review asks who reviews the game: chess.com, Lichess's servers (online, with your " +
         "Lichess account) or, with the Stockfish analysis patch, Stockfish on your phone (offline, no daily " +
-        "limit). The phone and Lichess " +
-        "judge moves the Lichess way (?! inaccuracies, ? mistakes, ?? blunders, accuracy and centipawn " +
-        "loss) in chess.com's own review screen, and the phone marks the moves Lichess leaves unmarked " +
-        "Best, Excellent or Good, as chess.com does. Finished games only; a live game on screen is never analysed.",
+        "limit). A Lichess or phone review is scored the Lichess way (accuracy, centipawn loss, and " +
+        "inaccuracies, mistakes and blunders) and shown in chess.com's own review screen. Finished games " +
+        "only; a live game on screen is never analysed.",
 ) {
     compatibleWith(Constants.COMPATIBILITY)
 
-    dependsOn(settingsPatch, lichessMarksResourcePatch)
+    dependsOn(settingsPatch, lichessScreensResourcePatch)
 
     execute {
         markFeaturePatched("gameReviewPatched")

@@ -43,7 +43,6 @@ public final class GameReview {
     /** Who reviews the next game, picked in the review chooser. */
     enum Mode { CHESSCOM, STOCKFISH, LICHESS }
 
-
     private static final String REVIEW_MODE = "review_mode";
     private static volatile Mode mode;
 

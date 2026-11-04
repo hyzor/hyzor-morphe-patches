@@ -1,6 +1,5 @@
 package dev.hyzor.patches.chesscom.timecontrol
 
-import app.morphe.patcher.extensions.InstructionExtensions.addInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
@@ -93,93 +92,91 @@ val shortTimeControlsPatch = bytecodePatch(
         }
 
         // The custom time row: the shared stepper (i) and the minutes row (b) in gamesetup.
-        run {
-            val gamesetup = mutableClassDefBy("Lcom/chess/features/gamesetup/compose/g;")
-            // 1) The slider range: 0..max -> sliderMin()..max for the minutes stepper (max 120).
-            val stepper = gamesetup.methods.single {
-                it.name == "i" && it.returnType == "V" && it.parameterTypes.size == 7
+        val gamesetup = mutableClassDefBy("Lcom/chess/features/gamesetup/compose/g;")
+        // 1) The slider range: 0..max -> sliderMin()..max for the minutes stepper (max 120).
+        val stepper = gamesetup.methods.single {
+            it.name == "i" && it.returnType == "V" && it.parameterTypes.size == 7
+        }
+        stepper.apply {
+            val code = instructions.toList()
+            val rangeIndex = code.indexOfFirst { instruction ->
+                instruction.opcode == Opcode.INVOKE_DIRECT &&
+                    (instruction as? ReferenceInstruction)?.reference.let { reference ->
+                        reference is MethodReference && reference.definingClass == "Lcom/google/android/vk0;" &&
+                            reference.name == "<init>" && reference.parameterTypes.size == 2
+                    }
             }
-            stepper.apply {
-                val code = instructions.toList()
-                val rangeIndex = code.indexOfFirst { instruction ->
-                    instruction.opcode == Opcode.INVOKE_DIRECT &&
-                        (instruction as? ReferenceInstruction)?.reference.let { reference ->
-                            reference is MethodReference && reference.definingClass == "Lcom/google/android/vk0;" &&
-                                reference.name == "<init>" && reference.parameterTypes.size == 2
-                        }
-                }
-                if (rangeIndex < 0) throw PatchException("The time slider range was not found")
-                val range = getInstruction<FiveRegisterInstruction>(rangeIndex)
-                // The receiver is registerC; the two float arguments follow it.
-                val minFloat = range.registerD
-                val maxFloat = range.registerE
-                val toFloatMin = indexOfLast(rangeIndex) {
-                    it.opcode == Opcode.INT_TO_FLOAT && (it as OneRegisterInstruction).registerA == minFloat
-                }
-                val toFloatMax = indexOfLast(rangeIndex) {
-                    it.opcode == Opcode.INT_TO_FLOAT && (it as OneRegisterInstruction).registerA == maxFloat
-                }
-                if (toFloatMin < 0 || toFloatMax < 0) throw PatchException("The time slider bounds were not found")
-                val minInt = getInstruction<TwoRegisterInstruction>(toFloatMin).registerB
-                val maxInt = getInstruction<TwoRegisterInstruction>(toFloatMax).registerB
-                val minConst = indexOfLast(toFloatMin) {
-                    it.opcode in CONSTANTS && (it as OneRegisterInstruction).registerA == minInt
-                }
-                if (minConst < 0) throw PatchException("The time slider minimum was not found")
-                // v11 is free until the slider call below.
-                val spare = 11
-                val target = getInstruction(toFloatMin)
-                replaceInstruction(minConst, "const/16 v$spare, 120")
-                addInstructionsWithLabels(
-                    minConst + 1,
-                    """
-                        if-ne p2, v$spare, :morphe_time_min
-                        invoke-static { }, $TIME_CONTROLS->sliderMin()I
-                        move-result v$minInt
-                    """,
-                    ExternalLabel("morphe_time_min", target),
-                )
+            if (rangeIndex < 0) throw PatchException("The time slider range was not found")
+            val range = getInstruction<FiveRegisterInstruction>(rangeIndex)
+            // The receiver is registerC; the two float arguments follow it.
+            val minFloat = range.registerD
+            val maxFloat = range.registerE
+            val toFloatMin = indexOfLast(rangeIndex) {
+                it.opcode == Opcode.INT_TO_FLOAT && (it as OneRegisterInstruction).registerA == minFloat
             }
+            val toFloatMax = indexOfLast(rangeIndex) {
+                it.opcode == Opcode.INT_TO_FLOAT && (it as OneRegisterInstruction).registerA == maxFloat
+            }
+            if (toFloatMin < 0 || toFloatMax < 0) throw PatchException("The time slider bounds were not found")
+            val minInt = getInstruction<TwoRegisterInstruction>(toFloatMin).registerB
+            val maxInt = getInstruction<TwoRegisterInstruction>(toFloatMax).registerB
+            val minConst = indexOfLast(toFloatMin) {
+                it.opcode in CONSTANTS && (it as OneRegisterInstruction).registerA == minInt
+            }
+            if (minConst < 0) throw PatchException("The time slider minimum was not found")
+            // v11 is free until the slider call below.
+            val spare = 11
+            val target = getInstruction(toFloatMin)
+            replaceInstruction(minConst, "const/16 v$spare, 120")
+            addInstructionsWithLabels(
+                minConst + 1,
+                """
+                    if-ne p2, v$spare, :morphe_time_min
+                    invoke-static { }, $TIME_CONTROLS->sliderMin()I
+                    move-result v$minInt
+                """,
+                ExternalLabel("morphe_time_min", target),
+            )
+        }
 
-            // 2) The minutes row: show the slider position and the sub-minute label.
-            val minutesRow = gamesetup.methods.single {
-                it.name == "b" && it.returnType == "V" && it.parameterTypes.size == 4
+        // 2) The minutes row: show the slider position and the sub-minute label.
+        val minutesRow = gamesetup.methods.single {
+            it.name == "b" && it.returnType == "V" && it.parameterTypes.size == 4
+        }
+        minutesRow.apply {
+            val code = instructions.toList()
+            val callIndex = code.indexOfFirst { instruction ->
+                instruction.opcode == Opcode.INVOKE_STATIC_RANGE &&
+                    (instruction as? ReferenceInstruction)?.reference.let { reference ->
+                        reference is MethodReference && reference.definingClass == gamesetup.type &&
+                            reference.name == "i" && reference.parameterTypes.size == 7
+                    }
             }
-            minutesRow.apply {
-                val code = instructions.toList()
-                val callIndex = code.indexOfFirst { instruction ->
-                    instruction.opcode == Opcode.INVOKE_STATIC_RANGE &&
-                        (instruction as? ReferenceInstruction)?.reference.let { reference ->
-                            reference is MethodReference && reference.definingClass == gamesetup.type &&
-                                reference.name == "i" && reference.parameterTypes.size == 7
-                        }
-                }
-                if (callIndex < 0) throw PatchException("The minutes row was not found")
-                val call = getInstruction<RegisterRangeInstruction>(callIndex)
-                val first = call.startRegister
-                val label = "v${first + 1}"
-                // The minutes value is read from the row's GameTime just before the call.
-                val valueIndex = code.take(callIndex).indexOfLast { instruction ->
-                    instruction.opcode == Opcode.INVOKE_VIRTUAL &&
-                        (instruction as? ReferenceInstruction)?.reference.let { reference ->
-                            reference is MethodReference && reference.definingClass == "Lcom/chess/entities/GameTime;" &&
-                                reference.name == "getMinPerGame"
-                        }
-                }
-                if (valueIndex < 0) throw PatchException("The time row's minutes were not found")
-                val receiver = getInstruction<FiveRegisterInstruction>(valueIndex).registerC
-                addInstructions(
-                    valueIndex,
-                    """
-                        invoke-static { $label, v$receiver }, $TIME_CONTROLS->sliderLabel(Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/String;
-                        move-result-object $label
-                    """,
-                )
-                replaceInstruction(
-                    valueIndex + 2,
-                    "invoke-static { v$receiver }, $TIME_CONTROLS->sliderPosition(Ljava/lang/Object;)I",
-                )
+            if (callIndex < 0) throw PatchException("The minutes row was not found")
+            val call = getInstruction<RegisterRangeInstruction>(callIndex)
+            val first = call.startRegister
+            val label = "v${first + 1}"
+            // The minutes value is read from the row's GameTime just before the call.
+            val valueIndex = code.take(callIndex).indexOfLast { instruction ->
+                instruction.opcode == Opcode.INVOKE_VIRTUAL &&
+                    (instruction as? ReferenceInstruction)?.reference.let { reference ->
+                        reference is MethodReference && reference.definingClass == "Lcom/chess/entities/GameTime;" &&
+                            reference.name == "getMinPerGame"
+                    }
             }
+            if (valueIndex < 0) throw PatchException("The time row's minutes were not found")
+            val receiver = getInstruction<FiveRegisterInstruction>(valueIndex).registerC
+            addInstructions(
+                valueIndex,
+                """
+                    invoke-static { $label, v$receiver }, $TIME_CONTROLS->sliderLabel(Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/String;
+                    move-result-object $label
+                """,
+            )
+            replaceInstruction(
+                valueIndex + 2,
+                "invoke-static { v$receiver }, $TIME_CONTROLS->sliderPosition(Ljava/lang/Object;)I",
+            )
         }
 
         // "0:30+1" where the app would print "0+1".

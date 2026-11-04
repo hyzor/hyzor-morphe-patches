@@ -106,9 +106,9 @@ private val arrowsResourcePatch = resourcePatch(
 @Suppress("unused")
 val arrowsPatch = bytecodePatch(
     name = "Arrows in games",
-    description = "Adds Arrows and Clear buttons to the game bars (live, daily, archived, pass and " +
-        "play, bots, coach). While Arrows is on, dragging on the board draws an arrow and tapping marks a " +
-        "square, as on the website, and pieces don't move.",
+    description = "Adds Arrows and Clear buttons to the live, daily and pass-and-play game bars, and a " +
+        "small chip over the board in bot games. While Arrows is on, dragging on the board draws an arrow " +
+        "and tapping marks a square, as on the website, and pieces don't move.",
 ) {
     compatibleWith(Constants.COMPATIBILITY)
 
@@ -193,6 +193,5 @@ val arrowsPatch = bytecodePatch(
                 }
             }
         }
-
     }
 }

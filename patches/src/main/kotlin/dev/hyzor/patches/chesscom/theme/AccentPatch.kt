@@ -34,7 +34,7 @@ val accentPatch = bytecodePatch(
     execute {
         markFeaturePatched("accentPatched")
 
-        // The design system's colour palette: static colours set in <clinit>, one getter each.
+        // The design system's colour palette: static colours set in <clinit>.
         var palette: ClassDef? = null
         classDefForEach { classDef ->
             if (palette != null || !classDef.type.startsWith("Lcom/chess/designsystem/tokens/")) return@classDefForEach
