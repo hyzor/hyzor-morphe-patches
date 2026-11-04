@@ -17,7 +17,6 @@ import dev.hyzor.patches.chesscom.shared.indexOfLast
 import dev.hyzor.patches.chesscom.shared.markFeaturePatched
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
-import com.android.tools.smali.dexlib2.iface.instruction.NarrowLiteralInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.RegisterRangeInstruction
@@ -27,15 +26,6 @@ import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 private const val TIME_CONTROLS = "${Constants.EXTENSION_PACKAGE}/timecontrol/TimeControls;"
 
 private val CONSTANTS = setOf(Opcode.CONST_4, Opcode.CONST_16, Opcode.CONST, Opcode.CONST_HIGH16)
-
-private fun MethodReference.isSliderRow() =
-    parameterTypes.size == 8 && returnType == "V" &&
-        parameterTypes.take(6).map { it.toString() } ==
-        listOf("I", "Ljava/lang/String;", "I", "I", "I", "Lkotlin/jvm/functions/Function1;")
-
-private fun MethodReference.isQuantityString() =
-    returnType == "Ljava/lang/String;" &&
-        parameterTypes.map { it.toString() }.take(3) == listOf("I", "I", "[Ljava/lang/Object;")
 
 @Suppress("unused")
 val shortTimeControlsPatch = bytecodePatch(
@@ -50,9 +40,9 @@ val shortTimeControlsPatch = bytecodePatch(
     execute {
         markFeaturePatched("shortTimeControlsPatched")
 
-        // The setter: slider stop -> minutes, instead of max(stop, 1).
-        // 4.10.23 moved the setter into a shared synthetic lambda (one switch case).
-        val sharedSetter = classDefByOrNull { classDef ->
+        // The setter: slider stop -> minutes, instead of max(stop, 1). It lives in a shared
+        // synthetic lambda (one switch case).
+        val setterClass = classDefByOrNull { classDef ->
             classDef.methods.any { method ->
                 val instructions = method.implementation?.instructions ?: return@any false
                 instructions.any {
@@ -66,7 +56,8 @@ val shortTimeControlsPatch = bytecodePatch(
                     }
                 }
             }
-        }?.let { classDef ->
+        }
+        (setterClass?.let { classDef ->
             mutableClassDefBy(classDef).methods.single { method ->
                 val instructions = method.implementation?.instructions ?: return@single false
                 instructions.any {
@@ -80,9 +71,7 @@ val shortTimeControlsPatch = bytecodePatch(
                     }
                 }
             }
-        }
-        (MinutesSetterFingerprint.matchOrNull()?.method ?: sharedSetter
-            ?: throw PatchException("The minutes setter was not found")).apply {
+        } ?: throw PatchException("The minutes setter was not found")).apply {
             val maxIndex = indexOfFirstOrThrow(description = "Math.max") {
                 it.opcode == Opcode.INVOKE_STATIC &&
                     ((it as ReferenceInstruction).reference as MethodReference).let { ref ->
@@ -103,64 +92,8 @@ val shortTimeControlsPatch = bytecodePatch(
             )
         }
 
-        // The minutes slider: SliderRow(titleRes, valueText, min, max, value, onValueChange, ...).
-        // 4.10.23 uses a shared stepper; only the setter mapping is ported for now.
-        CustomTimeSelectorFingerprint.matchOrNull()?.method?.apply {
-            val sliderIndex = indexOfFirstOrThrow(description = "the minutes slider") {
-                it.opcode == Opcode.INVOKE_STATIC_RANGE &&
-                    ((it as ReferenceInstruction).reference as MethodReference).isSliderRow()
-            }
-            val firstArgument = getInstruction<RegisterRangeInstruction>(sliderIndex).startRegister
-            val minRegister = firstArgument + 2
-            val valueRegister = firstArgument + 4
-
-            // Bottom-up, so earlier indices stay valid. 1) min: the constant 0 -> sliderMin().
-            val minIndex = indexOfLast(sliderIndex) {
-                it.opcode in CONSTANTS && it is NarrowLiteralInstruction &&
-                    (it as OneRegisterInstruction).registerA == minRegister
-            }
-            if (minIndex < 0) throw PatchException("The minutes slider minimum was not found")
-            replaceInstruction(minIndex, "invoke-static { }, $TIME_CONTROLS->sliderMin()I")
-            addInstruction(minIndex + 1, "move-result v$minRegister")
-
-            // 2) value: GameTime.getMinPerGame() -> sliderPosition(gameTime).
-            val valueIndex = indexOfLast(minIndex) {
-                it.opcode == Opcode.INVOKE_VIRTUAL &&
-                    ((it as ReferenceInstruction).reference as MethodReference).let { ref ->
-                        ref.definingClass == "Lcom/chess/entities/GameTime;" && ref.name == "getMinPerGame"
-                    }
-            }
-            if (valueIndex < 0 || getInstruction<OneRegisterInstruction>(valueIndex + 1).registerA != valueRegister) {
-                throw PatchException("The minutes slider value was not found")
-            }
-            val gameTimeRegister = getInstruction<FiveRegisterInstruction>(valueIndex).registerC
-
-            // 3) label: the "N min" string built just before -> "30 sec" below a minute.
-            val labelIndex = indexOfLast(valueIndex) {
-                it.opcode == Opcode.INVOKE_STATIC &&
-                    ((it as ReferenceInstruction).reference as MethodReference).isQuantityString()
-            }
-            if (labelIndex < 0 || getInstruction(labelIndex + 1).opcode != Opcode.MOVE_RESULT_OBJECT) {
-                throw PatchException("The minutes slider label was not found")
-            }
-            val labelRegister = getInstruction<OneRegisterInstruction>(labelIndex + 1).registerA
-            if (labelRegister == gameTimeRegister) throw PatchException("Unexpected slider registers")
-
-            replaceInstruction(
-                valueIndex,
-                "invoke-static { v$gameTimeRegister }, $TIME_CONTROLS->sliderPosition(Ljava/lang/Object;)I",
-            )
-            addInstructions(
-                valueIndex,
-                """
-                    invoke-static { v$labelRegister, v$gameTimeRegister }, $TIME_CONTROLS->sliderLabel(Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/String;
-                    move-result-object v$labelRegister
-                """,
-            )
-        }
-
-        // 4.10.23's custom time row: the shared stepper (i) and the minutes row (b) in gamesetup.
-        if (CustomTimeSelectorFingerprint.matchOrNull() == null) {
+        // The custom time row: the shared stepper (i) and the minutes row (b) in gamesetup.
+        run {
             val gamesetup = mutableClassDefBy("Lcom/chess/features/gamesetup/compose/g;")
             // 1) The slider range: 0..max -> sliderMin()..max for the minutes stepper (max 120).
             val stepper = gamesetup.methods.single {

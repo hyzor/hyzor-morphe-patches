@@ -6,8 +6,7 @@ import app.morphe.patcher.patch.Compatibility
 internal object Constants {
     const val CHESSCOM_PACKAGE = "com.chess"
 
-    // The supported target (versionCode 280100). 4.10.18 was dropped: some patches still
-    // recognise its shapes as fallbacks, but Morphe only offers 4.10.23.
+    // The supported target (versionCode 280100).
     const val CHESSCOM_VERSION = "4.10.23-googleplay"
 
     val COMPATIBILITY = Compatibility(
