@@ -58,7 +58,7 @@ import dev.hyzor.extension.chesscom.theme.Amoled;
 public final class MorpheSettingsActivity extends Activity {
     public static final String EXTRA_PAGE = "morphe_page";
 
-    private static final String TITLE = "Noam's Patches";
+    private static final String TITLE = "Noam's Patches · hyzor";
     private static final int TEXT = 0xFFFFFFFF;
     private static final int TEXT_SECONDARY = 0xFFB4B2B0;
     /** Features that take effect when the app starts. */

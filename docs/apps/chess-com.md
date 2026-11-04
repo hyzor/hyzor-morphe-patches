@@ -17,7 +17,8 @@ file header keeps that attribution.
 
 ## Noam's Patches settings
 
-Applying **Noam's Patches settings** adds a row at the top of the More tab. That screen is
+Applying **Noam's Patches settings** adds a row at the top of the More tab (titled
+*Noam's Patches · hyzor*). That screen is
 part of the extension (`MorpheSettingsActivity`, registered in the manifest by a resource
 patch) and groups the options into *Board*, *Look*, *Games* and *Less clutter*. Settings are
 stored in the `morphe_chesscom` SharedPreferences file.
