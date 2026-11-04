@@ -1,3 +1,14 @@
+## [1.5.2-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.5.1...v1.5.2-dev.1) (2026-11-04)
+
+### 🐛 Bug Fixes
+
+* **chesscom:** harden the Lichess puzzle hooks ([ef94532](https://github.com/hyzor/hyzor-morphe-patches/commit/ef945329a3e340a16ad369bf7e9d53edc38db03f))
+* **chesscom:** serve and score Lichess puzzles reliably ([4fb172d](https://github.com/hyzor/hyzor-morphe-patches/commit/4fb172d53039ead78d5a331ba2fa7a6797f98717))
+
+### 🚀 Updated App Support
+
+* **chesscom:** support 4.10.23 only, drop 4.10.18 ([fa6d286](https://github.com/hyzor/hyzor-morphe-patches/commit/fa6d286fa751fbb303082baa02472057d6e95cdd))
+
 ## [1.5.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.5.0...v1.5.1) (2026-11-02)
 
 ### 🚀 Updated App Support

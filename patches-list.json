@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.5.1",
+  "version": "1.5.2-dev.1",
   "patches": [
     {
       "name": "AMOLED Black",
@@ -50,13 +50,6 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "4.10.18-googleplay",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "4.10.23-googleplay",
               "versionCodes": null,
               "isExperimental": false,
@@ -83,13 +76,6 @@
           "signatures": null,
           "formFactor": "MOBILE",
           "targets": [
-            {
-              "version": "4.10.18-googleplay",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
             {
               "version": "4.10.23-googleplay",
               "versionCodes": null,
@@ -118,13 +104,6 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "4.10.18-googleplay",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "4.10.23-googleplay",
               "versionCodes": null,
               "isExperimental": false,
@@ -151,13 +130,6 @@
           "signatures": null,
           "formFactor": "MOBILE",
           "targets": [
-            {
-              "version": "4.10.18-googleplay",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
             {
               "version": "4.10.23-googleplay",
               "versionCodes": null,
@@ -186,13 +158,6 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "4.10.18-googleplay",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "4.10.23-googleplay",
               "versionCodes": null,
               "isExperimental": false,
@@ -219,13 +184,6 @@
           "signatures": null,
           "formFactor": "MOBILE",
           "targets": [
-            {
-              "version": "4.10.18-googleplay",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
             {
               "version": "4.10.23-googleplay",
               "versionCodes": null,
@@ -254,13 +212,6 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "4.10.18-googleplay",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "4.10.23-googleplay",
               "versionCodes": null,
               "isExperimental": false,
@@ -287,13 +238,6 @@
           "signatures": null,
           "formFactor": "MOBILE",
           "targets": [
-            {
-              "version": "4.10.18-googleplay",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
             {
               "version": "4.10.23-googleplay",
               "versionCodes": null,
@@ -563,13 +507,6 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "4.10.18-googleplay",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "4.10.23-googleplay",
               "versionCodes": null,
               "isExperimental": false,
@@ -596,13 +533,6 @@
           "signatures": null,
           "formFactor": "MOBILE",
           "targets": [
-            {
-              "version": "4.10.18-googleplay",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
             {
               "version": "4.10.23-googleplay",
               "versionCodes": null,
@@ -631,13 +561,6 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "4.10.18-googleplay",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "4.10.23-googleplay",
               "versionCodes": null,
               "isExperimental": false,
@@ -664,13 +587,6 @@
           "signatures": null,
           "formFactor": "MOBILE",
           "targets": [
-            {
-              "version": "4.10.18-googleplay",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
             {
               "version": "4.10.23-googleplay",
               "versionCodes": null,
@@ -699,13 +615,6 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "4.10.18-googleplay",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "4.10.23-googleplay",
               "versionCodes": null,
               "isExperimental": false,
@@ -732,13 +641,6 @@
           "signatures": null,
           "formFactor": "MOBILE",
           "targets": [
-            {
-              "version": "4.10.18-googleplay",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
             {
               "version": "4.10.23-googleplay",
               "versionCodes": null,
@@ -767,13 +669,6 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "4.10.18-googleplay",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "4.10.23-googleplay",
               "versionCodes": null,
               "isExperimental": false,
@@ -800,13 +695,6 @@
           "signatures": null,
           "formFactor": "MOBILE",
           "targets": [
-            {
-              "version": "4.10.18-googleplay",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
             {
               "version": "4.10.23-googleplay",
               "versionCodes": null,
@@ -835,13 +723,6 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "4.10.18-googleplay",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "4.10.23-googleplay",
               "versionCodes": null,
               "isExperimental": false,
@@ -868,13 +749,6 @@
           "signatures": null,
           "formFactor": "MOBILE",
           "targets": [
-            {
-              "version": "4.10.18-googleplay",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
             {
               "version": "4.10.23-googleplay",
               "versionCodes": null,
@@ -935,13 +809,6 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "4.10.18-googleplay",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "4.10.23-googleplay",
               "versionCodes": null,
               "isExperimental": false,
@@ -1000,13 +867,6 @@
           "signatures": null,
           "formFactor": "MOBILE",
           "targets": [
-            {
-              "version": "4.10.18-googleplay",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
             {
               "version": "4.10.23-googleplay",
               "versionCodes": null,
