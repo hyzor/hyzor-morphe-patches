@@ -4,7 +4,7 @@ Patches for apps I use, for use with [Morphe](https://morphe.software).
 
 | App | Package | Supported versions |
 |---|---|---|
-| [Sleep as Android](docs/apps/sleep-as-android.md) | `com.urbandroid.sleep` | `20261006`, `20260616` |
+| [Sleep as Android](docs/apps/sleep-as-android.md) | `com.urbandroid.sleep` | `20261006` |
 | [SnoreLab](docs/apps/snorelab.md) | `com.snorelab.app` | `2.33.5.7814` |
 | [NYT Games](docs/apps/nyt-games.md) | `com.nytimes.crossword` | `6.48.0` |
 | [Chess.com](docs/apps/chess-com.md) | `com.chess` | `4.10.23` |
@@ -145,7 +145,7 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 
 ## 📱 Sleep as Android
 
-Supported targets: `20261006`, `20260616`.
+Supported target: `20261006`.
 
 | Patch | Default | What it does |
 |---|---|---|
