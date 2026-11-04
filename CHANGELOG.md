@@ -1,3 +1,9 @@
+## [1.6.1-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.6.0...v1.6.1-dev.1) (2026-11-04)
+
+### 🚀 Updated App Support
+
+* **sleep:** support 20261006 only, drop 20260616 ([bc4ead1](https://github.com/hyzor/hyzor-morphe-patches/commit/bc4ead18a70cacac73e9d8a67121dbd8ff29e077))
+
 ## [1.6.0](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.5.1...v1.6.0) (2026-11-04)
 
 ### 🐛 Bug Fixes

@@ -26,7 +26,7 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.6.0](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.6.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;30 patches total
+> **[v1.6.1-dev.1](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.6.1-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;30 patches total
 <details open>
 <summary>📦 NYT Games&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -101,8 +101,8 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 
 **🎯 Supported versions:**
 
-| 20261006 | 20260616 |
-| :---: | :---: |
+| 20261006 |
+| :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
