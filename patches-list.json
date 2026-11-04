@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.5.2-dev.1",
+  "version": "1.6.0-dev.1",
   "patches": [
     {
       "name": "AMOLED Black",
@@ -117,7 +117,7 @@
     },
     {
       "name": "Arrows in games",
-      "description": "Adds Arrows and Clear buttons to the game bars (live, daily, archived, pass and play, bots, coach). While Arrows is on, dragging on the board draws an arrow and tapping marks a square, as on the website, and pieces don't move.",
+      "description": "Adds Arrows and Clear buttons to the live, daily and pass-and-play game bars, and a small chip over the board in bot games. While Arrows is on, dragging on the board draws an arrow and tapping marks a square, as on the website, and pieces don't move.",
       "default": true,
       "category": null,
       "compatiblePackages": [
@@ -198,7 +198,7 @@
     },
     {
       "name": "Customize Home screen",
-      "description": "Choose which tiles and sections the Home screen shows, and the order of the tiles. Works on both of chess.com's Home screens (the older list and the redesign).",
+      "description": "Choose which tiles and sections the Home screen shows, and the order of the tiles.",
       "default": true,
       "category": null,
       "compatiblePackages": [
@@ -709,7 +709,7 @@
     },
     {
       "name": "Unlimited Game Review",
-      "description": "Game Review asks who reviews the game: chess.com, Lichess's servers (online, with your Lichess account) or, with the Stockfish analysis patch, Stockfish on your phone (offline, no daily limit). The phone and Lichess judge moves the Lichess way (?! inaccuracies, ? mistakes, ?? blunders, accuracy and centipawn loss) in chess.com's own review screen, and the phone marks the moves Lichess leaves unmarked Best, Excellent or Good, as chess.com does. Finished games only; a live game on screen is never analysed.",
+      "description": "Game Review asks who reviews the game: chess.com, Lichess's servers (online, with your Lichess account) or, with the Stockfish analysis patch, Stockfish on your phone (offline, no daily limit). A Lichess or phone review is scored the Lichess way (accuracy, centipawn loss, and inaccuracies, mistakes and blunders) and shown in chess.com's own review screen. Finished games only; a live game on screen is never analysed.",
       "default": true,
       "category": null,
       "compatiblePackages": [

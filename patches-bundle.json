@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-11-04T17:42:24",
-  "description": "## [1.5.2-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.5.1...v1.5.2-dev.1) (2026-11-04)\n\n### 🐛 Bug Fixes\n\n* **chesscom:** harden the Lichess puzzle hooks ([ef94532](https://github.com/hyzor/hyzor-morphe-patches/commit/ef945329a3e340a16ad369bf7e9d53edc38db03f))\n* **chesscom:** serve and score Lichess puzzles reliably ([4fb172d](https://github.com/hyzor/hyzor-morphe-patches/commit/4fb172d53039ead78d5a331ba2fa7a6797f98717))\n\n### 🚀 Updated App Support\n\n* **chesscom:** support 4.10.23 only, drop 4.10.18 ([fa6d286](https://github.com/hyzor/hyzor-morphe-patches/commit/fa6d286fa751fbb303082baa02472057d6e95cdd))",
-  "download_url": "https://github.com/hyzor/hyzor-morphe-patches/releases/download/v1.5.2-dev.1/patches-1.5.2-dev.1.mpp",
+  "created_at": "2026-11-04T19:08:44",
+  "description": "## [1.6.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.5.2-dev.1...v1.6.0-dev.1) (2026-11-04)\n\n### ✨ New Features\n\n* **chesscom:** credit hyzor in the patches settings title ([b9ec0c1](https://github.com/hyzor/hyzor-morphe-patches/commit/b9ec0c10fac6feba72a88660c8c1035e07149be2))",
+  "download_url": "https://github.com/hyzor/hyzor-morphe-patches/releases/download/v1.6.0-dev.1/patches-1.6.0-dev.1.mpp",
   "signature_download_url": "",
-  "version": "1.5.2-dev.1"
+  "version": "1.6.0-dev.1"
 }

@@ -26,7 +26,7 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.5.2-dev.1](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.5.2-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;30 patches total
+> **[v1.6.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.6.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;30 patches total
 <details open>
 <summary>📦 NYT Games&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -57,10 +57,10 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 | [AMOLED black](#amoled-black) | Pure black backgrounds instead of chess.com's dark grey, in the newer and the older screens. Switch it in Noam's Patches (then restart the app). |  |
 | [Accent color](#accent-color) | Your own colour in place of chess.com's green, chosen in Noam's Patches → Accent color: buttons, highlights, icons and text of the app. |  |
 | [Arcade animations](#arcade-animations) | Adds the chess.com website's Arcade piece animations to every board: light trails, bursts when a piece is picked up, dropped or captured, a flash on check, outlined last-move squares and animated move hints. Switch it in Noam's Patches. |  |
-| [Arrows in games](#arrows-in-games) | Adds Arrows and Clear buttons to the game bars (live, daily, archived, pass and play, bots, coach). While Arrows is on, dragging on the board draws an arrow and tapping marks a square, as on the website, and pieces don't move. |  |
+| [Arrows in games](#arrows-in-games) | Adds Arrows and Clear buttons to the live, daily and pass-and-play game bars, and a small chip over the board in bot games. While Arrows is on, dragging on the board draws an arrow and tapping marks a square, as on the website, and pieces don't move. |  |
 | [Board colors](#board-colors) | Choose the board's square colours: your own, or one of chess.com's colour themes, on every board of the app. In Noam's Patches → Board colors. |  |
 | [Clone Chess.com](#clone-chess-com) | Renames the app to com.chess.noam so it installs next to the real Chess.com app instead of over it. Leave it off to keep updating your current install. |  |
-| [Customize Home screen](#customize-home-screen) | Choose which tiles and sections the Home screen shows, and the order of the tiles. Works on both of chess.com's Home screens (the older list and the redesign). |  |
+| [Customize Home screen](#customize-home-screen) | Choose which tiles and sections the Home screen shows, and the order of the tiles. |  |
 | [Customize bottom bar](#customize-bottom-bar) | Choose the tabs between Home and More (Puzzles, Learn, Watch, Bots, Train) and their order, in Noam's Patches → Bottom bar. |  |
 | [Hide Premium-only content](#hide-premium-only-content) | Free accounts no longer see what only Premium members can use: Premium-only bots are not listed, and the Premium toolbar button, the Home and More banners and the Settings Upgrade row, the Home diamond, the sale banner and More's Membership row are gone. Nothing is unlocked. |  |
 | [Lichess Puzzles](#lichess-puzzles) | Puzzles from Lichess becomes the Puzzles tab's big button, with chess.com's Solve Puzzles above it. Lichess's puzzles play in chess.com's own puzzle screen (board, coach, sounds), rated on the phone the way Lichess rates them; nothing is sent to chess.com. |  |
@@ -70,7 +70,7 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 | [Noam's Patches settings](#noam-s-patches-settings) | Adds a Noam's Patches row at the top of the More tab, where the other patches of this bundle are switched on and off. Patches you did not select do not show up there. |  |
 | [Stockfish analysis](#stockfish-analysis) | Stockfish 19 on your phone, offline (arm64): best-move arrows on finished games, the analysis boards, the game explorer and Game Review (in a Lichess review, on the moves Lichess didn't mark), and an eval bar where chess.com has none of its own. It never shows while a game is being played or in puzzles. Patching downloads the official Stockfish 19 (80 MB) from Stockfish's GitHub, so it needs internet. |  |
 | [Time controls under a minute](#time-controls-under-a-minute) | The custom time slider goes below one minute: 10, 15, 20, 30 and 45 seconds, with or without increment, the way the website allows. Labels read "30 sec" and "0:30+1". |  |
-| [Unlimited Game Review](#unlimited-game-review) | Game Review asks who reviews the game: chess.com, Lichess's servers (online, with your Lichess account) or, with the Stockfish analysis patch, Stockfish on your phone (offline, no daily limit). The phone and Lichess judge moves the Lichess way (?! inaccuracies, ? mistakes, ?? blunders, accuracy and centipawn loss) in chess.com's own review screen, and the phone marks the moves Lichess leaves unmarked Best, Excellent or Good, as chess.com does. Finished games only; a live game on screen is never analysed. |  |
+| [Unlimited Game Review](#unlimited-game-review) | Game Review asks who reviews the game: chess.com, Lichess's servers (online, with your Lichess account) or, with the Stockfish analysis patch, Stockfish on your phone (offline, no daily limit). A Lichess or phone review is scored the Lichess way (accuracy, centipawn loss, and inaccuracies, mistakes and blunders) and shown in chess.com's own review screen. Finished games only; a live game on screen is never analysed. |  |
 | [Unlimited Play Coach](#unlimited-play-coach) | Removes the one-free-game-per-day limit on Play Coach, a bot-only practice mode. |  |
 | [Unlock Premium content](#unlock-premium-content) | The app's own premium-tier check always answers with the top tier, so content gated on it (lessons, drills, insights, themes, puzzle-rush extras and anything else that reads the account's tier) treats the account as a member. The server still decides what you may actually play online. |  |
 | [Unlock all bots](#unlock-all-bots) | Every bot in Versus Bots can be played, including ones only Premium members may play. |  |

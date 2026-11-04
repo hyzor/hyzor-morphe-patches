@@ -1,3 +1,9 @@
+## [1.6.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.5.2-dev.1...v1.6.0-dev.1) (2026-11-04)
+
+### ✨ New Features
+
+* **chesscom:** credit hyzor in the patches settings title ([b9ec0c1](https://github.com/hyzor/hyzor-morphe-patches/commit/b9ec0c10fac6feba72a88660c8c1035e07149be2))
+
 ## [1.5.2-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.5.1...v1.5.2-dev.1) (2026-11-04)
 
 ### 🐛 Bug Fixes
