@@ -44,6 +44,8 @@ public final class LichessPuzzles {
     private static final String FAILED = "lichess_puzzle_failed";
     private static final String HISTORY = "lichess_puzzle_history";
     private static final int HISTORY_LIMIT = 20;
+    /** The settings row type; its enum constants say which row it is. */
+    private static final String SETTING_TYPE = "com.chess.features.puzzles.rated.api.PuzzleSettingType";
     /** Lichess shows a rating as provisional (with a ?) while its deviation is above this. */
     private static final double PROVISIONAL = 110;
 
@@ -433,42 +435,89 @@ public final class LichessPuzzles {
     /**
      * 4.10.23's delete lives behind a suspend DAO call; clearing the same table through Room's
      * writable database is what the DAO would do. Runs on the seeding thread, before the Lichess
-     * rows are inserted, and only once per session (the caller tracks that).
+     * rows are inserted, and only once per session (the caller tracks that). The Room members
+     * are found by shape: the build renames the open-helper method, execSQL and the source value.
+     * Room's invalidation tracker does not see this statement, but the seed insert that follows
+     * goes through the DAO and does refresh the puzzle queries.
      */
     private static boolean clearGuestQueueBySql(Object repository, PuzzleStore store) {
         try {
             Field daoField = repository.getClass().getDeclaredField(daoField());
             daoField.setAccessible(true);
             Object dao = daoField.get(repository);
-            Object database = dao.getClass().getField("a").get(dao);
-            Method openHelper = null;
-            for (Method method : database.getClass().getMethods()) {
-                if (method.getParameterTypes().length == 0
-                    && method.getReturnType().getName().equals("com.google.android.vz6")) {
-                    openHelper = method;
-                    break;
-                }
-            }
-            if (openHelper == null) throw new IllegalStateException("Room open helper not found");
-            Object helper = openHelper.invoke(database);
+            Object helper = openHelperOf(roomDatabaseOf(dao));
             Object writable = helper.getClass().getMethod("getWritableDatabase").invoke(helper);
             Class<?> sourceClass = Class.forName("com.chess.features.puzzles.db.model.ProblemSource");
-            Object guest = enumValue(sourceClass, "RATED_GUEST");
-            int source = ((Number) Class.forName("com.chess.db.converters.a")
-                .getMethod("x", sourceClass).invoke(null, guest)).intValue();
-            String sql = "DELETE FROM tactics_problem WHERE source = " + source;
-            try {
-                writable.getClass().getMethod("Z0", String.class).invoke(writable, sql);
-            } catch (NoSuchMethodException noZ0) {
-                writable.getClass().getMethod("execSQL", String.class).invoke(writable, sql);
-            }
+            int source = sourceValue(sourceClass, enumValue(sourceClass, "RATED_GUEST"));
+            execSql(writable, "DELETE FROM tactics_problem WHERE source = " + source);
             store.ungive();
-            Utils.log("Lichess puzzles: cleared chess.com guest puzzles (" + source + ")");
+            Utils.log("Lichess puzzles: cleared chess.com guest puzzles (source=" + source + ")");
             return true;
         } catch (Throwable throwable) {
             Utils.logError("Lichess guest queue not cleared", throwable);
             return false;
         }
+    }
+
+    /** The RoomDatabase a generated DAO holds: the field whose type hands out the open helper. */
+    private static Object roomDatabaseOf(Object dao) throws Exception {
+        for (Class<?> type = dao.getClass(); type != null && type != Object.class; type = type.getSuperclass()) {
+            for (Field field : type.getDeclaredFields()) {
+                if (Modifier.isStatic(field.getModifiers()) || openHelperIn(field.getType()) == null) continue;
+                field.setAccessible(true);
+                Object database = field.get(dao);
+                if (database != null) return database;
+            }
+        }
+        throw new IllegalStateException("Room database not found");
+    }
+
+    /** The no-argument method on a RoomDatabase that returns its open helper, whatever its name. */
+    private static Method openHelperIn(Class<?> database) {
+        for (Method method : database.getMethods()) {
+            if (Modifier.isStatic(method.getModifiers()) || method.getParameterTypes().length != 0) continue;
+            if (hasWritableDatabase(method.getReturnType())) return method;
+        }
+        return null;
+    }
+
+    private static boolean hasWritableDatabase(Class<?> type) {
+        try {
+            type.getMethod("getWritableDatabase");
+            return true;
+        } catch (NoSuchMethodException missing) {
+            return false;
+        }
+    }
+
+    private static Object openHelperOf(Object database) throws Exception {
+        Method openHelper = openHelperIn(database.getClass());
+        if (openHelper == null) throw new IllegalStateException("Room open helper not found");
+        return openHelper.invoke(database);
+    }
+
+    /** The int a ProblemSource is stored as: the enum's own value, not its ordinal. */
+    private static int sourceValue(Class<?> sourceClass, Object source) throws Exception {
+        for (Method method : sourceClass.getDeclaredMethods()) {
+            if (Modifier.isStatic(method.getModifiers()) || method.getParameterTypes().length != 0
+                || method.getReturnType() != int.class) continue;
+            method.setAccessible(true);
+            return ((Number) method.invoke(source)).intValue();
+        }
+        throw new IllegalStateException("The puzzle source value was not found");
+    }
+
+    /** Runs one statement: the build renames execSQL, so the one String statement is used. */
+    private static void execSql(Object writable, String sql) throws Exception {
+        java.util.Set<String> names = new java.util.LinkedHashSet<>();
+        for (Method method : writable.getClass().getMethods()) {
+            Class<?>[] parameters = method.getParameterTypes();
+            if (parameters.length == 1 && parameters[0] == String.class && method.getReturnType() == void.class) {
+                names.add(method.getName());
+            }
+        }
+        if (names.size() != 1) throw new IllegalStateException("SQLite execSQL ambiguous: " + names);
+        writable.getClass().getMethod(names.iterator().next(), String.class).invoke(writable, sql);
     }
 
     /** Seeds the guest store from the puzzle view model, which holds the repository. */
@@ -651,8 +700,8 @@ public final class LichessPuzzles {
         try {
             int[] values = ratingHistoryValues();
             int rating = values.length > 0 ? values[0]
-                : displayRating(point.getClass().getField("a").getInt(point));
-            Object selected = point.getClass().getField("b").get(point);
+                : displayRating(((Number) fieldValue(point, "a")).intValue());
+            Object selected = fieldValue(point, "b");
             return point.getClass().getConstructor(int.class, Boolean.class).newInstance(rating, selected);
         } catch (Throwable throwable) {
             Utils.logError("Lichess rating point", throwable);
@@ -693,20 +742,29 @@ public final class LichessPuzzles {
         return kept;
     }
 
+    /** True for a settings row that does nothing in a Lichess session. */
     private static boolean isUnusedSetting(Object item) {
         if (item == null) return false;
-        String type = item.getClass().getName();
-        if (type.equals("com.chess.settings.ui.puzzles.a$a")) return true; // Difficulty dropdown
-        if (!type.equals("com.chess.settings.ui.puzzles.a$b")) return false;
-        try {
-            Object setting = item.getClass().getField("a").get(item);
-            if (!(setting instanceof Enum)) return false;
-            String name = ((Enum<?>) setting).name();
-            return "ALWAYS_SHOW_RATING".equals(name) || "PUZZLE_GOALS".equals(name)
-                || "COLLECT_POINTS".equals(name) || "CHAT_HINTS".equals(name);
-        } catch (Throwable ignored) {
-            return false;
+        for (Class<?> type = item.getClass(); type != null && type != Object.class; type = type.getSuperclass()) {
+            for (Field field : type.getDeclaredFields()) {
+                if (Modifier.isStatic(field.getModifiers())) continue;
+                Object setting;
+                try {
+                    field.setAccessible(true);
+                    setting = field.get(item);
+                } catch (Throwable unreadable) {
+                    continue;
+                }
+                if (!(setting instanceof Enum)) continue;
+                // The row's setting type is a PuzzleSettingType; its constant names the row.
+                if (!setting.getClass().getName().startsWith(SETTING_TYPE)) continue;
+                String name = ((Enum<?>) setting).name();
+                return "DIFFICULTY_MODE".equals(name) || "ALWAYS_SHOW_RATING".equals(name)
+                    || "PUZZLE_GOALS".equals(name) || "COLLECT_POINTS".equals(name)
+                    || "CHAT_HINTS".equals(name);
+            }
         }
+        return false;
     }
 
     public static int rating() {
@@ -942,5 +1000,19 @@ public final class LichessPuzzles {
             }
         }
         return null;
+    }
+
+    /** A field of one of the app's objects, however its build declares it. */
+    private static Object fieldValue(Object owner, String name) throws Exception {
+        for (Class<?> type = owner.getClass(); type != null; type = type.getSuperclass()) {
+            try {
+                Field field = type.getDeclaredField(name);
+                field.setAccessible(true);
+                return field.get(owner);
+            } catch (NoSuchFieldException missing) {
+                // Declared further up.
+            }
+        }
+        throw new NoSuchFieldException(name);
     }
 }
