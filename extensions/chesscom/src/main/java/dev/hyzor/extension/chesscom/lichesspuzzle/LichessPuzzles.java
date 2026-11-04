@@ -92,9 +92,7 @@ public final class LichessPuzzles {
     private static String converterMethod() { return ""; }
     private static String resultClass() { return ""; }
     private static String scoreClass() { return ""; }
-    private static String problemIdGetter() { return ""; }
-    private static String puzzleDbField() { return ""; }
-    private static String puzzleDbClear() { return ""; }
+    private static String problemIdField() { return ""; }
     private static String guestRepositoryClass() { return ""; }
 
     public static boolean enabled() {
@@ -393,7 +391,7 @@ public final class LichessPuzzles {
     // The puzzle repository.
 
     /** Stores Lichess puzzles for the guest puzzle flow. */
-    public static void onGuestPuzzles(Object repository) {
+    private static void onGuestPuzzles(Object repository) {
         if (!active) return;
         boolean fresh = freshQueue;
         new Thread(() -> {
@@ -409,38 +407,15 @@ public final class LichessPuzzles {
 
     /**
      * Empties the guest queue once a session starts, so chess.com's own signed-out guest puzzles
-     * (older and served first) cannot be played in a Lichess session. 4.10.23's delete is a
-     * suspend DAO method the patch cannot name, so that version clears the table through Room's
-     * open database instead.
+     * (older and served first) cannot be played in a Lichess session. The delete is a suspend DAO
+     * method, so the same table is cleared through Room's writable database instead. Runs on the
+     * seeding thread, before the Lichess rows are inserted, and only once per session (the caller
+     * tracks that). The Room members are found by shape: the build renames the open-helper
+     * method, execSQL and the source value. Room's invalidation tracker does not see this
+     * statement, but the seed insert that follows goes through the DAO and does refresh the
+     * puzzle queries.
      */
     private static boolean clearGuestQueue(Object repository, PuzzleStore store) {
-        if (puzzleDbField().isEmpty() || puzzleDbClear().isEmpty()) {
-            return clearGuestQueueBySql(repository, store);
-        }
-        try {
-            Class<?> sourceClass = Class.forName("com.chess.features.puzzles.db.model.ProblemSource");
-            Field field = repository.getClass().getDeclaredField(puzzleDbField());
-            field.setAccessible(true);
-            Object puzzleDb = field.get(repository);
-            puzzleDb.getClass().getMethod(puzzleDbClear(), sourceClass)
-                .invoke(puzzleDb, enumValue(sourceClass, "RATED_GUEST"));
-            store.ungive();
-            return true;
-        } catch (Throwable throwable) {
-            Utils.logError("Guest puzzles not cleared", throwable);
-            return false;
-        }
-    }
-
-    /**
-     * 4.10.23's delete lives behind a suspend DAO call; clearing the same table through Room's
-     * writable database is what the DAO would do. Runs on the seeding thread, before the Lichess
-     * rows are inserted, and only once per session (the caller tracks that). The Room members
-     * are found by shape: the build renames the open-helper method, execSQL and the source value.
-     * Room's invalidation tracker does not see this statement, but the seed insert that follows
-     * goes through the DAO and does refresh the puzzle queries.
-     */
-    private static boolean clearGuestQueueBySql(Object repository, PuzzleStore store) {
         try {
             Field daoField = repository.getClass().getDeclaredField(daoField());
             daoField.setAccessible(true);
@@ -544,13 +519,7 @@ public final class LichessPuzzles {
     public static Object solved(Object repository, Object solution) {
         if (!active || solution == null) return null;
         try {
-            Object idValue;
-            try {
-                idValue = solution.getClass().getMethod(problemIdGetter()).invoke(solution);
-            } catch (NoSuchMethodException noGetter) {
-                idValue = solution.getClass().getField(problemIdGetter()).get(solution);
-            }
-            long id = ((Number) idValue).longValue();
+            long id = ((Number) fieldValue(solution, problemIdField())).longValue();
             if (id < ID_BASE) return null;
             Context context = Utils.context();
             if (context == null) return null;
@@ -590,8 +559,8 @@ public final class LichessPuzzles {
                     break;
                 }
             }
-            // 4.10.18 takes a Throwable here, 4.10.23 an ApiException; a null fits either, and
-            // the parameter type is matched by assignability so a rename does not break scoring.
+            // The score carries an optional ApiException; null fits either way, and the parameter
+            // types are matched by assignability so a rename does not break scoring.
             Object score = null;
             for (Constructor<?> constructor : Class.forName(scoreClass()).getConstructors()) {
                 Class<?>[] types = constructor.getParameterTypes();
