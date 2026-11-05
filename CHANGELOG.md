@@ -1,3 +1,9 @@
+## [1.6.2-dev.2](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.6.2-dev.1...v1.6.2-dev.2) (2026-11-05)
+
+### 🐛 Bug Fixes
+
+* **chesscom:** keep the puzzle path background green ([49d8343](https://github.com/hyzor/hyzor-morphe-patches/commit/49d8343db948781e8113105cee85fd4d31b5d285))
+
 ## [1.6.2-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.6.1...v1.6.2-dev.1) (2026-11-05)
 
 ### 🐛 Bug Fixes
