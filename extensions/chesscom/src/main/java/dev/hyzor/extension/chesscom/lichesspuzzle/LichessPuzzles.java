@@ -62,6 +62,8 @@ public final class LichessPuzzles {
     private static final java.util.List<Runnable> countWaiters = new java.util.ArrayList<>();
     /** The Lichess puzzle screen is the activity in front. */
     private static volatile boolean puzzleVisible;
+    /** The puzzle screen instance that set it: a replaced screen's teardown must not undo it. */
+    private static WeakReference<Activity> visiblePuzzle = new WeakReference<>(null);
     private static boolean watching;
     private static final String PUZZLE_SCREEN = "com.chess.features.puzzles.rated.RatedPuzzlesGameActivity";
     private static final String HOME_SCREEN = "com.chess.home.HomeActivity";
@@ -262,7 +264,10 @@ public final class LichessPuzzles {
 
     /** Ends the session before the hub resumes, not after the Lichess screen is destroyed. */
     private static void endSessionIfFinishing(Activity activity) {
-        if (isPuzzle(activity) && activity.isFinishing() && SystemClock.uptimeMillis() > keepAliveUntil) active = false;
+        if (isPuzzle(activity) && activity.isFinishing() && isVisiblePuzzle(activity)
+            && SystemClock.uptimeMillis() > keepAliveUntil) {
+            active = false;
+        }
     }
 
     private static boolean isPuzzle(Activity activity) {
@@ -273,9 +278,28 @@ public final class LichessPuzzles {
         return activity.getClass().getName().equals(HOME_SCREEN);
     }
 
+    private static boolean isVisiblePuzzle(Activity activity) {
+        return visiblePuzzle.get() == activity;
+    }
+
+    private static void showPuzzle(Activity activity) {
+        visiblePuzzle = new WeakReference<>(activity);
+        puzzleVisible = true;
+    }
+
+    /** Hides the puzzle screen, unless its replacement is already the one in front. */
+    private static void hidePuzzle(Activity activity) {
+        if (!isVisiblePuzzle(activity)) return;
+        visiblePuzzle = new WeakReference<>(null);
+        puzzleVisible = false;
+    }
+
     private static void onPuzzlePaused(Activity activity) {
-        if (isPuzzle(activity) && !activity.isChangingConfigurations()) puzzleVisible = false;
+        if (!isPuzzle(activity)) return;
+        // Before the puzzle is hidden: whether it was the visible one decides if this ends the
+        // session. Next has already raised the keep-alive window, so its hand-off is exempt.
         endSessionIfFinishing(activity);
+        if (!activity.isChangingConfigurations()) hidePuzzle(activity);
     }
 
     /** Watches the Lichess screen's lifecycle. */
@@ -295,25 +319,34 @@ public final class LichessPuzzles {
 
             @Override
             public void onActivityDestroyed(Activity activity) {
-                if (isPuzzle(activity) && !activity.isChangingConfigurations()) {
-                    puzzleVisible = false;
+                if (!isPuzzle(activity) || activity.isChangingConfigurations()) return;
+                // Next starts the replacement before the old screen is destroyed: it has already
+                // shown itself, and this instance's teardown must not hide it (or end the session).
+                if (isVisiblePuzzle(activity)) {
+                    hidePuzzle(activity);
                     if (SystemClock.uptimeMillis() > keepAliveUntil) active = false;
                 }
             }
 
             @Override
             public void onActivityCreated(Activity activity, Bundle state) {
-                if (isPuzzle(activity)) puzzleVisible = true;
+                if (isPuzzle(activity)) showPuzzle(activity);
             }
 
             @Override
             public void onActivityStarted(Activity activity) {
-                if (isPuzzle(activity)) puzzleVisible = true;
+                if (isPuzzle(activity)) showPuzzle(activity);
             }
 
             @Override
             public void onActivityResumed(Activity activity) {
-                puzzleVisible = isPuzzle(activity);
+                if (isPuzzle(activity)) {
+                    showPuzzle(activity);
+                } else {
+                    // Another screen is in front, so no puzzle screen is.
+                    visiblePuzzle = new WeakReference<>(null);
+                    puzzleVisible = false;
+                }
                 if (isHub(activity)) {
                     // Back at the hub means the session is over, so a chess.com puzzle started from
                     // here never sees it. The window keeps the Next hand-off from ending it.

@@ -106,10 +106,13 @@ session runs it as `PathPuzzlesMode.REGULAR` so the Classic layout and the ratin
   Puzzle Points, Always Show Rating, Show Puzzle Goals, Difficulty and Show Chat Hints.
   Mistake Feedback, Voice and Show Timer are local and stay. The full Settings → Puzzles page
   is unchanged.
+- The filter holds on the next puzzle too. Next recreates the screen before the old instance
+  is destroyed, so the extension tracks which puzzle screen is in front: the replaced
+  instance's teardown must not hide its replacement.
 
 Runtime-tested on 4.10.23: the seed cleared chess.com's guest queue, puzzles scored locally,
 the rating box and graph showed the Lichess values, and the settings dialog showed only the
-three local rows.
+three local rows — before and after Next.
 
 ## Feature groups
 
