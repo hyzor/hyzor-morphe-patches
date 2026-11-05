@@ -106,13 +106,16 @@ session runs it as `PathPuzzlesMode.REGULAR` so the Classic layout and the ratin
   Puzzle Points, Always Show Rating, Show Puzzle Goals, Difficulty and Show Chat Hints.
   Mistake Feedback, Voice and Show Timer are local and stay. The full Settings → Puzzles page
   is unchanged.
-- The filter holds on the next puzzle too. Next recreates the screen before the old instance
-  is destroyed, so the extension tracks which puzzle screen is in front: the replaced
-  instance's teardown must not hide its replacement.
+- The filter holds on the next puzzle too. Next opens the replacement screen before the old
+  instance is destroyed, so the extension tracks which puzzle screen is in front: the replaced
+  instance's teardown must not hide its replacement. Backing out to the hub ends the session even
+  inside the short Next hand-off window: the decision waits for the window to close instead of
+  being skipped.
 
 Runtime-tested on 4.10.23: the seed cleared chess.com's guest queue, puzzles scored locally,
-the rating box and graph showed the Lichess values, and the settings dialog showed only the
-three local rows — before and after Next.
+the rating box and graph showed the Lichess values, the settings dialog showed only the three
+local rows — before and after Next — and backing out to the hub right after Next ended the
+session.
 
 ## Feature groups
 
