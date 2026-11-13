@@ -8,7 +8,7 @@ conventions the repository follows.
 
 ## What this repository is
 
-- A **Morphe patch bundle** for seven Android apps. It contains Kotlin patches that edit
+- A **Morphe patch bundle** for eight Android apps. It contains Kotlin patches that edit
   Dalvik bytecode and decoded resources, plus one Java extension that is merged into the
   patched app as extra classes.
 - **Not an app, and not a fork of the apps.** The build output is `patches/build/libs/patches-<version>.mpp`
@@ -30,6 +30,7 @@ conventions the repository follows.
 | Duolingo | `com.duolingo` | `6.104.3` | `patches/.../duolingo/` |
 | Nova Launcher | `com.teslacoilsw.launcher` | `8.9.6` | `patches/.../nova/` |
 | FolderSync | `dk.tacit.android.foldersync.lite` | `4.14.0` | `patches/.../foldersync/` |
+| Solid Explorer | `pl.solidexplorer2` | `3.6.4` | `patches/.../solidexplorer/` |
 
 ## Repository map
 
@@ -349,6 +350,7 @@ claim in the PR.
 | Duolingo | Fresh install + email login works; Super Dashboard and profile badge; debug options open; one launcher icon; RampUp timer only if the account has a challenge. |
 | Nova Launcher | Settings → version row reads `Nova Prime <version>` instead of `Nova Launcher <version>`; `Prime` badges next to App drawer → Hide apps (and similar rows) are gone and the rows open instead of the subscription screen. |
 | FolderSync | About / settings report the Premium version; no ads on the dashboard; more than two accounts and folder pairs can be created; the premium-only options are not locked. |
+| Solid Explorer | The drawer header shows the **Pro** badge, Settings → Icon set → **Paper** applies instead of opening the Pro paywall, and no ads appear. |
 
 Record what was **not** exercised (e.g. “MAX variant applied but not installed”, “RampUp
 verified in the patched DEX, account has no challenge”). Be explicit about static-only
@@ -402,7 +404,7 @@ force-stop the app so the next test starts cold.
   `fix` → patch, `feat` → minor, `perf` → patch, `bump` → “Updated App Support”,
   `build` with scope `Needs bump` → patch, `chore`/`docs`/`ci` → no release.
 - Scopes used here: `chesscom`, `duolingo`, `foldersync`, `nova`, `nytgames`, `sleep`,
-  `snorelab`.
+  `snorelab`, `solidexplorer`.
 - Pushing to `dev` publishes a pre-release (`vX.Y.Z-dev.N`); pushing to `main` publishes a
   stable release. Merge `dev` into `main` with a merge commit — don't squash, the history is
   what semantic-release reads.
