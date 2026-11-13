@@ -1,3 +1,9 @@
+## [1.7.0-dev.4](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0-dev.3...v1.7.0-dev.4) (2026-11-13)
+
+### 🐛 Bug Fixes
+
+* **chesscom:** show board coordinates with Board colors on ([97f2ff0](https://github.com/hyzor/hyzor-morphe-patches/commit/97f2ff01348dca1e93557f98693b1dab72fb2dc6))
+
 ## [1.7.0-dev.3](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0-dev.2...v1.7.0-dev.3) (2026-11-13)
 
 ### ✨ New Features
