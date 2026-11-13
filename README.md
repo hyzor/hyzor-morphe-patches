@@ -6,7 +6,7 @@ Patches for apps I use, for use with [Morphe](https://morphe.software).
 |---|---|---|
 | [Sleep as Android](docs/apps/sleep-as-android.md) | `com.urbandroid.sleep` | `20261016` |
 | [SnoreLab](docs/apps/snorelab.md) | `com.snorelab.app` | `2.33.7.7953` |
-| [NYT Games](docs/apps/nyt-games.md) | `com.nytimes.crossword` | `6.48.0` |
+| [NYT Games](docs/apps/nyt-games.md) | `com.nytimes.crossword` | `6.50.0` |
 | [Chess.com](docs/apps/chess-com.md) | `com.chess` | `4.10.23` |
 | [Duolingo](docs/apps/duolingo.md) | `com.duolingo` | `6.104.3` |
 | [Nova Launcher](docs/apps/nova-launcher.md) | `com.teslacoilsw.launcher` | `8.9.7` |
@@ -231,7 +231,7 @@ every install — reinstalling forgets runtime permissions.
 
 ## 📱 NYT Games
 
-Supported target: `6.48.0` (APKM).
+Supported target: `6.50.0` (APKM).
 
 | Patch | Default | What it does |
 |---|---|---|

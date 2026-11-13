@@ -61,16 +61,17 @@ TARGETS = {
         ("Lmp/d;", "p"):
             ("Z", True, "Enable Premium", "premium expiry check"),
     },
-    # NYT Games 6.48.0:
+    # NYT Games 6.50.0:
     #   SubauthEntitlementClientImpl  the subauth bridge; class is not obfuscated but all of
     #                                 its members are one letter. P() = isSubscribedForGames,
-    #                                 E() = isSubscribedAndLinked, K() = isSubscribedViaGooglePlay,
+    #                                 D() = isSubscribedAndLinked, J() = isSubscribedViaGooglePlay,
     #                                 R() = hasUnlinkedSubscription (see the in-app dev settings).
-    #                                 Only P() reads NYTUserState.f, which the patch's
-    #                                 IGET_BOOLEAN filter relies on.
+    #                                 Only P() executes an iget-boolean (of NYTUserState.f),
+    #                                 which the patch's IGET_BOOLEAN filter relies on. The
+    #                                 letters move: 6.48.0 had E()/K() for the linked/Play checks.
     "NYT Games": {
         ("Lcom/nytimes/games/integrations/subauth/library/SubauthEntitlementClientImpl;", "P"):
-            ("Z", True, "Unlock Subscription", "isSubscribedForGames; only boolean read of NYTUserState.f"),
+            ("Z", True, "Unlock Subscription", "isSubscribedForGames; only iget-boolean of NYTUserState.f"),
         ("Lcom/nytimes/games/designsystem/theme/ExtendedColorsKt;", "<clinit>"):
             ("V", True, "AMOLED Black", "static light/dark palette; dark greys rewritten to #000000"),
     },
