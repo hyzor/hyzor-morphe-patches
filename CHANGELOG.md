@@ -1,3 +1,9 @@
+## [1.7.0-dev.3](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0-dev.2...v1.7.0-dev.3) (2026-11-13)
+
+### ✨ New Features
+
+* **projectivy:** add Projectivy Launcher 4.73 Unlock Premium patch ([b54622c](https://github.com/hyzor/hyzor-morphe-patches/commit/b54622c5a65f642ccaaefa208857c4a92791b299))
+
 ## [1.7.0-dev.2](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0-dev.1...v1.7.0-dev.2) (2026-11-13)
 
 ### 🚀 Updated App Support

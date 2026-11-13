@@ -28,7 +28,7 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.7.0-dev.2](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.7.0-dev.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;31 patches total
+> **[v1.7.0-dev.3](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.7.0-dev.3)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;32 patches total
 <details open>
 <summary>📦 NYT Games&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -155,6 +155,21 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | [Unlock Premium](#unlock-premium) | Unlocks FolderSync's premium without the in-app purchase and removes the ads, so you get unlimited sync pairs and the advanced options. |  |
+
+</details>
+
+<details open>
+<summary>📦 Projectivy Launcher&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 4.73 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Unlock Premium](#unlock-premium) | Unlocks Projectivy Launcher's premium features by starting the app in its registered state, so the purchase prompts and feature locks are gone. |  |
 
 </details>
 

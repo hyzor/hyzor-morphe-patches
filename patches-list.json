@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.7.0-dev.2",
+  "version": "1.7.0-dev.3",
   "patches": [
     {
       "name": "AMOLED Black",
@@ -801,6 +801,38 @@
                 "ARMEABI_V7A": 2020100216,
                 "X86_64": 2020100216,
                 "X86": 2020100216
+              },
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Unlock Premium",
+      "description": "Unlocks Projectivy Launcher's premium features by starting the app in its registered state, so the purchase prompts and feature locks are gone.",
+      "default": true,
+      "category": null,
+      "compatiblePackages": [
+        {
+          "packageName": "com.spocky.projengmenu",
+          "name": "Projectivy Launcher",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#F08029",
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "4.73",
+              "versionCodes": {
+                "ARM64_V8A": 98,
+                "ARMEABI_V7A": 98,
+                "X86_64": 98,
+                "X86": 98
               },
               "isExperimental": false,
               "minSdk": null,
