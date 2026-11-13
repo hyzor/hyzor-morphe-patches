@@ -27,6 +27,7 @@ MARKERS = {
     "NYT Games": "Lcom/nytimes/games/",
     "Duolingo": "Lcom/duolingo/",
     "Nova Launcher": "Lcom/teslacoilsw/launcher/",
+    "FolderSync": "Ldk/tacit/",
 }
 
 # App -> (class descriptor, method name) -> (return type, required, patch, description)
@@ -106,6 +107,19 @@ TARGETS = {
         ("Lcom/duolingo/data/session/state/RampupTimerState$Tick;", "<init>"):
             ("V", True, "Unlimited RampUp time", "per-second tick state"),
     },
+    # FolderSync 4.14.0:
+    #   VersionFeaturesConfig(...Z...)  the data class whose second field is isPaidVersion;
+    #                                   every premium/ad consumer reads it, and the billing
+    #                                   flow rebuilds it, so the patch forces the constructor
+    #                                   argument instead of the preference
+    #   getPremiumVersionPurchased()Z   the "premium_version" preference read; seeds the initial
+    #                                   config and backs the direct readers (ads, About screen)
+    "FolderSync": {
+        ("Ldk/tacit/foldersync/services/VersionFeaturesConfig;", "<init>"):
+            ("V", True, "Unlock Premium", "isPaidVersion store; single 4-arg constructor"),
+        ("Ldk/tacit/foldersync/services/AppPreferenceManager;", "getPremiumVersionPurchased"):
+            ("Z", True, "Unlock Premium", "the \"premium_version\" preference"),
+    },
 }
 
 # App -> (class, method) -> parameter lists that must each be present.
@@ -129,6 +143,14 @@ REQUIRED_PARAMS = {
         ],
         ("Lcom/duolingo/data/session/state/RampupTimerState$Tick;", "<init>"): [
             ["I"],
+        ],
+    },
+    "FolderSync": {
+        ("Ldk/tacit/foldersync/services/VersionFeaturesConfig;", "<init>"): [
+            ["Ldk/tacit/foldersync/services/VersionIdentifier;", "Z", "I", "I"],
+        ],
+        ("Ldk/tacit/foldersync/services/AppPreferenceManager;", "getPremiumVersionPurchased"): [
+            [],
         ],
     },
 }
