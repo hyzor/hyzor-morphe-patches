@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.7.0-dev.7",
+  "version": "1.7.0-dev.8",
   "patches": [
     {
       "name": "AMOLED Black",
@@ -18,12 +18,12 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "6.48.0",
+              "version": "6.50.0",
               "versionCodes": {
-                "ARM64_V8A": 6428192,
-                "ARMEABI_V7A": 6428192,
-                "X86_64": 6428192,
-                "X86": 6428192
+                "ARM64_V8A": 6428354,
+                "ARMEABI_V7A": 6428354,
+                "X86_64": 6428354,
+                "X86": 6428354
               },
               "isExperimental": false,
               "minSdk": null,
@@ -918,12 +918,12 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "6.48.0",
+              "version": "6.50.0",
               "versionCodes": {
-                "ARM64_V8A": 6428192,
-                "ARMEABI_V7A": 6428192,
-                "X86_64": 6428192,
-                "X86": 6428192
+                "ARM64_V8A": 6428354,
+                "ARMEABI_V7A": 6428354,
+                "X86_64": 6428354,
+                "X86": 6428354
               },
               "isExperimental": false,
               "minSdk": null,

@@ -1,3 +1,9 @@
+## [1.7.0-dev.8](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0-dev.7...v1.7.0-dev.8) (2026-11-13)
+
+### 🚀 Updated App Support
+
+* **nytgames:** support 6.50.0 ([261e65d](https://github.com/hyzor/hyzor-morphe-patches/commit/261e65dbc14f61d7699f3b919b26a0d2dab7f117)), closes [#000000](https://github.com/hyzor/hyzor-morphe-patches/issues/000000)
+
 ## [1.7.0-dev.7](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0-dev.6...v1.7.0-dev.7) (2026-11-13)
 
 ### 🚀 Updated App Support

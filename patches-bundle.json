@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-11-13T19:23:00",
-  "description": "## [1.7.0-dev.7](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0-dev.6...v1.7.0-dev.7) (2026-11-13)\n\n### 🚀 Updated App Support\n\n* **nova:** support 8.9.7 ([5be3bb3](https://github.com/hyzor/hyzor-morphe-patches/commit/5be3bb315d27fbfaa98793a14e61c3f5fe121278))",
-  "download_url": "https://github.com/hyzor/hyzor-morphe-patches/releases/download/v1.7.0-dev.7/patches-1.7.0-dev.7.mpp",
+  "created_at": "2026-11-13T19:50:18",
+  "description": "## [1.7.0-dev.8](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0-dev.7...v1.7.0-dev.8) (2026-11-13)\n\n### 🚀 Updated App Support\n\n* **nytgames:** support 6.50.0 ([261e65d](https://github.com/hyzor/hyzor-morphe-patches/commit/261e65dbc14f61d7699f3b919b26a0d2dab7f117)), closes [#000000](https://github.com/hyzor/hyzor-morphe-patches/issues/000000)",
+  "download_url": "https://github.com/hyzor/hyzor-morphe-patches/releases/download/v1.7.0-dev.8/patches-1.7.0-dev.8.mpp",
   "signature_download_url": "",
-  "version": "1.7.0-dev.7"
+  "version": "1.7.0-dev.8"
 }
