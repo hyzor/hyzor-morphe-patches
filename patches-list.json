@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.7.0-dev.4",
+  "version": "1.7.0-dev.5",
   "patches": [
     {
       "name": "AMOLED Black",
@@ -435,6 +435,38 @@
                 "ARMEABI_V7A": 89600,
                 "X86_64": 89600,
                 "X86": 89600
+              },
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Enable Pro",
+      "description": "Enables the features locked behind the Pro subscription.",
+      "default": true,
+      "category": null,
+      "compatiblePackages": [
+        {
+          "packageName": "pl.solidexplorer2",
+          "name": "Solid Explorer",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#039BE5",
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "3.6.4",
+              "versionCodes": {
+                "ARM64_V8A": 306041,
+                "ARMEABI_V7A": 306041,
+                "X86_64": 306041,
+                "X86": 306041
               },
               "isExperimental": false,
               "minSdk": null,

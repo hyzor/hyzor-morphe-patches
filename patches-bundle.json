@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-11-13T17:39:24",
-  "description": "## [1.7.0-dev.4](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0-dev.3...v1.7.0-dev.4) (2026-11-13)\n\n### 🐛 Bug Fixes\n\n* **chesscom:** show board coordinates with Board colors on ([97f2ff0](https://github.com/hyzor/hyzor-morphe-patches/commit/97f2ff01348dca1e93557f98693b1dab72fb2dc6))",
-  "download_url": "https://github.com/hyzor/hyzor-morphe-patches/releases/download/v1.7.0-dev.4/patches-1.7.0-dev.4.mpp",
+  "created_at": "2026-11-13T18:03:34",
+  "description": "## [1.7.0-dev.5](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0-dev.4...v1.7.0-dev.5) (2026-11-13)\n\n### ✨ New Features\n\n* **solidexplorer:** add Solid Explorer 3.6.4 Enable Pro patch ([d12e56d](https://github.com/hyzor/hyzor-morphe-patches/commit/d12e56d91f39d33c488573e4bf5c594ab3e153fe))",
+  "download_url": "https://github.com/hyzor/hyzor-morphe-patches/releases/download/v1.7.0-dev.5/patches-1.7.0-dev.5.mpp",
   "signature_download_url": "",
-  "version": "1.7.0-dev.4"
+  "version": "1.7.0-dev.5"
 }

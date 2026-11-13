@@ -1,3 +1,9 @@
+## [1.7.0-dev.5](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0-dev.4...v1.7.0-dev.5) (2026-11-13)
+
+### ✨ New Features
+
+* **solidexplorer:** add Solid Explorer 3.6.4 Enable Pro patch ([d12e56d](https://github.com/hyzor/hyzor-morphe-patches/commit/d12e56d91f39d33c488573e4bf5c594ab3e153fe))
+
 ## [1.7.0-dev.4](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0-dev.3...v1.7.0-dev.4) (2026-11-13)
 
 ### 🐛 Bug Fixes
