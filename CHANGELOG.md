@@ -1,3 +1,9 @@
+## [1.7.0-dev.2](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0-dev.1...v1.7.0-dev.2) (2026-11-13)
+
+### 🚀 Updated App Support
+
+* **snorelab:** support 2.33.7 ([9b4f7e3](https://github.com/hyzor/hyzor-morphe-patches/commit/9b4f7e343a2865d769894b3bac7f22fe6206cbe6))
+
 ## [1.7.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.6.2...v1.7.0-dev.1) (2026-11-13)
 
 ### ✨ New Features
