@@ -1,3 +1,9 @@
+## [1.7.0-dev.6](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0-dev.5...v1.7.0-dev.6) (2026-11-13)
+
+### 🚀 Updated App Support
+
+* **sleep:** support 20261016 ([e3648d0](https://github.com/hyzor/hyzor-morphe-patches/commit/e3648d0320ec49d0e530d728af593567a6f5dae9))
+
 ## [1.7.0-dev.5](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0-dev.4...v1.7.0-dev.5) (2026-11-13)
 
 ### ✨ New Features
