@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.6.2",
+  "version": "1.7.0-dev.1",
   "patches": [
     {
       "name": "AMOLED Black",
@@ -769,6 +769,38 @@
                 "ARMEABI_V7A": 2492,
                 "X86_64": 2492,
                 "X86": 2492
+              },
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Unlock Premium",
+      "description": "Unlocks FolderSync's premium without the in-app purchase and removes the ads, so you get unlimited sync pairs and the advanced options.",
+      "default": true,
+      "category": null,
+      "compatiblePackages": [
+        {
+          "packageName": "dk.tacit.android.foldersync.lite",
+          "name": "FolderSync",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#406FB8",
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "4.14.0",
+              "versionCodes": {
+                "ARM64_V8A": 2020100216,
+                "ARMEABI_V7A": 2020100216,
+                "X86_64": 2020100216,
+                "X86": 2020100216
               },
               "isExperimental": false,
               "minSdk": null,

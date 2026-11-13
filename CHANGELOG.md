@@ -1,3 +1,9 @@
+## [1.7.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.6.2...v1.7.0-dev.1) (2026-11-13)
+
+### ✨ New Features
+
+* **foldersync:** add Unlock Premium patch for 4.14.0 ([d2ec435](https://github.com/hyzor/hyzor-morphe-patches/commit/d2ec435ad2a185f0fa21703e81d34c85a83ac5ad))
+
 ## [1.6.2](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.6.1...v1.6.2) (2026-11-05)
 
 ### 🐛 Bug Fixes
