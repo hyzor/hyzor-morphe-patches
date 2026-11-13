@@ -36,7 +36,7 @@ MARKERS = {
 TARGETS = {
     "Sleep as Android": {
         ("Lcom/urbandroid/sleep/TrialFilter;", "isTrial"):
-            ("Z", True, "Enable Premium", "the paywall; 58 call sites and isTrialExpired()"),
+            ("Z", True, "Enable Premium", "the paywall; 64 external call sites and isTrialExpired()"),
         ("Lcom/urbandroid/sleep/TrialFilter;", "hasUnlock"):
             ("Z", True, "Enable Premium", "drawer / unlock UI"),
         ("Lcom/urbandroid/common/util/PreferencesUtils;", "isUnlockAcked"):
