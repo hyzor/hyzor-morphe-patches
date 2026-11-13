@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.7.0-dev.6",
+  "version": "1.7.0-dev.7",
   "patches": [
     {
       "name": "AMOLED Black",
@@ -429,12 +429,12 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "89600 (8.9.6)",
+              "version": "89700 (8.9.7)",
               "versionCodes": {
-                "ARM64_V8A": 89600,
-                "ARMEABI_V7A": 89600,
-                "X86_64": 89600,
-                "X86": 89600
+                "ARM64_V8A": 89700,
+                "ARMEABI_V7A": 89700,
+                "X86_64": 89700,
+                "X86": 89700
               },
               "isExperimental": false,
               "minSdk": null,

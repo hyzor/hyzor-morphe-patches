@@ -1,3 +1,9 @@
+## [1.7.0-dev.7](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0-dev.6...v1.7.0-dev.7) (2026-11-13)
+
+### 🚀 Updated App Support
+
+* **nova:** support 8.9.7 ([5be3bb3](https://github.com/hyzor/hyzor-morphe-patches/commit/5be3bb315d27fbfaa98793a14e61c3f5fe121278))
+
 ## [1.7.0-dev.6](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0-dev.5...v1.7.0-dev.6) (2026-11-13)
 
 ### 🚀 Updated App Support
