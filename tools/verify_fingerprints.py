@@ -48,12 +48,13 @@ TARGETS = {
         ("Lcom/urbandroid/common/util/PreferencesUtils;", "isCloudPremiumStatusUnknown"):
             ("Z", False, "Enable Cloud Premium", "cloud state unresolved sentinel"),
     },
-    # SnoreLab 2.33.5.7814:
-    #   vp.h.q()          remotePremiumActive getter (the class has three ()Z getters,
-    #                     so the patch pins the obfuscated method name too)
-    #   mp.d.p(Lh80/g;)   premium expiration-date check in the local premium source
+    # SnoreLab 2.33.7.7953:
+    #   up.h.q()          remotePremiumActive getter (the class has three ()Z getters,
+    #                     so the patch pins the obfuscated method name too). Moved from
+    #                     vp.h in 2.33.5.7814; the fingerprint's string anchors do not care.
+    #   mp.d.p(Lg80/g;)   premium expiration-date check in the local premium source
     "SnoreLab": {
-        ("Lvp/h;", "q"):
+        ("Lup/h;", "q"):
             ("Z", True, "Enable Premium", "remotePremiumActive getter"),
         ("Lmp/d;", "p"):
             ("Z", True, "Enable Premium", "premium expiry check"),

@@ -24,7 +24,7 @@ conventions the repository follows.
 | App | Package | Targets | Sources |
 |---|---|---|---|
 | Sleep as Android | `com.urbandroid.sleep` | `20261006` | `patches/.../sleep/` |
-| SnoreLab | `com.snorelab.app` | `2.33.5.7814` | `patches/.../snorelab/` |
+| SnoreLab | `com.snorelab.app` | `2.33.7.7953` | `patches/.../snorelab/` |
 | NYT Games | `com.nytimes.crossword` | `6.48.0` | `patches/.../nytgames/` |
 | Chess.com | `com.chess` | `4.10.23` | `patches/.../chesscom/` + `extensions/chesscom/` |
 | Duolingo | `com.duolingo` | `6.104.3` | `patches/.../duolingo/` |
