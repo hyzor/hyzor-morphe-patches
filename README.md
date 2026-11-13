@@ -12,6 +12,7 @@ Patches for apps I use, for use with [Morphe](https://morphe.software).
 | [Nova Launcher](docs/apps/nova-launcher.md) | `com.teslacoilsw.launcher` | `8.9.6` |
 | [FolderSync](docs/apps/foldersync.md) | `dk.tacit.android.foldersync.lite` | `4.14.0` |
 | [Projectivy Launcher](docs/apps/projectivy-launcher.md) | `com.spocky.projengmenu` | `4.73` |
+| [Solid Explorer](docs/apps/solidexplorer.md) | `pl.solidexplorer2` | `3.6.4` |
 
 ### How to use these patches
 
@@ -350,6 +351,9 @@ attribution:
 - **FolderSync:** port of
   [arandomhooman/hoomans-morphe-patches](https://github.com/arandomhooman/hoomans-morphe-patches)
   (GPLv3), re-resolved for 4.14.0.
+- **Solid Explorer:** port of
+  [hoo-dles/morphe-patches](https://github.com/hoo-dles/morphe-patches) (GPLv3), re-resolved
+  for 3.6.4.
 
 Original patch code is © the upstream authors and contributors — ImNoammm, hoo-dles,
 rushiranpise, Entree3k, PrathxmOp, arandomhooman and their contributors. New code in this

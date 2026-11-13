@@ -29,6 +29,7 @@ MARKERS = {
     "Nova Launcher": "Lcom/teslacoilsw/launcher/",
     "FolderSync": "Ldk/tacit/",
     "Projectivy Launcher": "Lcom/spocky/projengmenu/",
+    "Solid Explorer": "Lpl/solidexplorer/licensing/",
 }
 
 # App -> (class descriptor, method name) -> (return type, required, patch, description)
@@ -136,6 +137,21 @@ TARGETS = {
         ("Lcom/spocky/projengmenu/PTApplication;", "d"):
             ("V", True, "Unlock Premium", "licence re-check writer"),
     },
+    # Solid Explorer 3.6.4:
+    #   LicenseDetails.<init>(LicenseState, String, Long, Long, String)V
+    #                          the immutable licence record and the one place the state is
+    #                          written; the patch rewrites it to PREMIUM_PRO while
+    #                          adsEnabled() reports the free tier. The state field is named
+    #                          `a` (R8), so the patch reads the name from that iput instead of
+    #                          hard-coding it.
+    #   LicenseDetails.adsEnabled()Z
+    #                          the free-tier anchor the hook branches on.
+    "Solid Explorer": {
+        ("Lpl/solidexplorer/licensing/LicenseDetails;", "<init>"):
+            ("V", True, "Enable Pro", "licence record; state field rewritten"),
+        ("Lpl/solidexplorer/licensing/LicenseDetails;", "adsEnabled"):
+            ("Z", True, "Enable Pro", "free-tier check used as the hook's condition"),
+    },
 }
 
 # App -> (class, method) -> parameter lists that must each be present.
@@ -172,6 +188,18 @@ REQUIRED_PARAMS = {
     "Projectivy Launcher": {
         ("Lcom/spocky/projengmenu/PTApplication;", "<init>"): [[]],
         ("Lcom/spocky/projengmenu/PTApplication;", "d"): [["Z"]],
+    },
+    "Solid Explorer": {
+        ("Lpl/solidexplorer/licensing/LicenseDetails;", "<init>"): [
+            [
+                "Lpl/solidexplorer/licensing/LicenseState;",
+                "Ljava/lang/String;",
+                "Ljava/lang/Long;",
+                "Ljava/lang/Long;",
+                "Ljava/lang/String;",
+            ],
+        ],
+        ("Lpl/solidexplorer/licensing/LicenseDetails;", "adsEnabled"): [[]],
     },
 }
 
