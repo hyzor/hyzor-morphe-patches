@@ -28,6 +28,7 @@ MARKERS = {
     "Duolingo": "Lcom/duolingo/",
     "Nova Launcher": "Lcom/teslacoilsw/launcher/",
     "FolderSync": "Ldk/tacit/",
+    "Projectivy Launcher": "Lcom/spocky/projengmenu/",
 }
 
 # App -> (class descriptor, method name) -> (return type, required, patch, description)
@@ -121,6 +122,20 @@ TARGETS = {
         ("Ldk/tacit/foldersync/services/AppPreferenceManager;", "getPremiumVersionPurchased"):
             ("Z", True, "Unlock Premium", "the \"premium_version\" preference"),
     },
+    # Projectivy Launcher 4.73:
+    #   PTApplication.<init>   seeds the Boolean StateFlow with Boolean.TRUE ("locked");
+    #                          the patch swaps that one constant for FALSE
+    #   PTApplication.d(Z)     the only later writer (billing + startup re-check); the patch
+    #                          makes it return immediately. The name is obfuscated and moves
+    #                          with the release, so it is pinned here only as a fast exact-name
+    #                          pre-check; the real fingerprint matches the (Z)V shape plus the
+    #                          cj3.l / PTApplication.x / ze4.h accesses.
+    "Projectivy Launcher": {
+        ("Lcom/spocky/projengmenu/PTApplication;", "<init>"):
+            ("V", True, "Unlock Premium", "premium StateFlow seed (Boolean.TRUE)"),
+        ("Lcom/spocky/projengmenu/PTApplication;", "d"):
+            ("V", True, "Unlock Premium", "licence re-check writer"),
+    },
 }
 
 # App -> (class, method) -> parameter lists that must each be present.
@@ -153,6 +168,10 @@ REQUIRED_PARAMS = {
         ("Ldk/tacit/foldersync/services/AppPreferenceManager;", "getPremiumVersionPurchased"): [
             [],
         ],
+    },
+    "Projectivy Launcher": {
+        ("Lcom/spocky/projengmenu/PTApplication;", "<init>"): [[]],
+        ("Lcom/spocky/projengmenu/PTApplication;", "d"): [["Z"]],
     },
 }
 
