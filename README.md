@@ -9,7 +9,7 @@ Patches for apps I use, for use with [Morphe](https://morphe.software).
 | [NYT Games](docs/apps/nyt-games.md) | `com.nytimes.crossword` | `6.48.0` |
 | [Chess.com](docs/apps/chess-com.md) | `com.chess` | `4.10.23` |
 | [Duolingo](docs/apps/duolingo.md) | `com.duolingo` | `6.104.3` |
-| [Nova Launcher](docs/apps/nova-launcher.md) | `com.teslacoilsw.launcher` | `8.9.6` |
+| [Nova Launcher](docs/apps/nova-launcher.md) | `com.teslacoilsw.launcher` | `8.9.7` |
 | [FolderSync](docs/apps/foldersync.md) | `dk.tacit.android.foldersync.lite` | `4.14.0` |
 | [Projectivy Launcher](docs/apps/projectivy-launcher.md) | `com.spocky.projengmenu` | `4.73` |
 | [Solid Explorer](docs/apps/solidexplorer.md) | `pl.solidexplorer2` | `3.6.4` |
@@ -281,15 +281,15 @@ patch depends on.
 
 ## 📱 Nova Launcher
 
-Supported target: `89600 (8.9.6)` (APK, versionCode `89600`).
+Supported target: `89700 (8.9.7)` (APK, versionCode `89700`).
 
 | Patch | Default | What it does |
 |---|---|---|
 | Enable Prime | on | Unlocks the features gated on Nova Prime. |
 
 Nova keeps the Prime decision on the device. The patch returns `true` from the static Prime
-gate (`qx.b1.b()`), forces the persisted `"1"` value read at startup to `0x200` (the app's own
-"direct licence" state), and returns `true` from the active-subscription check (`gy.d0.w()`),
+gate (`ix.i1.b()`), forces the persisted `"1"` value read at startup to `0x200` (the app's own
+"direct licence" state), and returns `true` from the active-subscription check (`xx.b0.w()`),
 which also keeps the Play licence revocation path from starting. Client-side only: anything
 Nova asks its backend for still needs a real account.
 
@@ -362,7 +362,7 @@ attribution:
 - **Nova Launcher:** port of
   [rushiranpise/morphe-patches](https://github.com/rushiranpise/morphe-patches) and
   [hoo-dles/morphe-patches](https://github.com/hoo-dles/morphe-patches) (both GPLv3),
-  re-resolved for 8.9.6.
+  re-resolved for 8.9.7.
 - **FolderSync:** port of
   [arandomhooman/hoomans-morphe-patches](https://github.com/arandomhooman/hoomans-morphe-patches)
   (GPLv3), re-resolved for 4.14.0.

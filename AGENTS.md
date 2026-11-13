@@ -28,7 +28,7 @@ conventions the repository follows.
 | NYT Games | `com.nytimes.crossword` | `6.48.0` | `patches/.../nytgames/` |
 | Chess.com | `com.chess` | `4.10.23` | `patches/.../chesscom/` + `extensions/chesscom/` |
 | Duolingo | `com.duolingo` | `6.104.3` | `patches/.../duolingo/` |
-| Nova Launcher | `com.teslacoilsw.launcher` | `8.9.6` | `patches/.../nova/` |
+| Nova Launcher | `com.teslacoilsw.launcher` | `8.9.7` | `patches/.../nova/` |
 | FolderSync | `dk.tacit.android.foldersync.lite` | `4.14.0` | `patches/.../foldersync/` |
 | Solid Explorer | `pl.solidexplorer2` | `3.6.4` | `patches/.../solidexplorer/` |
 
