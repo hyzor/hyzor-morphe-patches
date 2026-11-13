@@ -74,23 +74,23 @@ TARGETS = {
         ("Lcom/nytimes/games/designsystem/theme/ExtendedColorsKt;", "<clinit>"):
             ("V", True, "AMOLED Black", "static light/dark palette; dark greys rewritten to #000000"),
     },
-    # Nova Launcher 8.9.6 (versionName "89600 (8.9.6)"):
-    #   qx.b1.b()                    the static "is Prime or Prime APK" gate (17 callers);
+    # Nova Launcher 8.9.7 (versionName "89700 (8.9.7)"):
+    #   ix.i1.b()                    the static "is Prime or Prime APK" gate (17 callers);
     #                                the patch replaces its body with return true
-    #   j10.h2.a(SharedPreferences)  derives Prime (j10.h2.h) from the persisted "1" value;
+    #   b10.k2.a(SharedPreferences)  derives Prime (b10.k2.h) from the persisted "1" value;
     #                                the patch overwrites the getInt() result with 0x200
-    #   gy.d0.w(Context)             active-subscription check, which also gates the Play
+    #   xx.b0.w(Context)             active-subscription check, which also gates the Play
     #                                licence revocation path; the patch returns true
     # The class and method names are obfuscated and change with every release. They are pinned
     # here only as a fast exact-name pre-check; the fingerprints themselves match instruction
     # shapes (field access, literal sequence, string + opcode). Re-resolve all three when
     # bumping the supported version.
     "Nova Launcher": {
-        ("Lqx/b1;", "b"):
+        ("Lix/i1;", "b"):
             ("Z", True, "Enable Prime", "static isPrime gate"),
-        ("Lj10/h2;", "a"):
+        ("Lb10/k2;", "a"):
             ("V", True, "Enable Prime", "prime state initialiser"),
-        ("Lgy/d0;", "w"):
+        ("Lxx/b0;", "w"):
             ("Z", True, "Enable Prime", "active-subscription check"),
     },
     # Duolingo 6.104.3:
