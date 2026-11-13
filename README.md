@@ -11,6 +11,7 @@ Patches for apps I use, for use with [Morphe](https://morphe.software).
 | [Duolingo](docs/apps/duolingo.md) | `com.duolingo` | `6.104.3` |
 | [Nova Launcher](docs/apps/nova-launcher.md) | `com.teslacoilsw.launcher` | `8.9.6` |
 | [FolderSync](docs/apps/foldersync.md) | `dk.tacit.android.foldersync.lite` | `4.14.0` |
+| [Projectivy Launcher](docs/apps/projectivy-launcher.md) | `com.spocky.projengmenu` | `4.73` |
 
 ### How to use these patches
 
