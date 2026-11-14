@@ -434,6 +434,10 @@ public final class MorpheSettingsActivity extends Activity {
         preview.addView(new ArcadePreview(this), new LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, dp(156)));
         list.addView(preview, cardParams(16));
+        list.addView(header("Where it applies"));
+        list.addView(caption("chess.com's classic board: live games and the Puzzle Rush, Puzzle "
+            + "Battle, Learning and Review puzzle modes. Bot games, the Daily Puzzle, Solve Puzzles "
+            + "and Lichess Puzzles use the newer board, where these effects do not run yet."));
         list.addView(caption("A light trail follows each move, the square lights up where the piece "
             + "lands and captures burst. In games, pieces also flash as you pick them up and drop "
             + "them, a king in check flashes and move hints are animated."));
