@@ -1,3 +1,9 @@
+## [1.7.0-dev.9](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0-dev.8...v1.7.0-dev.9) (2026-11-14)
+
+### 🐛 Bug Fixes
+
+* **projectivy:** make the patched APK install on 16 KB page devices ([27ec7cd](https://github.com/hyzor/hyzor-morphe-patches/commit/27ec7cd6ed3839113fcf5528fb0f6fc281a1252c)), closes [#42](https://github.com/hyzor/hyzor-morphe-patches/issues/42)
+
 ## [1.7.0-dev.8](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0-dev.7...v1.7.0-dev.8) (2026-11-13)
 
 ### 🚀 Updated App Support
