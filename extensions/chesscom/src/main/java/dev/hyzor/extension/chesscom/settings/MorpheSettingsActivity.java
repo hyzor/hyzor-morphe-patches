@@ -375,18 +375,37 @@ public final class MorpheSettingsActivity extends Activity {
 
     private void renderBoardColors() {
         int dark = BoardColors.dark(), light = BoardColors.light();
-        LinearLayout preview = card();
-        preview.setPadding(dp(12), dp(12), dp(12), dp(12));
-        preview.addView(boardPreview(dark, light), new LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, dp(84)));
-        list.addView(preview, cardParams(16));
+        boolean appTheme = BoardColors.appTheme();
+
+        if (appTheme) {
+            list.addView(caption("Using the board from More → Theme → Board. Pick a colour below to "
+                + "use these colours instead."));
+        } else {
+            LinearLayout preview = card();
+            preview.setPadding(dp(12), dp(12), dp(12), dp(12));
+            preview.addView(boardPreview(dark, light), new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, dp(84)));
+            list.addView(preview, cardParams(16));
+        }
+
+        // The app's own Theme → Board choice, so both can be used without turning the feature off.
+        list.addView(header("chess.com theme"));
+        LinearLayout appThemeCard = card();
+        appThemeCard.addView(actionRow(
+            (appTheme ? "✓ " : "") + "Use the app's board theme",
+            "The board chosen in More → Theme → Board.", () -> {
+                BoardColors.setAppTheme(true);
+                render();
+            }));
+        list.addView(appThemeCard, cardParams());
 
         list.addView(header("chess.com colors"));
         List<View> presets = new ArrayList<>();
         for (String[] preset : BoardColors.PRESETS) {
             int presetDark = Color.parseColor(preset[1]), presetLight = Color.parseColor(preset[2]);
-            boolean selected = presetDark == dark && presetLight == light;
+            boolean selected = !appTheme && presetDark == dark && presetLight == light;
             presets.add(choice(miniBoard(presetDark, presetLight, selected), 56, preset[0], selected, () -> {
+                BoardColors.setAppTheme(false);
                 BoardColors.set(presetDark, presetLight);
                 render();
             }));
@@ -396,11 +415,17 @@ public final class MorpheSettingsActivity extends Activity {
         list.addView(header("Your own"));
         LinearLayout custom = card();
         list.addView(custom, cardParams());
-        custom.addView(colorRow("Light squares", light, color -> BoardColors.set(BoardColors.dark(), color)));
+        custom.addView(colorRow("Light squares", light, color -> {
+            BoardColors.setAppTheme(false);
+            BoardColors.set(BoardColors.dark(), color);
+        }));
         custom.addView(divider(56));
-        custom.addView(colorRow("Dark squares", dark, color -> BoardColors.set(color, BoardColors.light())));
-        list.addView(caption("Every board uses these colours while Board colors is on. Boards already "
-            + "open change when they next redraw."));
+        custom.addView(colorRow("Dark squares", dark, color -> {
+            BoardColors.setAppTheme(false);
+            BoardColors.set(color, BoardColors.light());
+        }));
+        list.addView(caption("Every board uses these colours while Board colors is on, unless you pick "
+            + "the app's board theme above. Boards already open change when they next redraw."));
     }
 
     private void renderArcade() {
@@ -409,6 +434,10 @@ public final class MorpheSettingsActivity extends Activity {
         preview.addView(new ArcadePreview(this), new LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, dp(156)));
         list.addView(preview, cardParams(16));
+        list.addView(header("Where it applies"));
+        list.addView(caption("chess.com's classic board: live games and the Puzzle Rush, Puzzle "
+            + "Battle, Learning and Review puzzle modes. Bot games, the Daily Puzzle, Solve Puzzles "
+            + "and Lichess Puzzles use the newer board, where these effects do not run yet."));
         list.addView(caption("A light trail follows each move, the square lights up where the piece "
             + "lands and captures burst. In games, pieces also flash as you pick them up and drop "
             + "them, a king in check flashes and move hints are animated."));
