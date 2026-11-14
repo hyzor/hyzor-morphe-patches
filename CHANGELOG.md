@@ -1,3 +1,9 @@
+## [1.8.0-dev.2](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.8.0-dev.1...v1.8.0-dev.2) (2026-11-14)
+
+### 🐛 Bug Fixes
+
+* **chesscom:** state where Arcade animations apply ([22ca5d2](https://github.com/hyzor/hyzor-morphe-patches/commit/22ca5d22dbcce741ff0ac88ec600efc538cbd2d5))
+
 ## [1.8.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.1-dev.1...v1.8.0-dev.1) (2026-11-14)
 
 ### ✨ New Features

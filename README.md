@@ -29,7 +29,7 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.8.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.8.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;33 patches total
+> **[v1.8.0-dev.2](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.8.0-dev.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;33 patches total
 <details open>
 <summary>📦 NYT Games&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -59,7 +59,7 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 |----------|----------------|-----------|
 | [AMOLED black](#amoled-black) | Pure black backgrounds instead of chess.com's dark grey, in the newer and the older screens. Switch it in Noam's Patches (then restart the app). |  |
 | [Accent color](#accent-color) | Your own colour in place of chess.com's green, chosen in Noam's Patches → Accent color: buttons, highlights, icons and text of the app. |  |
-| [Arcade animations](#arcade-animations) | Adds the chess.com website's Arcade piece animations to every board: light trails, bursts when a piece is picked up, dropped or captured, a flash on check, outlined last-move squares and animated move hints. Switch it in Noam's Patches. |  |
+| [Arcade animations](#arcade-animations) | Adds the chess.com website's Arcade piece animations to the classic board (live games and the Puzzle Rush, Puzzle Battle, Learning and Review puzzle modes): light trails, bursts when a piece is picked up, dropped or captured, a flash on check, outlined last-move squares and animated move hints. The newer board used by bot games, the Daily Puzzle, Solve Puzzles and Lichess Puzzles is not covered yet. Switch it in Noam's Patches. |  |
 | [Arrows in games](#arrows-in-games) | Adds Arrows and Clear buttons to the live, daily and pass-and-play game bars, and a small chip over the board in bot games. While Arrows is on, dragging on the board draws an arrow and tapping marks a square, as on the website, and pieces don't move. |  |
 | [Board colors](#board-colors) | Choose the board's square colours: your own, or one of chess.com's colour themes, on every board of the app. In Noam's Patches → Board colors. |  |
 | [Clone Chess.com](#clone-chess-com) | Renames the app to com.chess.noam so it installs next to the real Chess.com app instead of over it. Leave it off to keep updating your current install. |  |
