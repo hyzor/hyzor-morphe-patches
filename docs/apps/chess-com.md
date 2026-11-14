@@ -151,10 +151,15 @@ set after a restart, *Puzzles from Lichess* downloads the offline set and opens 
 Classic puzzle screen with the Lichess rating box and graph, and the Arrows chip appears in a
 bot game. Not exercised: a signed-in free account (so the sale banner and Upgrade row side of
 *Hide Premium-only content*), the custom time slider (the guest game-setup flow does not expose
-it), and Stockfish (not selected in the test build). Two Lichess-flow observations still need a
-4.10.23 comparison before they can be called regressions: the puzzle after a wrong move showed
-*Unrated* without the rating box, and the Puzzles big button fell back to *Solve Puzzles* until
-the app was restarted.
+it), and Stockfish (not selected in the test build).
+
+The two oddities seen during the first ad-hoc session (a puzzle shown *Unrated* after a move,
+and the Puzzles big button falling back to *Solve Puzzles*) were checked with an A/B run:
+4.10.23 with the previous bundle and 4.10.27 with this one, same clone install and the same
+guest flow. Both builds behave identically — a wrong move stays on the puzzle and updates the
+Lichess rating (1183/−317 on 4.10.23, 1217/−283 on 4.10.27), *Next* opens the following puzzle
+with the rating box intact, and Back to the hub keeps *Puzzles from Lichess* in place. They
+look like transient states of that session, not version differences.
 
 ## Feature groups
 
