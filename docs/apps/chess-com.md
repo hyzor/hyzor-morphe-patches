@@ -75,6 +75,20 @@ grid colours mismatched. The patch replaces that one palette read with `Accent.P
 the other tiers build their backgrounds from non-green palette colours and literals, which the
 accent never touched.
 
+## Arcade animations
+
+A reimplementation of chess.com's website Arcade renderer on the app's classic board: a light
+trail follows each move, the piece pulses while it is held with grab and drop bursts, captures
+burst, the king flashes in check, the last move is outlined in the mover's colour and legal-move
+hints are animated. The sprites are chess.com's own, downloaded once and cached.
+
+The patch hooks the classic board (`com.chess.chessboard.view.ChessBoardView` and its
+`viewlayers.PieceView`), which is still used by live games (`RealGameActivity`) and the Puzzle
+Rush, Puzzle Battle, Learning and Review puzzle modes. The Compose board
+(`com.chess.chessboard.v2.ChessBoardView`) used by bot games, the Daily Puzzle, Solve Puzzles and
+Lichess puzzles is a different implementation and is not hooked, so those screens have no Arcade
+effects. The in-app page says this as well.
+
 ## Board colors
 
 The patch replaces the theme's board background with the app's own plain-colour
