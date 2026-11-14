@@ -13,6 +13,7 @@ import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.bytecodePatch
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
+import dev.hyzor.patches.projectivy.install.extractNativeLibsPatch
 import dev.hyzor.patches.projectivy.shared.Constants.PROJECTIVY
 
 /**
@@ -60,6 +61,7 @@ val unlockPremiumPatch = bytecodePatch(
     default = true,
 ) {
     compatibleWith(PROJECTIVY)
+    dependsOn(extractNativeLibsPatch)
 
     execute {
         val constructor = PremiumSeedFingerprint.method
