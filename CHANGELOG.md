@@ -1,3 +1,9 @@
+## [1.7.1-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0...v1.7.1-dev.1) (2026-11-14)
+
+### 🚀 Updated App Support
+
+* **chesscom:** support 4.10.27 ([3926058](https://github.com/hyzor/hyzor-morphe-patches/commit/392605832a603a597f86e2120ceb692b56bea6da))
+
 ## [1.7.0](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.6.2...v1.7.0) (2026-11-14)
 
 ### 🐛 Bug Fixes
