@@ -7,7 +7,7 @@ Patches for apps I use, for use with [Morphe](https://morphe.software).
 | [Sleep as Android](docs/apps/sleep-as-android.md) | `com.urbandroid.sleep` | `20261016` |
 | [SnoreLab](docs/apps/snorelab.md) | `com.snorelab.app` | `2.33.7.7953` |
 | [NYT Games](docs/apps/nyt-games.md) | `com.nytimes.crossword` | `6.50.0` |
-| [Chess.com](docs/apps/chess-com.md) | `com.chess` | `4.10.23` |
+| [Chess.com](docs/apps/chess-com.md) | `com.chess` | `4.10.27` |
 | [Duolingo](docs/apps/duolingo.md) | `com.duolingo` | `6.104.3` |
 | [Nova Launcher](docs/apps/nova-launcher.md) | `com.teslacoilsw.launcher` | `8.9.7` |
 | [FolderSync](docs/apps/foldersync.md) | `dk.tacit.android.foldersync.lite` | `4.14.0` |
@@ -52,7 +52,7 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 
 **🎯 Supported versions:**
 
-| 4.10.23-googleplay |
+| 4.10.27-googleplay |
 | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
@@ -250,7 +250,7 @@ WebViews with the website's own dark theme and stay dark grey.
 
 ## 📱 Chess.com
 
-Supported target: `4.10.23-googleplay`. Older builds, including 4.10.18, are no longer
+Supported target: `4.10.27-googleplay`. Older builds, including 4.10.23, are no longer
 supported.
 
 20 patches, most backed by the bundle's Java extension. The **Noam's Patches** row in the
