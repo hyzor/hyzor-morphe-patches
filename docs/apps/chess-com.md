@@ -1,6 +1,6 @@
 # Chess.com
 
-Package `com.chess`, supported target `4.10.23-googleplay` (versionCode 280100). The patches
+Package `com.chess`, supported target `4.10.27-googleplay` (versionCode 280120). The patches
 are written for that build only: no older version's shapes are kept as fallbacks.
 Sources: [`patches/.../chesscom/`](../../patches/src/main/kotlin/dev/hyzor/patches/chesscom/) and
 [`extensions/chesscom/`](../../extensions/chesscom/).
@@ -145,10 +145,16 @@ session runs it as `PathPuzzlesMode.REGULAR` so the Classic layout and the ratin
   inside the short Next hand-off window: the decision waits for the window to close instead of
   being skipped.
 
-Runtime-tested on 4.10.23: the seed cleared chess.com's guest queue, puzzles scored locally,
-the rating box and graph showed the Lichess values, the settings dialog showed only the three
-local rows — before and after Next — and backing out to the hub right after Next ended the
-session.
+Port-tested on 4.10.27 with a clone install (`com.chess.noam`, guest account): cold start
+without a crash, Noam's Patches lists every applied patch, the bottom bar honours a saved tab
+set after a restart, *Puzzles from Lichess* downloads the offline set and opens chess.com's
+Classic puzzle screen with the Lichess rating box and graph, and the Arrows chip appears in a
+bot game. Not exercised: a signed-in free account (so the sale banner and Upgrade row side of
+*Hide Premium-only content*), the custom time slider (the guest game-setup flow does not expose
+it), and Stockfish (not selected in the test build). Two Lichess-flow observations still need a
+4.10.23 comparison before they can be called regressions: the puzzle after a wrong move showed
+*Unrated* without the rating box, and the Puzzles big button fell back to *Solve Puzzles* until
+the app was restarted.
 
 ## Feature groups
 
