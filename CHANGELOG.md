@@ -1,3 +1,9 @@
+## [1.8.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.1-dev.1...v1.8.0-dev.1) (2026-11-14)
+
+### ✨ New Features
+
+* **chesscom:** allow the app board theme alongside Board colors ([7be9316](https://github.com/hyzor/hyzor-morphe-patches/commit/7be931600e7a5647e7c5c2bd76c45a192fe33d9c))
+
 ## [1.7.1-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0...v1.7.1-dev.1) (2026-11-14)
 
 ### 🚀 Updated App Support
