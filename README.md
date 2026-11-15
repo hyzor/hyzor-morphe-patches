@@ -328,6 +328,106 @@ Nova asks its backend for still needs a real account.
 
 [Port notes, hook map and on-device verification →](docs/apps/nova-launcher.md)
 
+## 📱 FolderSync
+
+Supported target: `4.14.0` (APKM, versionCode `2020100216`).
+
+| Patch | Default | What it does |
+|---|---|---|
+| Unlock Premium | on | Reports the lite build as the paid version and turns off its ads. |
+
+FolderSync keeps the licence in one `VersionFeaturesConfig` record and rebuilds it from Play
+Billing on every preference change, so forcing only the preference getter would be undone a
+moment after startup. The patch forces the constructor's `isPaidVersion` argument instead, which
+covers every config the app builds, and forces `getPremiumVersionPurchased()` for the readers
+that use the preference directly. `showAds` follows the same flag, so the dashboard ads are
+gone, and the lite build already ships `Int.MAX_VALUE` for the account and folder-pair limits.
+Anything FolderSync's backend verifies still sees the real account.
+
+[Port notes, billing details and verification →](docs/apps/foldersync.md)
+
+## 📱 Projectivy Launcher
+
+Supported target: `4.73` (versionCode `98`), as both the APKMirror APKM and the GitHub release
+APK.
+
+| Patch | Default | What it does |
+|---|---|---|
+| Unlock Premium | on | Starts the app in its registered state, so the purchase prompts and feature locks are gone. |
+
+The premium flag is one `StateFlow<Boolean>` created by `PTApplication`, and it is inverted:
+`true` means **not registered**. The patch flips the constructor's `Boolean.TRUE` seed to
+`FALSE` and turns the licence writer `d(Z)V` into `return-void`, so neither the startup re-check
+nor the Play Billing collector can set it back.
+
+The 4.73 release exists as two separately compiled builds with the same identity — the
+APKMirror APKM and the GitHub universal APK — and they do not share R8 names, so the
+fingerprints anchor on structure rather than class names, and both `APKM` and `APK` are
+declared (the file type is part of compatibility). An APKM carries only its own ABIs; the
+GitHub APK has all four. Every patch also depends on an internal resource patch that sets
+`android:extractNativeLibs="true"`, without which a repackaged build can fail on 16 KB-page
+devices with `INSTALL_FAILED_NO_MATCHING_ABIS`.
+
+[Build variants, install notes and verification →](docs/apps/projectivy-launcher.md)
+
+## 📱 Solid Explorer
+
+Supported target: `3.6.4` (APKM, versionCode `306041`).
+
+| Patch | Default | What it does |
+|---|---|---|
+| Enable Pro | on | Reports the free licence as Pro, so the Pro features unlock and the ads are gone. |
+
+The licence is one immutable `LicenseDetails` record, and every gate reads its `LicenseState`:
+`FeatureGate.isAccessGranted()` accepts `SUBSCRIBER` and `PREMIUM_PRO`, while `adsEnabled()` is
+`state == UNLICENSED`. At the end of the constructor the patch rewrites a record that still
+reports ads to `PREMIUM_PRO`, which unlocks the Pro features (folder encryption, the storage
+analyser, backup sync, icon sets) and stops the ad views from being created. A record that is
+already licensed keeps its state, and the product id, trial dates and server decisions are
+untouched.
+
+[Port notes, hook map and verification →](docs/apps/solidexplorer.md)
+
+## 📱 nzb360
+
+Supported target: `25.3` (versionCode `537`, universal APK).
+
+| Patch | Default | What it does |
+|---|---|---|
+| Unlock All Access | on | Reports All Access as active, so every service module and the Upgrade Center unlock. |
+
+All Access is decided on the device by `NZB360LicenseHelper`: `isAASubscriptionActive()` gates
+`isUnlocked(Service, Z)`, and the two `isLocked` wrappers the UI calls invert it. The patch
+rewrites those four licence checks plus `Contract$UIState.isSubscribed()` for the Upgrade
+Center, and seeds the plan toggle on `"Yearly"`. The modules added in 25.3 need no change
+because the unlock is at the All Access level; credits and Feature Bounties are separate and are
+not granted, and anything the backend verifies still sees the real account.
+
+[Port notes, hook map and verification →](docs/apps/nzb360.md)
+
+## 📱 Trakt
+
+Supported target: `3.28.0` (APKM, versionCode `452`).
+
+| Patch | Default | What it does |
+|---|---|---|
+| Fix sign-in | on | Signs in through a regular browser tab so the OAuth callback can return to a re-signed build. If the browser offers to open Trakt, choose it. |
+| Unlock VIP | on | Reports the signed-in account as VIP to the app's own checks, unlocking the local VIP gates. |
+
+VIP is one boolean on the Kotlinx-serialized `User` model. The patch sets it in both
+constructors that write it — the primary one used when mapping the API response and the
+serialization synthetic used when decoding a cached session — so the local VIP gates (the recap
+screens, the VIP badge, Discover → Filters) see a VIP account. Server-enforced limits and perks
+still follow the real tier.
+
+3.28 signs in through AuthTab with an `https://app.trakt.tv/…` redirect, and Chrome only
+completes that hand-off after Digital Asset Links verification, which a Morphe-signed build
+fails. `Fix sign-in` forces the HTTPS callback on and routes the flow to the app's regular
+Custom Tab path, which `MainActivity` already accepts; the callback may ask for **Open in
+Trakt** once. Without it, AuthTab fails and the retired `trakt://auth` redirect is refused.
+
+[Sign-in, hook map and verification →](docs/apps/trakt.md)
+
 ## ✅ Verification
 
 `tools/verify_fingerprints.py` re-checks the pinned class/method fingerprints against an
@@ -361,9 +461,10 @@ export GITHUB_TOKEN=<token with read:packages>
 
 The bundle lands in `patches/build/libs/patches-*.mpp`.
 
-- Make changes on `dev`. `fix:` / `feat:` commits produce pre-releases, `chore:`
-  commits do not.
-- Merge `dev` into `main` (merge, don't squash) for a stable release.
+- Make changes on `dev`. `fix:` / `feat:` / `bump:` commits produce pre-releases;
+  `chore:`, `docs:` and `ci:` commits do not.
+- Merge `dev` into `main` (merge, don't squash) for a stable release. Documentation-only
+  changes may go straight to `main` with a `docs:` commit.
 - Enable *Allow GitHub Actions to create and approve pull requests* in
   Settings → Actions → General → Workflow permissions, or the `dev` → `main` PR
   job fails.
@@ -379,7 +480,7 @@ attribution:
   [MorpheApp/morphe-patches-template](https://github.com/MorpheApp/morphe-patches-template).
 - **Sleep as Android:** descends from
   [Entree3k/Morning-Entree-Patches](https://github.com/Entree3k/Morning-Entree-Patches)
-  (GPLv3). The 20261006 compatibility target, the two extra fingerprint hooks and the cloud
+  (GPLv3). The 20261016 compatibility target, the two extra fingerprint hooks and the cloud
   patch are new here.
 - **SnoreLab:** port of
   [hoo-dles/morphe-patches](https://github.com/hoo-dles/morphe-patches) (GPLv3).
@@ -387,7 +488,7 @@ attribution:
   [rushiranpise/morphe-patches](https://github.com/rushiranpise/morphe-patches) (GPLv3).
 - **Chess.com:** port of
   [Noam's Morphe Patches](https://github.com/ImNoammm/Noams-Morphe-Patches) (GPLv3); the
-  4.10.23 support is new here. The clone patch derives from
+  4.10.27 support is new here. The clone patch derives from
   [PrathxmOp/Prathxm-Patches](https://github.com/PrathxmOp/Prathxm-Patches) (GPL-3.0).
 - **Duolingo:** port of
   [hoo-dles/morphe-patches](https://github.com/hoo-dles/morphe-patches) (GPLv3), re-resolved
@@ -399,6 +500,9 @@ attribution:
 - **FolderSync:** port of
   [arandomhooman/hoomans-morphe-patches](https://github.com/arandomhooman/hoomans-morphe-patches)
   (GPLv3), re-resolved for 4.14.0.
+- **Projectivy Launcher:** port of the 4.71 "Unlock Premium" patch in
+  [Entree3k/Morning-Entree-Patches](https://github.com/Entree3k/Morning-Entree-Patches)
+  (GPLv3), re-resolved for 4.73 with the APK/APKM split targets.
 - **Solid Explorer:** port of
   [hoo-dles/morphe-patches](https://github.com/hoo-dles/morphe-patches) (GPLv3), re-resolved
   for 3.6.4.
@@ -413,8 +517,9 @@ Original patch code is © the upstream authors and contributors — ImNoammm, ho
 rushiranpise, Entree3k, PrathxmOp, arandomhooman, ineednotitle and their contributors. New
 code in this repository is © hyzor.
 
-Not affiliated with Urbandroid, The New York Times, Duolingo, Chess.com, Nova Launcher,
-TeslaCoil Software, Tacit Dynamics, nzb360, Trakt, the Morphe project, or the above authors.
+Not affiliated with Urbandroid, SnoreLab, The New York Times, Chess.com, Duolingo, Nova
+Launcher, TeslaCoil Software, Tacit Dynamics, Projectivy Launcher, Solid Explorer, nzb360,
+Trakt, the Morphe project, or the above authors.
 
 ## ⚠️ Disclaimer
 
