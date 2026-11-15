@@ -31,6 +31,7 @@ MARKERS = {
     "Projectivy Launcher": "Lcom/spocky/projengmenu/",
     "Solid Explorer": "Lpl/solidexplorer/licensing/",
     "nzb360": "Lcom/kevinforeman/nzb360/",
+    "Trakt": "Ltv/trakt/trakt/",
 }
 
 # App -> (class descriptor, method name) -> (return type, required, patch, description)
@@ -176,6 +177,24 @@ TARGETS = {
         ("Lcom/kevinforeman/nzb360/upgradecenter/UpgradeCenterKt;", "SubscriptionSection"):
             ("V", True, "Unlock All Access", "plan toggle, seeded from \"Monthly\""),
     },
+    # Trakt 3.28.0:
+    #   User.<init>              the public 14-arg primary constructor; the app's API model is
+    #                            mapped to User through it (UserKt.a)
+    #   User.<init>(I, ...)      the synthetic Kotlinx-serialization constructor used when a
+    #                            User is decoded from JSON (cached sessions, list responses).
+    #                            3.28.0 stores the fields itself instead of delegating to the
+    #                            primary constructor, so both are patched.
+    #   s2j.b(MainActivity, String)Z
+    #                            the AuthTab capability check; `Fix sign-in` forces it to false
+    #                            so the OAuth flow uses a regular Custom Tab and the app's
+    #                            https://app.trakt.tv/callback/app/trakt filter receives the code.
+    # `User.h` (isVip) is obfuscated; REQUIRED_PARAMS pins both exact argument lists.
+    "Trakt": {
+        ("Ltv/trakt/trakt/common/model/User;", "<init>"):
+            ("V", True, "Unlock VIP", "public + serializer constructors; isVip store into User.h"),
+        ("Ls2j;", "b"):
+            ("Z", True, "Fix sign-in", "AuthTab support check; forced to false so the flow uses a Custom Tab"),
+    },
 }
 
 # App -> (class, method) -> parameter lists that must each be present.
@@ -236,6 +255,38 @@ REQUIRED_PARAMS = {
             ["Lcom/kevinforeman/nzb360/helpers/NZB360LicenseHelper$Service;", "Z"],
         ],
         ("Lcom/kevinforeman/nzb360/upgradecenter/Contract$UIState;", "isSubscribed"): [[]],
+    },
+    "Trakt": {
+        ("Ls2j;", "b"): [
+            ["Ltv/trakt/trakt/MainActivity;", "Ljava/lang/String;"],
+        ],
+        ("Ltv/trakt/trakt/common/model/User;", "<init>"): [
+            [
+                "Ltv/trakt/trakt/common/model/Ids;",
+                "Ljava/lang/String;",
+                "Ljava/lang/String;",
+                "Ljava/lang/String;",
+                "Ljava/lang/String;",
+                "Ljava/lang/String;",
+                "Z", "Z", "Z", "Z", "Z",
+                "Ltv/trakt/trakt/common/model/User$Images;",
+                "Ltv/trakt/trakt/common/model/User$Streamings;",
+                "Ltv/trakt/trakt/common/model/User$Settings;",
+            ],
+            [
+                "I",
+                "Ltv/trakt/trakt/common/model/Ids;",
+                "Ljava/lang/String;",
+                "Ljava/lang/String;",
+                "Ljava/lang/String;",
+                "Ljava/lang/String;",
+                "Ljava/lang/String;",
+                "Z", "Z", "Z", "Z", "Z",
+                "Ltv/trakt/trakt/common/model/User$Images;",
+                "Ltv/trakt/trakt/common/model/User$Streamings;",
+                "Ltv/trakt/trakt/common/model/User$Settings;",
+            ],
+        ],
     },
 }
 
