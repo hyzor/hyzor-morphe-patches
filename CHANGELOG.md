@@ -1,3 +1,9 @@
+## [1.9.0-dev.2](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.9.0-dev.1...v1.9.0-dev.2) (2026-11-15)
+
+### ✨ New Features
+
+* **nzb360:** add Unlock All Access patch for 25.3 ([8042d3e](https://github.com/hyzor/hyzor-morphe-patches/commit/8042d3ed9c9cfe53e9200d18a7aaccb031bd14ed))
+
 ## [1.9.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.8.0...v1.9.0-dev.1) (2026-11-15)
 
 ### ✨ New Features

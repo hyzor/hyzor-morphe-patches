@@ -30,7 +30,7 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.9.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.9.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;33 patches total
+> **[v1.9.0-dev.2](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.9.0-dev.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;34 patches total
 <details open>
 <summary>📦 NYT Games&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -157,6 +157,21 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | [Enable Pro](#enable-pro) | Enables the features locked behind the Pro subscription. |  |
+
+</details>
+
+<details open>
+<summary>📦 nzb360&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 25.3 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Unlock All Access](#unlock-all-access) | Unlocks All Access without the in-app purchase, so every service module and the Upgrade Center behave as if the subscription is active. |  |
 
 </details>
 
