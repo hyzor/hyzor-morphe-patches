@@ -6,6 +6,8 @@ or a disassembler.
 Morphe's `Fingerprint(name = ...)` matches the *exact DEX method name*, and
 `definingClass` is compared exactly when written as a full class descriptor, so all
 this needs to read is class descriptor + method name + return type + parameters.
+Fingerprints anchored only on a string literal (`STRINGS`) are checked by scanning the
+DEX string tables.
 
 Usage:
     python3 tools/verify_fingerprints.py <app.apk|app.apkm|app.xapk>
@@ -291,6 +293,17 @@ REQUIRED_PARAMS = {
 }
 
 
+# App -> literal strings that must be present in the app's DEX. These back fingerprints whose
+# only anchor is a string literal: an obfuscated class or method name would not survive an update,
+# so the name tables above cannot check them.
+STRINGS = {
+    "Trakt": {
+        "mobile_https_auth_callback_enabled_2":
+            "Fix sign-in: Remote Config key read by the auth coroutine",
+    },
+}
+
+
 class Dex:
     def __init__(self, data):
         self.d = data
@@ -316,6 +329,10 @@ class Dex:
             if not b & 0x80:
                 break
         return self.d[o:o + length].decode("utf-8", "replace")
+
+    def strings(self):
+        for i in range(self.n_str):
+            yield self.string(i)
 
     def type(self, i):
         return self.string(self.u32(self.o_type + 4 * i))
@@ -378,6 +395,18 @@ def scan(path):
     return classes, found
 
 
+def scan_strings(path, wanted):
+    """Return the wanted literals that the archive's DEX string tables do not contain."""
+    missing = set(wanted)
+    with zipfile.ZipFile(path) as z:
+        for _name, blob in _dex_blobs(z):
+            for value in Dex(blob).strings():
+                missing.discard(value)
+            if not missing:
+                break
+    return missing
+
+
 def signature_matches(signature, expected):
     """Whether a scanned signature matches an expected parameter list.
 
@@ -423,6 +452,13 @@ def main(path):
             ) or "-"
             print(f"  {status} {key[0]:<46} {key[1]:<28} {sig:<34} {dexname:<12} {patch}: {why}")
             ok = ok and (bool(signatures) and matches or not required)
+
+        if STRINGS.get(app):
+            missing = scan_strings(path, STRINGS[app])
+            for literal, why in STRINGS[app].items():
+                present = literal not in missing
+                print(f"  {'OK  ' if present else 'MISS'} string {literal:<40} {why}")
+                ok = ok and present
         print()
 
     print("all required fingerprints resolved" if ok else "MISSING REQUIRED FINGERPRINTS")

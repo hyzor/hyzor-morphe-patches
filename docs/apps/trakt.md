@@ -20,10 +20,10 @@ a=Ids  b..f=Strings  g=isPrivate  h=isVip  i=isVipEp  j=isVipOg  k=isDirector
 l=Images  m=Streamings  n=Settings
 ```
 
-`h` is read directly in 18 methods in 3.28.0 — the VIP upsell and badge code (`User.d()` is
-`isVip || isVipEp || isVipOg`), the recap screen and the other UI surfaces that consult the
-flag. `isVipEp`, `isVipOg` and `isDirector` are badge/staff flags rather than feature gates, so
-the patch deliberately leaves them alone.
+`h` is read at 18 `iget-boolean` sites across 16 methods in 3.28.0 — the VIP upsell and badge
+code (`User.d()` is `isVip || isVipEp || isVipOg`), the recap screen and the other UI surfaces
+that consult the flag. `isVipEp`, `isVipOg` and `isDirector` are badge/staff flags rather than
+feature gates, so the patch deliberately leaves them alone.
 
 Two constructors write `h`:
 
@@ -101,7 +101,7 @@ target.
   fingerprint.
 - Morphe apply `--validate` with both patches — 3 classes change (`User`, `jr8`, `s2j`). The
   patched DEX contains `const/16 v11, #int 1` before the serializer constructor's `User.h`
-  store, `const/16 v8, #int 1` before the primary constructor's, `const/4 v3, #int 1` before the
+  store, `const/16 v8, #int 1` before the primary constructor's, `const/16 v3, #int 1` before the
   auth redirect branch, and `s2j.b` starts with `const/4 v0, #int 0; return v0`.
 - ART runtime check — a small verifier DEX was run with `app_process` against the app's DEX on
   an Android 16 emulator, constructing `User` with `isVip = false` through both constructors:

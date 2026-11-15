@@ -2,8 +2,11 @@
  * Copyright 2026 ineednotitle
  * https://github.com/ineednotitle/Proteus-Patches
  *
- * Ported from the Trakt "Unlock VIP" patch in Proteus-Patches (GPLv3),
- * re-resolved for 3.28.0.
+ * The VIP constants (USER, USER_IS_VIP) are ported from the Trakt "Unlock VIP" patch in
+ * Proteus-Patches (GPLv3), re-resolved for 3.28.0.
+ *
+ * The auth constants (AUTH_HELPER, AUTH_REDIRECT_FLAG, AUTH_CONFIG_HELPER, AUTH_CONFIG_GETTER)
+ * are original work for this bundle, added with the 3.28.0 port.
  */
 
 package dev.hyzor.patches.trakt.shared
@@ -28,6 +31,12 @@ object Constants {
      * package implements AndroidX AuthTab support.
      */
     const val AUTH_HELPER = "Ls2j;"
+
+    /** `cp4`: the Firebase Remote Config wrapper. [AUTH_CONFIG_GETTER] reads a boolean key. */
+    const val AUTH_CONFIG_HELPER = "Lcp4;"
+
+    /** `cp4.b(String)Z`, the Remote Config boolean getter the auth coroutine calls. */
+    const val AUTH_CONFIG_GETTER = "b"
 
     /** Firebase Remote Config key that selects the HTTPS OAuth redirect on 3.28.0. */
     const val AUTH_REDIRECT_FLAG = "mobile_https_auth_callback_enabled_2"

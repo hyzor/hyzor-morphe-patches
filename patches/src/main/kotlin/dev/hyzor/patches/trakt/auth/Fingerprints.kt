@@ -14,9 +14,13 @@ import dev.hyzor.patches.trakt.shared.Constants.AUTH_REDIRECT_FLAG
  * The method is an R8-obfuscated state machine, so it is matched by the unique
  * `mobile_https_auth_callback_enabled_2` Remote Config key it reads. When that flag is on it
  * uses `https://app.trakt.tv/callback/app/trakt`; when off it falls back to the retired
- * `trakt://auth` redirect that `auth.trakt.tv` now rejects.
+ * `trakt://auth` redirect that `auth.trakt.tv` now rejects. The `Object` return type keeps the
+ * anchor on the state machine instead of a config-key constant table or an accessor.
  */
 object HttpsAuthCallbackFingerprint : Fingerprint(
+    // A suspend state machine's invokeSuspend always returns Object, so this keeps the string
+    // anchor from matching a config-key constant table or a boolean accessor.
+    returnType = "Ljava/lang/Object;",
     strings = listOf(AUTH_REDIRECT_FLAG),
 )
 

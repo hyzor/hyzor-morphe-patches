@@ -16,9 +16,12 @@ import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
-import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
+import dev.hyzor.patches.trakt.shared.Constants.AUTH_CONFIG_GETTER
+import dev.hyzor.patches.trakt.shared.Constants.AUTH_CONFIG_HELPER
 import dev.hyzor.patches.trakt.shared.Constants.TRAKT
+import dev.hyzor.patches.util.getReference
+import dev.hyzor.patches.util.returnEarly
 
 /**
  * Fresh sign-ins on a re-signed Trakt 3.28 build fail before the app ever sees the OAuth code.
@@ -57,15 +60,17 @@ val fixSignInPatch = bytecodePatch(
 
     execute {
         forceHttpsRedirect(HttpsAuthCallbackFingerprint.method)
-        disableAuthTab(AuthTabSupportFingerprint.method)
+        // s2j.b only answers the AuthTab capability question; its fallback is the Custom Tab.
+        AuthTabSupportFingerprint.method.returnEarly(false)
     }
 }
 
 /**
  * Forces the `mobile_https_auth_callback_enabled_2` Remote Config read to yield `true`.
  *
- * The flag is read with `cp4.b(String)Z`; the injected `const/4` goes after its `move-result`
- * and before the branch that chooses between the HTTPS and `trakt://auth` redirects.
+ * The flag is read with `cp4.b(String)Z`; the injected `const/16` goes after its `move-result`
+ * and before the branch that chooses between the HTTPS and `trakt://auth` redirects. `const/16`
+ * rather than `const/4` keeps the injection valid if a future build moves the result above `v15`.
  */
 private fun forceHttpsRedirect(method: MutableMethod) {
     val instructions = method.implementation?.instructions
@@ -73,40 +78,25 @@ private fun forceHttpsRedirect(method: MutableMethod) {
 
     val callIndex = instructions.indexOfFirst { instruction ->
         instruction.opcode == Opcode.INVOKE_VIRTUAL &&
-            (instruction as? ReferenceInstruction)?.reference.let { reference ->
-                reference is MethodReference &&
-                    reference.definingClass == "Lcp4;" &&
-                    reference.name == "b" &&
+            instruction.getReference<MethodReference>()?.let { reference ->
+                reference.definingClass == AUTH_CONFIG_HELPER &&
+                    reference.name == AUTH_CONFIG_GETTER &&
                     reference.returnType == "Z"
-            }
+            } == true
     }
     if (callIndex < 0) {
         throw PatchException(
             "The Trakt auth coroutine no longer reads the Remote Config flag through " +
-                "cp4.b(String). Re-resolve HttpsAuthCallbackFingerprint and the redirect branch.",
+                "$AUTH_CONFIG_HELPER->$AUTH_CONFIG_GETTER(String)Z. Re-resolve " +
+                "HttpsAuthCallbackFingerprint and the redirect branch.",
         )
     }
 
-    val resultIndex = (callIndex + 1..callIndex + 2).firstOrNull {
-        instructions[it].opcode == Opcode.MOVE_RESULT
+    val resultIndex = listOf(callIndex + 1, callIndex + 2).firstOrNull {
+        it < instructions.size && instructions[it].opcode == Opcode.MOVE_RESULT
     } ?: throw PatchException("No move-result found after cp4.b(String) in the auth coroutine.")
     val register = (instructions[resultIndex] as? OneRegisterInstruction)?.registerA
         ?: throw PatchException("The cp4.b(String) result is not a single register.")
 
-    method.addInstructions(resultIndex + 1, "const/4 v$register, 0x1")
-}
-
-/**
- * Replaces `s2j.b(MainActivity, String)Z` with `return false`, so the auth coroutine never takes
- * the AuthTab branch. The method only answers that one capability question, and the flow's
- * fallback is the regular Custom Tab.
- */
-private fun disableAuthTab(method: MutableMethod) {
-    method.addInstructions(
-        0,
-        """
-            const/4 v0, 0x0
-            return v0
-        """.trimIndent(),
-    )
+    method.addInstructions(resultIndex + 1, "const/16 v$register, 0x1")
 }
