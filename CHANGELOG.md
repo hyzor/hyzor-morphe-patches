@@ -1,3 +1,9 @@
+## [1.9.1-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.9.0...v1.9.1-dev.1) (2026-11-15)
+
+### 🚀 Updated App Support
+
+* **duolingo:** support 6.104.5 ([9230e59](https://github.com/hyzor/hyzor-morphe-patches/commit/9230e591a9183bcf3f2b0a903e20f417620590b9))
+
 ## [1.9.0](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.8.0...v1.9.0) (2026-11-15)
 
 ### 🐛 Bug Fixes
