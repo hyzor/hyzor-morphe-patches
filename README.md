@@ -13,6 +13,7 @@ Patches for apps I use, for use with [Morphe](https://morphe.software).
 | [FolderSync](docs/apps/foldersync.md) | `dk.tacit.android.foldersync.lite` | `4.14.0` |
 | [Projectivy Launcher](docs/apps/projectivy-launcher.md) | `com.spocky.projengmenu` | `4.73` |
 | [Solid Explorer](docs/apps/solidexplorer.md) | `pl.solidexplorer2` | `3.6.4` |
+| [nzb360](docs/apps/nzb360.md) | `com.kevinforeman.nzb360` | `25.3` |
 
 ### How to use these patches
 
@@ -369,13 +370,16 @@ attribution:
 - **Solid Explorer:** port of
   [hoo-dles/morphe-patches](https://github.com/hoo-dles/morphe-patches) (GPLv3), re-resolved
   for 3.6.4.
+- **nzb360:** port of
+  [rushiranpise/morphe-patches](https://github.com/rushiranpise/morphe-patches) (GPLv3),
+  re-resolved for 25.3.
 
 Original patch code is © the upstream authors and contributors — ImNoammm, hoo-dles,
 rushiranpise, Entree3k, PrathxmOp, arandomhooman and their contributors. New code in this
 repository is © hyzor.
 
 Not affiliated with Urbandroid, The New York Times, Duolingo, Chess.com, Nova Launcher,
-TeslaCoil Software, Tacit Dynamics, the Morphe project, or the above authors.
+TeslaCoil Software, Tacit Dynamics, nzb360, the Morphe project, or the above authors.
 
 ## ⚠️ Disclaimer
 

@@ -30,6 +30,7 @@ MARKERS = {
     "FolderSync": "Ldk/tacit/",
     "Projectivy Launcher": "Lcom/spocky/projengmenu/",
     "Solid Explorer": "Lpl/solidexplorer/licensing/",
+    "nzb360": "Lcom/kevinforeman/nzb360/",
 }
 
 # App -> (class descriptor, method name) -> (return type, required, patch, description)
@@ -153,6 +154,28 @@ TARGETS = {
         ("Lpl/solidexplorer/licensing/LicenseDetails;", "adsEnabled"):
             ("Z", True, "Enable Pro", "free-tier check used as the hook's condition"),
     },
+    # nzb360 25.3:
+    #   NZB360LicenseHelper    the singleton that owns both licence states: the All Access
+    #                          flag and the per-service status list. isUnlocked(Service, Z)
+    #                          combines them, and the two isLocked overloads are its inverted
+    #                          delegating wrappers (147 call sites). The patch replaces all
+    #                          five boolean bodies, so the exact names are pinned here as the
+    #                          fast pre-check; they are not obfuscated in 25.3.
+    #   Contract$UIState       the upgrade-center view state; isSubscribed() picks the paywall
+    #                          vs the "already subscribed" UI.
+    #   UpgradeCenterKt        SubscriptionSection seeds the plan toggle with "Monthly".
+    "nzb360": {
+        ("Lcom/kevinforeman/nzb360/helpers/NZB360LicenseHelper;", "isAASubscriptionActive"):
+            ("Z", True, "Unlock All Access", "cached All Access flag"),
+        ("Lcom/kevinforeman/nzb360/helpers/NZB360LicenseHelper;", "isUnlocked"):
+            ("Z", True, "Unlock All Access", "the service gate (24 call sites)"),
+        ("Lcom/kevinforeman/nzb360/helpers/NZB360LicenseHelper;", "isLocked"):
+            ("Z", True, "Unlock All Access", "both inverted wrappers (147 call sites)"),
+        ("Lcom/kevinforeman/nzb360/upgradecenter/Contract$UIState;", "isSubscribed"):
+            ("Z", True, "Unlock All Access", "upgrade-center subscribed state"),
+        ("Lcom/kevinforeman/nzb360/upgradecenter/UpgradeCenterKt;", "SubscriptionSection"):
+            ("V", True, "Unlock All Access", "plan toggle, seeded from \"Monthly\""),
+    },
 }
 
 # App -> (class, method) -> parameter lists that must each be present.
@@ -201,6 +224,18 @@ REQUIRED_PARAMS = {
             ],
         ],
         ("Lpl/solidexplorer/licensing/LicenseDetails;", "adsEnabled"): [[]],
+    },
+    "nzb360": {
+        ("Lcom/kevinforeman/nzb360/helpers/NZB360LicenseHelper;", "isAASubscriptionActive"): [[]],
+        ("Lcom/kevinforeman/nzb360/helpers/NZB360LicenseHelper;", "isUnlocked"): [
+            ["Lcom/kevinforeman/nzb360/helpers/NZB360LicenseHelper$Service;", "Z"],
+        ],
+        # Both overloads of the inverted wrapper.
+        ("Lcom/kevinforeman/nzb360/helpers/NZB360LicenseHelper;", "isLocked"): [
+            ["Lcom/kevinforeman/nzb360/helpers/NZB360LicenseHelper$Service;"],
+            ["Lcom/kevinforeman/nzb360/helpers/NZB360LicenseHelper$Service;", "Z"],
+        ],
+        ("Lcom/kevinforeman/nzb360/upgradecenter/Contract$UIState;", "isSubscribed"): [[]],
     },
 }
 
