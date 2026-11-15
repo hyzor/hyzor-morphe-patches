@@ -14,6 +14,7 @@ Patches for apps I use, for use with [Morphe](https://morphe.software).
 | [Projectivy Launcher](docs/apps/projectivy-launcher.md) | `com.spocky.projengmenu` | `4.73` |
 | [Solid Explorer](docs/apps/solidexplorer.md) | `pl.solidexplorer2` | `3.6.4` |
 | [nzb360](docs/apps/nzb360.md) | `com.kevinforeman.nzb360` | `25.3` |
+| [Trakt](docs/apps/trakt.md) | `tv.trakt.trakt` | `3.28.0` |
 
 ### How to use these patches
 
@@ -388,13 +389,16 @@ attribution:
 - **nzb360:** port of
   [rushiranpise/morphe-patches](https://github.com/rushiranpise/morphe-patches) (GPLv3),
   re-resolved for 25.3.
+- **Trakt:** port of
+  [ineednotitle/Proteus-Patches](https://github.com/ineednotitle/Proteus-Patches) (GPLv3),
+  re-resolved for 3.28.0.
 
 Original patch code is © the upstream authors and contributors — ImNoammm, hoo-dles,
-rushiranpise, Entree3k, PrathxmOp, arandomhooman and their contributors. New code in this
-repository is © hyzor.
+rushiranpise, Entree3k, PrathxmOp, arandomhooman, ineednotitle and their contributors. New
+code in this repository is © hyzor.
 
 Not affiliated with Urbandroid, The New York Times, Duolingo, Chess.com, Nova Launcher,
-TeslaCoil Software, Tacit Dynamics, nzb360, the Morphe project, or the above authors.
+TeslaCoil Software, Tacit Dynamics, nzb360, Trakt, the Morphe project, or the above authors.
 
 ## ⚠️ Disclaimer
 

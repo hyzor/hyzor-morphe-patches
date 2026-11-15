@@ -8,7 +8,7 @@ conventions the repository follows.
 
 ## What this repository is
 
-- A **Morphe patch bundle** for ten Android apps. It contains Kotlin patches that edit
+- A **Morphe patch bundle** for eleven Android apps. It contains Kotlin patches that edit
   Dalvik bytecode and decoded resources, plus one Java extension that is merged into the
   patched app as extra classes.
 - **Not an app, and not a fork of the apps.** The build output is `patches/build/libs/patches-<version>.mpp`
@@ -33,6 +33,7 @@ conventions the repository follows.
 | Projectivy Launcher | `com.spocky.projengmenu` | `4.73` | `patches/.../projectivy/` |
 | Solid Explorer | `pl.solidexplorer2` | `3.6.4` | `patches/.../solidexplorer/` |
 | nzb360 | `com.kevinforeman.nzb360` | `25.3` | `patches/.../nzb360/` |
+| Trakt | `tv.trakt.trakt` | `3.28.0` | `patches/.../trakt/` |
 
 ## Repository map
 
@@ -58,7 +59,8 @@ docs/apps/                            per-app technical write-ups
 outputs, decompiles, harnesses and logs. Keep one folder per app, named after the app
 (`.tmp/chesscom/`, `.tmp/duolingo/`, `.tmp/foldersync/`, `.tmp/nova_launcher/`,
 `.tmp/nytimes_games/`, `.tmp/nzb360/`, `.tmp/projectivy_launcher/`, `.tmp/sleep_as_android/`,
-`.tmp/snorelab/`), instead of dropping files at the top of `.tmp/` or in the repository root.
+`.tmp/snorelab/`, `.tmp/trakt/`), instead of dropping files at the top of `.tmp/` or in the
+repository root.
 It is gitignored: nothing the build needs may live there, and it is never committed.
 
 ## Toolchain
@@ -355,6 +357,7 @@ claim in the PR.
 | Projectivy Launcher | The Premium page and the premium-only editors (Display Profiles, theme/background import, parental control) open instead of redirecting to `PremiumActivity`. |
 | Solid Explorer | The drawer header shows the **Pro** badge, Settings → Icon set → **Paper** applies instead of opening the Pro paywall, and no ads appear. |
 | nzb360 | The side-menu header reads `nzb360 │ All ∞ Access`, Settings → Upgrade Center reads `Everything unlocked`, and every module in the Upgrade Center reads `Unlocked via ∞`. |
+| Trakt | Sign-in completes through a regular Custom Tab and returns to `MainActivity`; the profile shows the VIP badge; Discover → Filters opens the advanced VIP panel. |
 
 Record what was **not** exercised (e.g. “MAX variant applied but not installed”, “RampUp
 verified in the patched DEX, account has no challenge”). Be explicit about static-only
@@ -408,7 +411,7 @@ force-stop the app so the next test starts cold.
   `fix` → patch, `feat` → minor, `perf` → patch, `bump` → “Updated App Support”,
   `build` with scope `Needs bump` → patch, `chore`/`docs`/`ci` → no release.
 - Scopes used here: `chesscom`, `duolingo`, `foldersync`, `nova`, `nytgames`, `nzb360`,
-  `projectivy`, `sleep`, `snorelab`, `solidexplorer`.
+  `projectivy`, `sleep`, `snorelab`, `solidexplorer`, `trakt`.
 - Pushing to `dev` publishes a pre-release (`vX.Y.Z-dev.N`); pushing to `main` publishes a
   stable release. Merge `dev` into `main` with a merge commit — don't squash, the history is
   what semantic-release reads.

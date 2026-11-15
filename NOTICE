@@ -63,3 +63,10 @@ additional Solid Explorer 3.6.4 support.
 The nzb360 patch (patches/src/main/kotlin/dev/hyzor/patches/nzb360) is derived from
 rushiranpise/morphe-patches (https://github.com/rushiranpise/morphe-patches), GPLv3, with
 additional nzb360 25.3 support.
+
+The Trakt patch (patches/src/main/kotlin/dev/hyzor/patches/trakt) is derived from
+ineednotitle/Proteus-Patches (https://github.com/ineednotitle/Proteus-Patches), GPLv3, with
+additional Trakt 3.28.0 support.
+
+The Trakt `Fix sign-in` patch (patches/src/main/kotlin/dev/hyzor/patches/trakt/auth) is original
+to this bundle.
