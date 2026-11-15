@@ -1,3 +1,9 @@
+## [1.9.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.8.0...v1.9.0-dev.1) (2026-11-15)
+
+### ✨ New Features
+
+* **projectivy:** support the GitHub release APK ([0541526](https://github.com/hyzor/hyzor-morphe-patches/commit/0541526d0fd7e6dd8372969efe516efff10d1211))
+
 ## [1.8.0](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0...v1.8.0) (2026-11-15)
 
 ### 🐛 Bug Fixes
