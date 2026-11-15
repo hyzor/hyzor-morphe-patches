@@ -1,3 +1,27 @@
+## [1.8.0-dev.3](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.8.0-dev.2...v1.8.0-dev.3) (2026-11-15)
+
+### 🐛 Bug Fixes
+
+* **chesscom:** make the board-theme choice and Arcade scope clearer ([4224928](https://github.com/hyzor/hyzor-morphe-patches/commit/4224928bf52debd9e2e826fc59e7c9ba80ec4c15))
+
+## [1.8.0-dev.2](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.8.0-dev.1...v1.8.0-dev.2) (2026-11-14)
+
+### 🐛 Bug Fixes
+
+* **chesscom:** state where Arcade animations apply ([22ca5d2](https://github.com/hyzor/hyzor-morphe-patches/commit/22ca5d22dbcce741ff0ac88ec600efc538cbd2d5))
+
+## [1.8.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.1-dev.1...v1.8.0-dev.1) (2026-11-14)
+
+### ✨ New Features
+
+* **chesscom:** allow the app board theme alongside Board colors ([7be9316](https://github.com/hyzor/hyzor-morphe-patches/commit/7be931600e7a5647e7c5c2bd76c45a192fe33d9c))
+
+## [1.7.1-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.7.0...v1.7.1-dev.1) (2026-11-14)
+
+### 🚀 Updated App Support
+
+* **chesscom:** support 4.10.27 ([3926058](https://github.com/hyzor/hyzor-morphe-patches/commit/392605832a603a597f86e2120ceb692b56bea6da))
+
 ## [1.7.0](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.6.2...v1.7.0) (2026-11-14)
 
 ### 🐛 Bug Fixes
