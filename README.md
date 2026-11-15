@@ -461,9 +461,10 @@ export GITHUB_TOKEN=<token with read:packages>
 
 The bundle lands in `patches/build/libs/patches-*.mpp`.
 
-- Make changes on `dev`. `fix:` / `feat:` commits produce pre-releases, `chore:`
-  commits do not.
-- Merge `dev` into `main` (merge, don't squash) for a stable release.
+- Make changes on `dev`. `fix:` / `feat:` / `bump:` commits produce pre-releases;
+  `chore:`, `docs:` and `ci:` commits do not.
+- Merge `dev` into `main` (merge, don't squash) for a stable release. Documentation-only
+  changes may go straight to `main` with a `docs:` commit.
 - Enable *Allow GitHub Actions to create and approve pull requests* in
   Settings → Actions → General → Workflow permissions, or the `dev` → `main` PR
   job fails.
@@ -479,7 +480,7 @@ attribution:
   [MorpheApp/morphe-patches-template](https://github.com/MorpheApp/morphe-patches-template).
 - **Sleep as Android:** descends from
   [Entree3k/Morning-Entree-Patches](https://github.com/Entree3k/Morning-Entree-Patches)
-  (GPLv3). The 20261006 compatibility target, the two extra fingerprint hooks and the cloud
+  (GPLv3). The 20261016 compatibility target, the two extra fingerprint hooks and the cloud
   patch are new here.
 - **SnoreLab:** port of
   [hoo-dles/morphe-patches](https://github.com/hoo-dles/morphe-patches) (GPLv3).
@@ -487,7 +488,7 @@ attribution:
   [rushiranpise/morphe-patches](https://github.com/rushiranpise/morphe-patches) (GPLv3).
 - **Chess.com:** port of
   [Noam's Morphe Patches](https://github.com/ImNoammm/Noams-Morphe-Patches) (GPLv3); the
-  4.10.23 support is new here. The clone patch derives from
+  4.10.27 support is new here. The clone patch derives from
   [PrathxmOp/Prathxm-Patches](https://github.com/PrathxmOp/Prathxm-Patches) (GPL-3.0).
 - **Duolingo:** port of
   [hoo-dles/morphe-patches](https://github.com/hoo-dles/morphe-patches) (GPLv3), re-resolved
@@ -516,8 +517,9 @@ Original patch code is © the upstream authors and contributors — ImNoammm, ho
 rushiranpise, Entree3k, PrathxmOp, arandomhooman, ineednotitle and their contributors. New
 code in this repository is © hyzor.
 
-Not affiliated with Urbandroid, The New York Times, Duolingo, Chess.com, Nova Launcher,
-TeslaCoil Software, Tacit Dynamics, nzb360, Trakt, the Morphe project, or the above authors.
+Not affiliated with Urbandroid, SnoreLab, The New York Times, Chess.com, Duolingo, Nova
+Launcher, TeslaCoil Software, Tacit Dynamics, Projectivy Launcher, Solid Explorer, nzb360,
+Trakt, the Morphe project, or the above authors.
 
 ## ⚠️ Disclaimer
 
