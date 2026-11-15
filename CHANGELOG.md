@@ -1,3 +1,15 @@
+## [1.9.0](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.8.0...v1.9.0) (2026-11-15)
+
+### 🐛 Bug Fixes
+
+* **trakt:** address review findings for 3.28.0 ([2cf404d](https://github.com/hyzor/hyzor-morphe-patches/commit/2cf404d1b63082fdd543db90568f58ff403afa92))
+
+### ✨ New Features
+
+* **nzb360:** add Unlock All Access patch for 25.3 ([8042d3e](https://github.com/hyzor/hyzor-morphe-patches/commit/8042d3ed9c9cfe53e9200d18a7aaccb031bd14ed))
+* **projectivy:** support the GitHub release APK ([0541526](https://github.com/hyzor/hyzor-morphe-patches/commit/0541526d0fd7e6dd8372969efe516efff10d1211))
+* **trakt:** add Unlock VIP and sign-in support for 3.28.0 ([d29b966](https://github.com/hyzor/hyzor-morphe-patches/commit/d29b966df4d7c338afa99937dfbefcf19ac8859e))
+
 ## [1.9.0-dev.3](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.9.0-dev.2...v1.9.0-dev.3) (2026-11-15)
 
 ### 🐛 Bug Fixes
