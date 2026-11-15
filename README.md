@@ -8,7 +8,7 @@ Patches for apps I use, for use with [Morphe](https://morphe.software).
 | [SnoreLab](docs/apps/snorelab.md) | `com.snorelab.app` | `2.33.7.7953` |
 | [NYT Games](docs/apps/nyt-games.md) | `com.nytimes.crossword` | `6.50.0` |
 | [Chess.com](docs/apps/chess-com.md) | `com.chess` | `4.10.27` |
-| [Duolingo](docs/apps/duolingo.md) | `com.duolingo` | `6.104.3` |
+| [Duolingo](docs/apps/duolingo.md) | `com.duolingo` | `6.104.5` |
 | [Nova Launcher](docs/apps/nova-launcher.md) | `com.teslacoilsw.launcher` | `8.9.7` |
 | [FolderSync](docs/apps/foldersync.md) | `dk.tacit.android.foldersync.lite` | `4.14.0` |
 | [Projectivy Launcher](docs/apps/projectivy-launcher.md) | `com.spocky.projengmenu` | `4.73` |
@@ -31,7 +31,7 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.9.0](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.9.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;36 patches total
+> **[v1.9.1-dev.1](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.9.1-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;36 patches total
 <details open>
 <summary>📦 NYT Games&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -88,7 +88,7 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 
 **🎯 Supported versions:**
 
-| 6.104.3 |
+| 6.104.5 |
 | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
@@ -296,7 +296,7 @@ one and is off by default.
 
 ## 📱 Duolingo
 
-Supported target: `6.104.3` (APKM, versionCode 2492).
+Supported target: `6.104.5` (APKM, versionCode 2494).
 
 | Patch | Default | What it does |
 |---|---|---|
@@ -310,7 +310,7 @@ signed-in account changes and a friend's profile still shows their real state. E
 on the re-signed build depends on the login-integrity patch, which every other Duolingo
 patch depends on.
 
-[6.104.3 hook changes and on-device verification →](docs/apps/duolingo.md)
+[6.104.5 hook changes and on-device verification →](docs/apps/duolingo.md)
 
 ## 📱 Nova Launcher
 
@@ -492,7 +492,7 @@ attribution:
   [PrathxmOp/Prathxm-Patches](https://github.com/PrathxmOp/Prathxm-Patches) (GPL-3.0).
 - **Duolingo:** port of
   [hoo-dles/morphe-patches](https://github.com/hoo-dles/morphe-patches) (GPLv3), re-resolved
-  for 6.104.3.
+  for 6.104.5.
 - **Nova Launcher:** port of
   [rushiranpise/morphe-patches](https://github.com/rushiranpise/morphe-patches) and
   [hoo-dles/morphe-patches](https://github.com/hoo-dles/morphe-patches) (both GPLv3),

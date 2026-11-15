@@ -98,12 +98,13 @@ TARGETS = {
         ("Lxx/b0;", "w"):
             ("Z", True, "Enable Prime", "active-subscription check"),
     },
-    # Duolingo 6.104.3:
+    # Duolingo 6.104.5:
     #   Most Duolingo fingerprints are structural (toString literals, field-usage shapes,
     #   opcode windows) and are validated by building and applying the bundle, not by method
     #   names here. The rows below are the pinned class/method anchors: the login request
     #   constructor, both EnergyConfig constructors and the two RampUp timer states.
-    #   `Lss90`, `Lgo3`, `Lz22` and the other short names change with every obfuscation pass,
+    #   `Lus90` (was `Lss90`), `Lj3o` (was `Lk3o`), `Lgo3`, `Lz22` and the other short names
+    #   change with every obfuscation pass,
     #   so they are deliberately not pinned here.
     "Duolingo": {
         ("Lcom/duolingo/data/signuplogin/LoginRequest$EmailLoginRequest;", "<init>"):

@@ -27,7 +27,7 @@ conventions the repository follows.
 | SnoreLab | `com.snorelab.app` | `2.33.7.7953` | `patches/.../snorelab/` |
 | NYT Games | `com.nytimes.crossword` | `6.50.0` | `patches/.../nytgames/` |
 | Chess.com | `com.chess` | `4.10.27` | `patches/.../chesscom/` + `extensions/chesscom/` |
-| Duolingo | `com.duolingo` | `6.104.3` | `patches/.../duolingo/` |
+| Duolingo | `com.duolingo` | `6.104.5` | `patches/.../duolingo/` |
 | Nova Launcher | `com.teslacoilsw.launcher` | `8.9.7` | `patches/.../nova/` |
 | FolderSync | `dk.tacit.android.foldersync.lite` | `4.14.0` | `patches/.../foldersync/` |
 | Projectivy Launcher | `com.spocky.projengmenu` | `4.73` | `patches/.../projectivy/` |
