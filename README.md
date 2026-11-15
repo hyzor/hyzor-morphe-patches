@@ -31,7 +31,7 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.9.0-dev.2](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.9.0-dev.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;34 patches total
+> **[v1.9.0-dev.3](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.9.0-dev.3)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;36 patches total
 <details open>
 <summary>📦 NYT Games&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -158,6 +158,22 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | [Enable Pro](#enable-pro) | Enables the features locked behind the Pro subscription. |  |
+
+</details>
+
+<details open>
+<summary>📦 Trakt&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 3.28.0 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Fix sign-in](#fix-sign-in) | Signs in through a regular browser tab so the OAuth callback can return to a re-signed build. If the browser offers to open Trakt, choose it. |  |
+| [Unlock VIP](#unlock-vip) | Reports the signed-in account as VIP to the app's own checks, unlocking the local VIP gates (the recap screens, the VIP badge and the other surfaces gated on that flag). Client side only: limits and perks the Trakt API enforces server-side still follow the real account tier. |  |
 
 </details>
 
