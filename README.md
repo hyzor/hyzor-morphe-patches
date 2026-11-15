@@ -13,6 +13,8 @@ Patches for apps I use, for use with [Morphe](https://morphe.software).
 | [FolderSync](docs/apps/foldersync.md) | `dk.tacit.android.foldersync.lite` | `4.14.0` |
 | [Projectivy Launcher](docs/apps/projectivy-launcher.md) | `com.spocky.projengmenu` | `4.73` |
 | [Solid Explorer](docs/apps/solidexplorer.md) | `pl.solidexplorer2` | `3.6.4` |
+| [nzb360](docs/apps/nzb360.md) | `com.kevinforeman.nzb360` | `25.3` |
+| [Trakt](docs/apps/trakt.md) | `tv.trakt.trakt` | `3.28.0` |
 
 ### How to use these patches
 
@@ -29,7 +31,7 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.8.0](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.8.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;33 patches total
+> **[v1.9.0-dev.3](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.9.0-dev.3)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;36 patches total
 <details open>
 <summary>📦 NYT Games&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -156,6 +158,37 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | [Enable Pro](#enable-pro) | Enables the features locked behind the Pro subscription. |  |
+
+</details>
+
+<details open>
+<summary>📦 Trakt&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 3.28.0 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Fix sign-in](#fix-sign-in) | Signs in through a regular browser tab so the OAuth callback can return to a re-signed build. If the browser offers to open Trakt, choose it. |  |
+| [Unlock VIP](#unlock-vip) | Reports the signed-in account as VIP to the app's own checks, unlocking the local VIP gates (the recap screens, the VIP badge and the other surfaces gated on that flag). Client side only: limits and perks the Trakt API enforces server-side still follow the real account tier. |  |
+
+</details>
+
+<details open>
+<summary>📦 nzb360&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 25.3 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Unlock All Access](#unlock-all-access) | Unlocks All Access without the in-app purchase, so every service module and the Upgrade Center behave as if the subscription is active. |  |
 
 </details>
 
@@ -369,13 +402,19 @@ attribution:
 - **Solid Explorer:** port of
   [hoo-dles/morphe-patches](https://github.com/hoo-dles/morphe-patches) (GPLv3), re-resolved
   for 3.6.4.
+- **nzb360:** port of
+  [rushiranpise/morphe-patches](https://github.com/rushiranpise/morphe-patches) (GPLv3),
+  re-resolved for 25.3.
+- **Trakt:** port of
+  [ineednotitle/Proteus-Patches](https://github.com/ineednotitle/Proteus-Patches) (GPLv3),
+  re-resolved for 3.28.0.
 
 Original patch code is © the upstream authors and contributors — ImNoammm, hoo-dles,
-rushiranpise, Entree3k, PrathxmOp, arandomhooman and their contributors. New code in this
-repository is © hyzor.
+rushiranpise, Entree3k, PrathxmOp, arandomhooman, ineednotitle and their contributors. New
+code in this repository is © hyzor.
 
 Not affiliated with Urbandroid, The New York Times, Duolingo, Chess.com, Nova Launcher,
-TeslaCoil Software, Tacit Dynamics, the Morphe project, or the above authors.
+TeslaCoil Software, Tacit Dynamics, nzb360, Trakt, the Morphe project, or the above authors.
 
 ## ⚠️ Disclaimer
 
