@@ -1,3 +1,9 @@
+## [1.8.0-dev.3](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.8.0-dev.2...v1.8.0-dev.3) (2026-11-15)
+
+### 🐛 Bug Fixes
+
+* **chesscom:** make the board-theme choice and Arcade scope clearer ([4224928](https://github.com/hyzor/hyzor-morphe-patches/commit/4224928bf52debd9e2e826fc59e7c9ba80ec4c15))
+
 ## [1.8.0-dev.2](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.8.0-dev.1...v1.8.0-dev.2) (2026-11-14)
 
 ### 🐛 Bug Fixes
