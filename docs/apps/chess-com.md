@@ -104,7 +104,7 @@ on the dark squares. `BoardColors` therefore hands the dark shade the chosen dar
 the light shade the chosen light colour. Reversed, every coordinate takes the colour of the
 square under it and disappears — the bug reported upstream as issue #28.
 
-The page also has **Use the app's board theme**. With it selected the hook passes the
+The page also has a **Use the app's board theme** switch. While it is on the hook passes the
 background and both coordinate colours through unchanged, so the board chosen in *More →
 Theme → Board* applies — including the app's patterned themes, which this patch does not
 reproduce. Picking any preset or custom colour switches back to the patch's colours. That is

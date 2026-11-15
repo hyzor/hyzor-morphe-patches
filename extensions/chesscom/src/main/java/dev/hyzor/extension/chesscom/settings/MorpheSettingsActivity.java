@@ -391,10 +391,11 @@ public final class MorpheSettingsActivity extends Activity {
         // The app's own Theme → Board choice, so both can be used without turning the feature off.
         list.addView(header("chess.com theme"));
         LinearLayout appThemeCard = card();
-        appThemeCard.addView(actionRow(
-            (appTheme ? "✓ " : "") + "Use the app's board theme",
-            "The board chosen in More → Theme → Board.", () -> {
-                BoardColors.setAppTheme(true);
+        appThemeCard.addView(optionRow(
+            "Use the app's board theme",
+            "The board chosen in More → Theme → Board.",
+            appTheme, checked -> {
+                BoardColors.setAppTheme(checked);
                 render();
             }));
         list.addView(appThemeCard, cardParams());
@@ -424,8 +425,9 @@ public final class MorpheSettingsActivity extends Activity {
             BoardColors.setAppTheme(false);
             BoardColors.set(color, BoardColors.light());
         }));
-        list.addView(caption("Every board uses these colours while Board colors is on, unless you pick "
-            + "the app's board theme above. Boards already open change when they next redraw."));
+        list.addView(caption("Every board uses these colours while Board colors is on, unless \"Use the "
+            + "app's board theme\" above is switched on. Boards already open change when they next "
+            + "redraw."));
     }
 
     private void renderArcade() {
@@ -435,9 +437,11 @@ public final class MorpheSettingsActivity extends Activity {
             ViewGroup.LayoutParams.MATCH_PARENT, dp(156)));
         list.addView(preview, cardParams(16));
         list.addView(header("Where it applies"));
-        list.addView(caption("chess.com's classic board: live games and the Puzzle Rush, Puzzle "
+        list.addView(noteCard("chess.com's classic board: live games and the Puzzle Rush, Puzzle "
             + "Battle, Learning and Review puzzle modes. Bot games, the Daily Puzzle, Solve Puzzles "
-            + "and Lichess Puzzles use the newer board, where these effects do not run yet."));
+            + "and Lichess Puzzles use the newer board, where these effects do not run yet."),
+            cardParams());
+        list.addView(header("What it does"));
         list.addView(caption("A light trail follows each move, the square lights up where the piece "
             + "lands and captures burst. In games, pieces also flash as you pick them up and drop "
             + "them, a king in check flashes and move hints are animated."));
@@ -1281,6 +1285,48 @@ public final class MorpheSettingsActivity extends Activity {
         } catch (Throwable ignored) {
             return null;
         }
+    }
+
+    /** A card row with a switch, for a choice that is on or off. */
+    private View optionRow(String title, String summary, boolean checked, OnChecked onChecked) {
+        LinearLayout row = new LinearLayout(this);
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        row.setPadding(dp(16), dp(12), dp(12), dp(12));
+        row.setMinimumHeight(dp(64));
+        row.setBackground(ripple());
+
+        LinearLayout texts = new LinearLayout(this);
+        texts.setOrientation(LinearLayout.VERTICAL);
+        texts.addView(text(title, 16, TEXT));
+        if (summary != null) {
+            TextView detail = text(summary, 13, TEXT_SECONDARY);
+            detail.setPadding(0, dp(2), 0, 0);
+            texts.addView(detail);
+        }
+        row.addView(texts, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+
+        Switch toggle = toggle(checked, onChecked);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMarginStart(dp(12));
+        row.addView(toggle, params);
+        row.setOnClickListener(view -> toggle.toggle());
+        return row;
+    }
+
+    /** A card that sets a note apart from the page's plain captions. */
+    private View noteCard(String value) {
+        LinearLayout card = card();
+        GradientDrawable shape = new GradientDrawable();
+        shape.setColor(cardColor);
+        shape.setCornerRadius(dp(14));
+        shape.setStroke(dp(1), (accent & 0x00FFFFFF) | 0x55000000);
+        card.setBackground(shape);
+        card.setPadding(dp(16), dp(12), dp(16), dp(12));
+        TextView body = text(value, 14, TEXT);
+        body.setLineSpacing(dp(2), 1f);
+        card.addView(body);
+        return card;
     }
 
     private LinearLayout card() {
