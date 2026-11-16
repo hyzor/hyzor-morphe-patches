@@ -81,6 +81,7 @@ for the injected `v0`–`v3`). `LibUtils.w()` (debugger check) and `LibUtils.y(.
 | `SetupActivity$j.g1` | seeds the setup wizard's root mask field before the billing helper is created |
 | `SetupActivity$j.e2` | re-asserts the root mask to `0xFF` whenever the overview renders (the billing callbacks also write it; the failure one stores `0`) |
 | `SetupActivity$a/$c/$e/$g/$i/$l.g1` | clamps each setup fragment's cached `sync_internal` to `0xFF` |
+| `res/values/dimens.xml` | caps `movie/series_image_background_*` at 960 x 540dp (see below) |
 
 `LibUtils` method names are pinned by the native library and were identical in 2.3.1 and 2.4.0;
 the patch looks them up by name + exact signature and fails with the signature it wanted rather
@@ -110,6 +111,20 @@ them apart by the type of the first field store after the read (object vs `int`)
 why upstream's "first int field" heuristic would have failed on `SetupActivity$d` (no `int` field
 in 2.4.0).
 
+### VOD artwork on 4K screens
+
+The VOD screens (`MoviesActivity`, `SeriesActivity`, the details and the player) draw a
+full-screen background loaded through Glide, with `movie_image_background_*` and
+`series_image_background_*` as the requested size. The stock values are `2000dp` square, so on a
+4K TV at 640 dpi (density 4) Glide decodes an 8000 x 8000 ARGB bitmap — 256 MB. Android refuses
+to draw it (`Canvas: trying to draw too large(256000000bytes) bitmap`) and force-finishes the
+activity, which looks like Movies/Series bouncing straight back to the previous page.
+
+The patch caps those four `dimen` values at `960dp` x `540dp` in an internal resource patch.
+That is still 3840 x 2160 at density 4, so a 4K screen loses nothing, while the bitmap drops to
+32 MB. It was reproduced on the 3840 x 2160 / 640 dpi emulator (crash before the cap, both list
+screens render after it).
+
 ## Verification
 
 Static:
@@ -121,9 +136,11 @@ Static:
   return v0` in the gatekeeper, `const/16 p1, 0xff` in `MainActivity.K`, `startup_time = 1000` +
   `apply()` in `onCreate`, the `z0 = 0xff` writes in `SetupActivity$j.g1` and `.e2`, the
   `const/16 .. 255` before each setup fragment's mask store, the `LibUtils` constants, …).
+- The four VOD background dimens read back as `960dp` x `540dp` from the patched APK
+  (`aapt2 dump resources`).
 
 Device (Android TV emulator, `sdk_google_atv64_x86_64`, API 36, x86_64, real Stalker + m3u
-source, no Play Store and no purchases) — **the only device run so far**:
+source, no Play Store and no purchases; the physical-device pass is still pending):
 
 - Cold start reaches the setup flow (`SetupActivity`) with no crash, no
   `IncompatibleDeviceActivity` and no unknown-signature warning.
@@ -138,14 +155,20 @@ source, no Play Store and no purchases) — **the only device run so far**:
   the licence decision (`kh.x.e`, the `0xFF` mask and `LibUtils.u()` returning its `0x8` flag);
   it never touches the timeshift session/buffer classes (`th.*`), so that path stays stock.
 - `logcat` shows no `FATAL`/`AndroidRuntime` errors and no timeshift failures during the above.
+- **Movies and Series open and render** on the 4K (3840 x 2160, 640 dpi) emulator. Before the
+  artwork cap both were force-finished immediately with `Canvas: trying to draw
+  too large(256000000bytes) bitmap`; after it the list screens show their category rails and
+  posters. (The *Response code: 401* on the live channel in that run is the test source, not the
+  patch.)
 
 The billing-failure path (`SetupActivity$j$c.z0(I)`) is **not** exercised on this emulator because
 Play is absent. The patch re-asserts the root mask in `e2` so that path cannot re-lock the setup
 wizard, but the claim needs a physical device with Play installed; a physical-device pass is
 pending.
 
-Not yet exercised: DVR/recordings (scheduling and playback), VOD (movies & series), multiview,
-and category/EPG editing — also left for the physical-device pass.
+Not yet exercised: VOD playback (the Movies/Series list screens now open, but titles were not
+played), DVR/recordings (scheduling and playback), multiview, and category/EPG editing — also left
+for the physical-device pass.
 
 ## Port notes
 

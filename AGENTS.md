@@ -384,7 +384,7 @@ claim in the PR.
 | Solid Explorer | The drawer header shows the **Pro** badge, Settings → Icon set → **Paper** applies instead of opening the Pro paywall, and no ads appear. |
 | nzb360 | The side-menu header reads `nzb360 │ All ∞ Access`, Settings → Upgrade Center reads `Everything unlocked`, and every module in the Upgrade Center reads `Unlocked via ∞`. |
 | Trakt | Sign-in completes through a regular Custom Tab and returns to `MainActivity`; the profile shows the VIP badge; Discover → Filters opens the advanced VIP panel. |
-| Sparkle TV | Setup wizard is not locked (with and without Play installed); multiple XMLTV EPG sources can be added; timeshift works; the setup screens stay unlocked after a billing error. |
+| Sparkle TV | Setup wizard is not locked (with and without Play installed); multiple XMLTV EPG sources can be added; timeshift works; the setup screens stay unlocked after a billing error; Movies and Series open and render on a 4K/640 dpi display (the background artwork cap). |
 
 Record what was **not** exercised (e.g. “MAX variant applied but not installed”, “RampUp
 verified in the patched DEX, account has no challenge”). Be explicit about static-only

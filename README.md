@@ -459,7 +459,10 @@ returning `true` at its entry opens all of them. The patch also forces the mask 
 compares against, and neutralises the native handshake plus the debugger and
 purchase-signature checks. The setup wizard keeps its own copy of the mask: it is seeded and
 then re-asserted in the overview updater (a Play Billing failure callback writes `0` into it),
-and the six fragments that cache it are clamped.
+and the six fragments that cache it are clamped. The VOD background artwork is capped at
+960 x 540dp — still 4K at density 4 — because the stock 2000dp values ask Glide for an
+8000 x 8000 bitmap on a 640 dpi TV, which Android refuses to draw and which killed
+Movies/Series on entry.
 
 Timeshift is untouched — the patch only changes the licence decision, never the session or
 buffer classes. Client-side only: anything the backend verifies still sees the real account.
