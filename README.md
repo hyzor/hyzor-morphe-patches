@@ -15,6 +15,7 @@ Patches for apps I use, for use with [Morphe](https://morphe.software).
 | [Solid Explorer](docs/apps/solidexplorer.md) | `pl.solidexplorer2` | `3.6.4` |
 | [nzb360](docs/apps/nzb360.md) | `com.kevinforeman.nzb360` | `25.3` |
 | [Trakt](docs/apps/trakt.md) | `tv.trakt.trakt` | `3.28.0` |
+| [Sparkle TV](docs/apps/sparkle.md) | `se.hedekonsult.sparkle` | `2.4.0` |
 
 ### How to use these patches
 
