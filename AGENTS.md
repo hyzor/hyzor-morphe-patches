@@ -271,8 +271,32 @@ Morphe signs the output with its own key. Consequences you will meet:
 6. Fail with an actionable `PatchException` (name the class/method/resource and the likely
    fix), not a bare cast error.
 7. Build, apply with `--validate`, and test on a phone (below).
-8. If the change is user-visible, update the app's page under `docs/apps/`, and the
-   supported-versions table at the top of the README when a version changes.
+8. If the change is user-visible, update the app's page under `docs/apps/`, the matching
+   `## 📱 <App>` section in the root `README.md`, and the supported-versions table at the top
+   of the README when a version changes.
+
+### Adding a new app
+
+Adding an app is not just the patch package: if it is missing from the root README's app
+section, `docs/apps/` or this file, it is only half-added. Work through all of:
+
+1. Add `<app>/shared/Constants.kt` with a `Compatibility` (package, target(s), `apkFileType`,
+   `formFactor`) and the patch/fingerprint package, following the layout above.
+2. Add the app to `tools/verify_fingerprints.py`: `MARKERS`, `TARGETS` and, for any method
+   name that can be overloaded, `REQUIRED_PARAMS`.
+3. Attribute the port in the source header, `NOTICE`, and the "Licence and credits" section
+   of the root `README.md`.
+4. Add `docs/apps/<app>.md` with the licence model, hook map, verification record and port
+   notes.
+5. Update the root `README.md` in **two** places: the supported-versions table at the top and
+   a per-app `## 📱 <App>` section (supported target, patch table, how the licence works, and
+   the link to `docs/apps/<app>.md`). The table row alone is not enough.
+6. Update this file (`AGENTS.md`): the app count in the intro, the app table, the `.tmp/`
+   folder list, the conventional-commit scope list and the per-app checks table under
+   "Testing on a phone".
+7. Build, apply with `--validate`, run the device checks, and record what was not exercised.
+
+Keep this list current: if a new app needs another file or step, add it here in the same PR.
 
 ### Supporting a new app version
 
@@ -291,8 +315,9 @@ jumping to a beta or alpha build, where keeping the last stable target gives use
 4. Update the `TARGETS` in `tools/verify_fingerprints.py` so the next check covers the new
    version.
 5. Build, apply to the new APK, and run the device checks.
-6. Update the supported-versions table at the top of the README and the app page in
-   `docs/apps/`.
+6. Update the supported-versions table at the top of the README, the `## 📱 <App>` section in
+   the README (supported target), the app page in `docs/apps/`, and the target in the app
+   table at the top of this file (`AGENTS.md`).
 7. Commit with `bump(<app>): support <version>` — `bump:` maps to the release's
    “Updated App Support” section. Drop the previous target unless the exception above applies.
 
@@ -398,6 +423,10 @@ force-stop the app so the next test starts cold.
   block between `<!-- PATCHES_START … -->` and `<!-- PATCHES_END -->`, or `CHANGELOG.md`
   (all produced by the release CI).
 - The README table of supported apps *is* hand-maintained; update it when versions change.
+- Keep the docs in sync in the same change: a new app needs the root README's per-app section
+  **and** the app count/table/scopes/`.tmp` list in this file (see
+  [Adding a new app](#adding-a-new-app)); a version bump needs the README tables, the app page
+  and the target in this file's app table.
 - Support one version per app by default: port the patches forward when a new build lands and
   drop the old target, unless there is a specific reason to keep both (see
   [Supporting a new app version](#supporting-a-new-app-version)).
