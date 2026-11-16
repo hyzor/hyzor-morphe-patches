@@ -84,6 +84,10 @@ val enablePlusPatch = bytecodePatch(
 ) {
     compatibleWith(SPARKLE)
 
+    // The VOD screens are only reachable once the licence is open; cap their 2000dp background
+    // first so a 4K screen does not try to draw an 8000 x 8000 bitmap.
+    dependsOn(limitVodBackgroundPatch)
+
     execute {
         // 1. The single gatekeeper every Plus surface asks.
         GatekeeperFingerprint.method.addInstructions(0, returnConstant(true))
