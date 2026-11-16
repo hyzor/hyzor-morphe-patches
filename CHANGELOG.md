@@ -1,3 +1,9 @@
+## [1.10.0-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.9.1...v1.10.0-dev.1) (2026-11-16)
+
+### ✨ New Features
+
+* **sparkle:** add Enable Plus patch for 2.4.0 ([80468aa](https://github.com/hyzor/hyzor-morphe-patches/commit/80468aa48e807548aa4601b4e64b6f0272cd6f9c))
+
 ## [1.9.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.9.0...v1.9.1) (2026-11-15)
 
 ### 🚀 Updated App Support
