@@ -503,6 +503,13 @@ export GITHUB_TOKEN=<token with read:packages>
 
 The bundle lands in `patches/build/libs/patches-*.mpp`.
 
+New patching work uses the globally installed Morphe CLI (`morphe --version` →
+Morphe Desktop 2.3.0) and the project signing key kept outside this repository at
+`$HOME/Projects/hyzor/.signing/hyzor-morphe-patches.keystore`. Never let Morphe generate a
+key, and never commit the key. The full command, the key's alias and the
+`.tmp/<app>/<version>/` working-directory convention are in
+[AGENTS.md](AGENTS.md#morphe-cli-and-signing).
+
 - Make changes on `dev`. `fix:` / `feat:` / `bump:` commits produce pre-releases;
   `chore:`, `docs:` and `ci:` commits do not.
 - Merge `dev` into `main` (merge, don't squash) for a stable release. Documentation-only
