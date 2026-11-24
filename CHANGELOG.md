@@ -1,3 +1,9 @@
+## [1.10.1-dev.1](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.10.0...v1.10.1-dev.1) (2026-11-24)
+
+### 🚀 Updated App Support
+
+* **nova:** support 9.0.1 ([2c8ea1e](https://github.com/hyzor/hyzor-morphe-patches/commit/2c8ea1ef8eebd7b513b28c3cb51eb87e81ab5b7b))
+
 ## [1.10.0](https://github.com/hyzor/hyzor-morphe-patches/compare/v1.9.1...v1.10.0) (2026-11-16)
 
 ### 🐛 Bug Fixes
