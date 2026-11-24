@@ -485,7 +485,7 @@ expressed as class/method names, so for Duolingo the script only checks its pinn
 class/method signatures — build and apply the bundle for the rest.
 
 Run it after every app update, before bumping the matching `Constants.kt`. The full
-device checklist is in [AGENTS.md](AGENTS.md#testing-on-a-phone).
+device checklist is in [AGENTS.md](AGENTS.md#testing-on-a-device).
 
 ## 🚀 Development
 
