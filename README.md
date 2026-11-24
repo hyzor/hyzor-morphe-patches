@@ -12,7 +12,7 @@ Patches for apps I use, for use with [Morphe](https://morphe.software).
 | [Nova Launcher](docs/apps/nova-launcher.md) | `com.teslacoilsw.launcher` | `9.0.1` |
 | [FolderSync](docs/apps/foldersync.md) | `dk.tacit.android.foldersync.lite` | `4.14.0` |
 | [Projectivy Launcher](docs/apps/projectivy-launcher.md) | `com.spocky.projengmenu` | `4.73` |
-| [Solid Explorer](docs/apps/solidexplorer.md) | `pl.solidexplorer2` | `3.6.4` |
+| [Solid Explorer](docs/apps/solidexplorer.md) | `pl.solidexplorer2` | `3.6.5` |
 | [nzb360](docs/apps/nzb360.md) | `com.kevinforeman.nzb360` | `25.3` |
 | [Trakt](docs/apps/trakt.md) | `tv.trakt.trakt` | `3.28.0` |
 | [Sparkle TV](docs/apps/sparkle.md) | `se.hedekonsult.sparkle` | `2.4.0` |
@@ -32,7 +32,7 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.10.1](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.10.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;37 patches total
+> **[v1.10.2-dev.1](https://github.com/hyzor/hyzor-morphe-patches/releases/tag/v1.10.2-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;37 patches total
 <details open>
 <summary>📦 NYT Games&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
@@ -168,7 +168,7 @@ before you do. Updating an install signed by the same Morphe key keeps its data.
 
 **🎯 Supported versions:**
 
-| 3.6.4 |
+| 3.6.5 |
 | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
@@ -389,7 +389,7 @@ devices with `INSTALL_FAILED_NO_MATCHING_ABIS`.
 
 ## 📱 Solid Explorer
 
-Supported target: `3.6.4` (APKM, versionCode `306041`).
+Supported target: `3.6.5` (APKM, versionCode `306051`).
 
 | Patch | Default | What it does |
 |---|---|---|
@@ -547,7 +547,7 @@ attribution:
   (GPLv3), re-resolved for 4.73 with the APK/APKM split targets.
 - **Solid Explorer:** port of
   [hoo-dles/morphe-patches](https://github.com/hoo-dles/morphe-patches) (GPLv3), re-resolved
-  for 3.6.4.
+  for 3.6.5.
 - **nzb360:** port of
   [rushiranpise/morphe-patches](https://github.com/rushiranpise/morphe-patches) (GPLv3),
   re-resolved for 25.3.
