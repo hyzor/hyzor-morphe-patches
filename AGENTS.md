@@ -31,7 +31,7 @@ conventions the repository follows.
 | Nova Launcher | `com.teslacoilsw.launcher` | `9.0.1` | `patches/.../nova/` |
 | FolderSync | `dk.tacit.android.foldersync.lite` | `4.14.0` | `patches/.../foldersync/` |
 | Projectivy Launcher | `com.spocky.projengmenu` | `4.73` | `patches/.../projectivy/` |
-| Solid Explorer | `pl.solidexplorer2` | `3.6.4` | `patches/.../solidexplorer/` |
+| Solid Explorer | `pl.solidexplorer2` | `3.6.5` | `patches/.../solidexplorer/` |
 | nzb360 | `com.kevinforeman.nzb360` | `25.3` | `patches/.../nzb360/` |
 | Trakt | `tv.trakt.trakt` | `3.28.0` | `patches/.../trakt/` |
 | Sparkle TV | `se.hedekonsult.sparkle` | `2.4.0` | `patches/.../sparkle/` |

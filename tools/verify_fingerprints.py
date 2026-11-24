@@ -146,7 +146,7 @@ TARGETS = {
         ("Lcom/spocky/projengmenu/PTApplication;", "d"):
             ("V", True, "Unlock Premium", "licence re-check writer"),
     },
-    # Solid Explorer 3.6.4:
+    # Solid Explorer 3.6.5:
     #   LicenseDetails.<init>(LicenseState, String, Long, Long, String)V
     #                          the immutable licence record and the one place the state is
     #                          written; the patch rewrites it to PREMIUM_PRO while
