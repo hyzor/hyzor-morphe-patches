@@ -112,6 +112,20 @@ When a version is dropped from `Constants.kt`, delete its `.tmp/<app>/<version>/
 keep at most the current target plus one fallback. Decompiled trees and screenshots can go
 once the PR is merged — `.tmp/` is disposable by design.
 
+**Migrating a legacy app folder.** When an app still has files at the top of `.tmp/<app>/`,
+migrate it before adding new work:
+
+- Keep the current stock APK/APKM/XAPK in `in/`. That is the one file that is painful to
+  replace.
+- Move final verification screenshots to `screenshots/` and small scripts, notes and PR
+  bodies to `harness/`.
+- Move old stock APKs to `.tmp/_archive/<app>/<old-version>/in/`; delete `_archive/` once the
+  fallback is no longer needed.
+- Delete patched APKs, decompiled trees, dexdumps, extracted splits, Morphe jars/keystores,
+  logs, caches and one-off experiments. They are rebuildable; the stock APK is not.
+- Keep only the current target plus the archive. A clean version directory is usually a few
+  hundred MB of stock APK and evidence, not tens of GB.
+
 ## Toolchain
 
 | Software | Needed for | Notes |
