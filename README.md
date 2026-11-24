@@ -510,6 +510,11 @@ key, and never commit the key. The full command, the key's alias and the
 `.tmp/<app>/<version>/` working-directory convention are in
 [AGENTS.md](AGENTS.md#morphe-cli-and-signing).
 
+For a new app version, scaffold the version directory first with
+`tools/new-workdir.sh <app> <version>`. The stock APK/APKM/XAPK is supplied manually
+(APKMirror does not always carry a plain APK); put it in the printed `in/` path. See
+[AGENTS.md](AGENTS.md#supporting-a-new-app-version).
+
 - Make changes on `dev`. `fix:` / `feat:` / `bump:` commits produce pre-releases;
   `chore:`, `docs:` and `ci:` commits do not.
 - Merge `dev` into `main` (merge, don't squash) for a stable release. Documentation-only
