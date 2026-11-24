@@ -485,7 +485,7 @@ expressed as class/method names, so for Duolingo the script only checks its pinn
 class/method signatures — build and apply the bundle for the rest.
 
 Run it after every app update, before bumping the matching `Constants.kt`. The full
-device checklist is in [AGENTS.md](AGENTS.md#testing-on-a-phone).
+device checklist is in [AGENTS.md](AGENTS.md#testing-on-a-device).
 
 ## 🚀 Development
 
@@ -509,6 +509,11 @@ Morphe Desktop 2.3.0) and the project signing key kept outside this repository a
 key, and never commit the key. The full command, the key's alias and the
 `.tmp/<app>/<version>/` working-directory convention are in
 [AGENTS.md](AGENTS.md#morphe-cli-and-signing).
+
+For a new app version, scaffold the version directory first with
+`tools/new-workdir.sh <app> <version>`. The stock APK/APKM/XAPK is supplied manually
+(APKMirror does not always carry a plain APK); put it in the printed `in/` path. See
+[AGENTS.md](AGENTS.md#supporting-a-new-app-version).
 
 - Make changes on `dev`. `fix:` / `feat:` / `bump:` commits produce pre-releases;
   `chore:`, `docs:` and `ci:` commits do not.
